@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package chat.v1;
+
+option go_package = "github.com/akhilbabu26/jinnx-fitweb/backend2/proto/chat/v1;chatv1";
+
+service ChatService {
+  rpc GetChatHistory (GetChatHistoryRequest) returns (GetChatHistoryResponse);
+  rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
+}
+
+message GetChatHistoryRequest {
+  uint32 user_id = 1;
+}
+
+message ChatMessage {
+  uint32 id = 1;
+  string role = 2; // "user" or "assistant"
+  string content = 3;
+  string created_at = 4;
+}
+
+message GetChatHistoryResponse {
+  repeated ChatMessage messages = 1;
+  int32 remaining_limit = 2;
+}
+
+message SendMessageRequest {
+  uint32 user_id = 1;
+  string message = 2;
+}
+
+message SendMessageResponse {
+  string reply = 1;
+  int32 remaining_limit = 2;
+}

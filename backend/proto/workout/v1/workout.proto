@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package workout.v1;
+
+option go_package = "github.com/akhilbabu26/jinnx-fitweb/backend2/proto/workout/v1;workoutv1";
+
+service WorkoutService {
+  rpc GetCourses (GetCoursesRequest) returns (GetCoursesResponse);
+  rpc GetEnrolledCourse (GetEnrolledCourseRequest) returns (GetEnrolledCourseResponse);
+  rpc GetTodayWorkout (GetTodayWorkoutRequest) returns (GetTodayWorkoutResponse);
+  rpc GetWorkoutHistory (GetWorkoutHistoryRequest) returns (GetWorkoutHistoryResponse);
+  rpc Enroll (EnrollRequest) returns (EnrollResponse);
+  rpc CancelEnrollment (CancelEnrollmentRequest) returns (CancelEnrollmentResponse);
+  rpc CompleteWorkoutDay (CompleteWorkoutDayRequest) returns (CompleteWorkoutDayResponse);
+}
+
+message GetCoursesRequest {}
+
+message Course {
+  uint32 id = 1;
+  string name = 2;
+  string description = 3;
+  string slug = 4;
+}
+
+message GetCoursesResponse {
+  repeated Course courses = 1;
+}
+
+message GetEnrolledCourseRequest {
+  uint32 user_id = 1;
+}
+
+message GetEnrolledCourseResponse {
+  uint32 id = 1;
+  string name = 2;
+  string description = 3;
+  string slug = 4;
+  bool is_enrolled = 5;
+}
+
+message GetTodayWorkoutRequest {
+  uint32 user_id = 1;
+}
+
+message Exercise {
+  string name = 1;
+  int32 sets = 2;
+  string reps = 3;
+  string weight = 4;
+  string instructions = 5;
+}
+
+message GetTodayWorkoutResponse {
+  uint32 id = 1;
+  string title = 2;
+  int32 day_number = 3;
+  bool is_rest_day = 4;
+  repeated Exercise exercises = 5;
+}
+
+message GetWorkoutHistoryRequest {
+  uint32 user_id = 1;
+}
+
+message WorkoutLog {
+  uint32 id = 1;
+  string workout_title = 2;
+  string completed_at = 3;
+}
+
+message GetWorkoutHistoryResponse {
+  repeated WorkoutLog logs = 1;
+}
+
+message EnrollRequest {
+  uint32 user_id = 1;
+  uint32 course_id = 2;
+  string onboarding_data_json = 3;
+}
+
+message EnrollResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CancelEnrollmentRequest {
+  uint32 user_id = 1;
+}
+
+message CancelEnrollmentResponse {
+  bool success = 1;
+}
+
+message CompleteWorkoutDayRequest {
+  uint32 user_id = 1;
+  uint32 day_id = 2;
+}
+
+message CompleteWorkoutDayResponse {
+  bool success = 1;
+}

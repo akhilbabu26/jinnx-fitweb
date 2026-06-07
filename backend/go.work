@@ -1,0 +1,12 @@
+go 1.26
+
+use (
+	./gateway
+	./proto
+	./services/auth
+	./services/chat
+	./services/subscription
+	./services/video
+	./services/workout
+	./shared
+)

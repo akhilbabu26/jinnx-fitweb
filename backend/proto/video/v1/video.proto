@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package video.v1;
+
+option go_package = "github.com/akhilbabu26/jinnx-fitweb/backend2/proto/video/v1;videov1";
+
+service VideoService {
+  rpc CreateSessionToken (CreateSessionTokenRequest) returns (CreateSessionTokenResponse);
+  rpc GetSessionList (GetSessionListRequest) returns (GetSessionListResponse);
+}
+
+message CreateSessionTokenRequest {
+  uint32 user_id = 1;
+  string room_name = 2;
+}
+
+message CreateSessionTokenResponse {
+  string token = 1;
+  string livekit_url = 2;
+}
+
+message GetSessionListRequest {
+  uint32 user_id = 1;
+}
+
+message VideoSession {
+  uint32 id = 1;
+  string room_name = 2;
+  string title = 3;
+  string scheduled_at = 4;
+}
+
+message GetSessionListResponse {
+  repeated VideoSession sessions = 1;
+}

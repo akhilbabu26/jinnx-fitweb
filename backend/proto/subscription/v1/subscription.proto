@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package subscription.v1;
+
+option go_package = "github.com/akhilbabu26/jinnx-fitweb/backend2/proto/subscription/v1;subv1";
+
+import "google/protobuf/timestamp.proto";
+
+service SubscriptionService {
+  rpc GetSubscription (GetSubscriptionRequest) returns (GetSubscriptionResponse);
+  rpc CreateRazorpaySubscription (CreateRazorpaySubscriptionRequest) returns (CreateRazorpaySubscriptionResponse);
+  rpc HandleWebhook (HandleWebhookRequest) returns (HandleWebhookResponse);
+}
+
+message GetSubscriptionRequest {
+  uint32 user_id = 1;
+}
+
+message GetSubscriptionResponse {
+  string status = 1;
+  google.protobuf.Timestamp current_period_end = 2;
+  string razorpay_sub_id = 3;
+  bool is_active = 4;
+}
+
+message CreateRazorpaySubscriptionRequest {
+  uint32 user_id = 1;
+}
+
+message CreateRazorpaySubscriptionResponse {
+  string subscription_id = 1;
+  string key_id = 2;
+}
+
+message HandleWebhookRequest {
+  string signature = 1;
+  bytes payload = 2;
+}
+
+message HandleWebhookResponse {
+  bool success = 1;
+}

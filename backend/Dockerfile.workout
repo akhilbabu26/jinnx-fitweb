@@ -1,0 +1,12 @@
+FROM golang:1.26-alpine AS builder
+WORKDIR /app
+COPY go.mod ./
+RUN go mod download || true
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o workout ./cmd/services/workout
+
+FROM alpine:latest
+WORKDIR /app
+COPY --from=builder /app/workout .
+EXPOSE 50053
+CMD ["./workout"]

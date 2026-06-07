@@ -1,0 +1,170 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fitweb-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: jinnxfit
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: fitweb-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Services ──────────────────────────────────────────────────────────────
+
+  auth-service:
+    build:
+      context: .                             # root so Dockerfile can COPY shared/ + proto/
+      dockerfile: services/auth/Dockerfile
+    container_name: fitweb-auth
+    ports:
+      - "50051:50051"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - JWT_SECRET=${JWT_SECRET:-supersecretkey}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_FROM=${SMTP_FROM}
+      - REDIS_ADDR=redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  subscription-service:
+    build:
+      context: .
+      dockerfile: services/subscription/Dockerfile
+    container_name: fitweb-subscription
+    ports:
+      - "50052:50052"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET}
+      - RAZORPAY_PLAN_ID=${RAZORPAY_PLAN_ID}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  workout-service:
+    build:
+      context: .
+      dockerfile: services/workout/Dockerfile
+    container_name: fitweb-workout
+    ports:
+      - "50053:50053"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: services/chat/Dockerfile
+    container_name: fitweb-chat
+    ports:
+      - "50054:50054"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CHATBOT_DAILY_LIMIT_FREE=${CHATBOT_DAILY_LIMIT_FREE:-20}
+      - CHATBOT_MAX_HISTORY=${CHATBOT_MAX_HISTORY:-10}
+      - WORKOUT_SERVICE_ADDR=workout-service:50053
+    depends_on:
+      postgres:
+        condition: service_healthy
+      workout-service:
+        condition: service_started
+    restart: unless-stopped
+
+  video-service:
+    build:
+      context: .
+      dockerfile: services/video/Dockerfile
+    container_name: fitweb-video
+    ports:
+      - "50055:50055"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
+      - LIVEKIT_HOST=${LIVEKIT_HOST}
+      - AUTH_SERVICE_ADDR=auth-service:50051
+    depends_on:
+      postgres:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    restart: unless-stopped
+
+  # ── API Gateway ───────────────────────────────────────────────────────────
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: fitweb-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - APP_ENV=development
+      - JWT_SECRET=${JWT_SECRET:-supersecretkey}
+      - AUTH_SERVICE_ADDR=auth-service:50051
+      - SUBSCRIPTION_SERVICE_ADDR=subscription-service:50052
+      - WORKOUT_SERVICE_ADDR=workout-service:50053
+      - CHAT_SERVICE_ADDR=chat-service:50054
+      - VIDEO_SERVICE_ADDR=video-service:50055
+      - REDIS_ADDR=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+      subscription-service:
+        condition: service_started
+      workout-service:
+        condition: service_started
+      chat-service:
+        condition: service_started
+      video-service:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:

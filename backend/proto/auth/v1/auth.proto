@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "github.com/akhilbabu26/jinnx-fitweb/backend2/proto/auth/v1;authv1";
+
+service AuthService {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc GetUserProfile (GetUserProfileRequest) returns (GetUserProfileResponse);
+  rpc GetTrainerTasks (GetTrainerTasksRequest) returns (GetTrainerTasksResponse);
+  rpc MarkTaskCompleted (MarkTaskCompletedRequest) returns (MarkTaskCompletedResponse);
+}
+
+message RegisterRequest {
+  string email = 1;
+  string password = 2;
+  string name = 3;
+}
+
+message RegisterResponse {
+  uint32 user_id = 1;
+  string status = 2;
+  string message = 3;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  uint32 user_id = 3;
+  string role = 4;
+}
+
+message GetUserProfileRequest {
+  uint32 user_id = 1;
+}
+
+message GetUserProfileResponse {
+  uint32 id = 1;
+  string name = 2;
+  string email = 3;
+  string role = 4;
+  string status = 5;
+}
+
+message GetTrainerTasksRequest {
+  uint32 user_id = 1;
+}
+
+message Task {
+  uint32 id = 1;
+  string title = 2;
+  string description = 3;
+  string status = 4;
+  string due_date = 5;
+}
+
+message GetTrainerTasksResponse {
+  repeated Task tasks = 1;
+}
+
+message MarkTaskCompletedRequest {
+  uint32 task_id = 1;
+  uint32 user_id = 2;
+}
+
+message MarkTaskCompletedResponse {
+  bool success = 1;
+  string message = 2;
+}
