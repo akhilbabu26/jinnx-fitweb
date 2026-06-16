@@ -57,9 +57,13 @@ func (s *AuthService) Register(ctx context.Context, email, name, password string
 	}
 
 	code := generateOTP()
-	_ = s.repo.DeleteUnusedOTPs(ctx, email)
-	if err := s.repo.CreateOTP(ctx, email, code, time.Now().Add(10*time.Minute)); err != nil {
-		return nil, fmt.Errorf("failed to create OTP: %w", err)
+	if s.redisClient != nil {
+		hashedCode := hash.Token(code)
+		if err := s.redisClient.SetOTP(ctx, email, hashedCode); err != nil {
+			return nil, fmt.Errorf("failed to store OTP in cache: %w", err)
+		}
+	} else {
+		return nil, errors.New("OTP service unavailable")
 	}
 
 	log.Printf("[Register] OTP dispatched to %s\n", email)
@@ -182,4 +186,40 @@ func generateOTP() string {
 		return fmt.Sprintf("%06d", time.Now().UnixNano()%1000000)
 	}
 	return fmt.Sprintf("%06d", num.Uint64())
+}
+
+func (s *AuthService) VerifyOTP(ctx context.Context, email, code string) (bool, error) {
+	if s.redisClient == nil {
+		return false, errors.New("OTP service unavailable")
+	}
+
+	storedHash, err := s.redisClient.GetOTP(ctx, email)
+	if err != nil {
+		if errors.Is(err, cache.ErrCacheMiss) {
+			return false, errors.New("OTP expired or not found")
+		}
+		return false, fmt.Errorf("failed to retrieve OTP: %w", err)
+	}
+
+	if !hash.CheckToken(code, storedHash) {
+		return false, errors.New("invalid OTP")
+	}
+
+	// Consume OTP immediately
+	_ = s.redisClient.DeleteOTP(ctx, email)
+
+	user, err := s.repo.FindUserByEmail(ctx, email)
+	if err != nil {
+		return false, fmt.Errorf("user not found: %w", err)
+	}
+
+	if user.Status != "pending_otp" {
+		return false, errors.New("user is already verified or not pending verification")
+	}
+
+	if err := s.UpdateUserStatus(ctx, user.ID, "pending_approval"); err != nil {
+		return false, fmt.Errorf("failed to update user status: %w", err)
+	}
+
+	return true, nil
 }

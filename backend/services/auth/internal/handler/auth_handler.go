@@ -29,7 +29,7 @@ func (h *AuthHandler) Register(ctx context.Context, req *authv1.RegisterRequest)
 		case "email already registered":
 			return nil, status.Error(codes.AlreadyExists, err.Error())
 		default:
-			return nil, status.Errorf(codes.Internal, err.Error())
+			return nil, status.Error(codes.Internal, err.Error())
 		}
 	}
 
@@ -37,6 +37,29 @@ func (h *AuthHandler) Register(ctx context.Context, req *authv1.RegisterRequest)
 		UserId:  uint32(result.UserID),
 		Status:  result.Status,
 		Message: result.Message,
+	}, nil
+}
+
+func (h *AuthHandler) VerifyOTP(ctx context.Context, req *authv1.VerifyOTPRequest) (*authv1.VerifyOTPResponse, error) {
+	success, err := h.svc.VerifyOTP(ctx, req.Email, req.Code)
+	if err != nil {
+		switch err.Error() {
+		case "OTP expired or not found":
+			return nil, status.Error(codes.DeadlineExceeded, err.Error())
+		case "invalid OTP":
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		case "user is already verified or not pending verification":
+			return nil, status.Error(codes.FailedPrecondition, err.Error())
+		case "OTP service unavailable":
+			return nil, status.Error(codes.Unavailable, err.Error())
+		default:
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+	}
+
+	return &authv1.VerifyOTPResponse{
+		Success: success,
+		Message: "Email verified successfully. Pending trainer approval.",
 	}, nil
 }
 
@@ -52,7 +75,7 @@ func (h *AuthHandler) Login(ctx context.Context, req *authv1.LoginRequest) (*aut
 		case "your account is pending trainer approval", "your account has been rejected, contact the trainer":
 			return nil, status.Error(codes.PermissionDenied, msg)
 		default:
-			return nil, status.Errorf(codes.Internal, msg)
+			return nil, status.Error(codes.Internal, msg)
 		}
 	}
 
@@ -70,7 +93,7 @@ func (h *AuthHandler) GetUserProfile(ctx context.Context, req *authv1.GetUserPro
 		if err.Error() == "user not found" {
 			return nil, status.Error(codes.NotFound, err.Error())
 		}
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &authv1.GetUserProfileResponse{
@@ -85,7 +108,7 @@ func (h *AuthHandler) GetUserProfile(ctx context.Context, req *authv1.GetUserPro
 func (h *AuthHandler) GetTrainerTasks(ctx context.Context, req *authv1.GetTrainerTasksRequest) (*authv1.GetTrainerTasksResponse, error) {
 	tasks, err := h.svc.GetTrainerTasks(ctx, uint(req.UserId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	var protoTasks []*authv1.Task
@@ -112,7 +135,7 @@ func (h *AuthHandler) MarkTaskCompleted(ctx context.Context, req *authv1.MarkTas
 		if err.Error() == "task not found or does not belong to user" {
 			return nil, status.Error(codes.NotFound, err.Error())
 		}
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &authv1.MarkTaskCompletedResponse{

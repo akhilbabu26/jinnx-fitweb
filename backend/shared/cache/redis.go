@@ -71,3 +71,33 @@ func (c *RedisClient) Delete(ctx context.Context, keys ...string) error {
 	}
 	return c.rdb.Del(ctx, keys...).Err()
 }
+
+// OTPKey returns the canonical Redis key for a pending OTP.
+// Format: "otp:<email>"
+func OTPKey(email string) string {
+	return "otp:" + email
+}
+
+// SetOTP stores a pre-hashed OTP string under "otp:<email>" with a 10-minute TTL.
+// The TTL replaces the expires_at column that was previously stored in PostgreSQL.
+func (c *RedisClient) SetOTP(ctx context.Context, email, hashedCode string) error {
+	return c.rdb.Set(ctx, OTPKey(email), hashedCode, 10*time.Minute).Err()
+}
+
+// GetOTP retrieves the stored hashed OTP for an email.
+// Returns ErrCacheMiss if the OTP has expired or was never set.
+func (c *RedisClient) GetOTP(ctx context.Context, email string) (string, error) {
+	val, err := c.rdb.Get(ctx, OTPKey(email)).Result()
+	if errors.Is(err, redis.Nil) {
+		return "", ErrCacheMiss
+	}
+	if err != nil {
+		return "", fmt.Errorf("cache: get otp %q: %w", email, err)
+	}
+	return val, nil
+}
+
+// DeleteOTP removes the OTP key after successful verification to prevent reuse.
+func (c *RedisClient) DeleteOTP(ctx context.Context, email string) error {
+	return c.rdb.Del(ctx, OTPKey(email)).Err()
+}

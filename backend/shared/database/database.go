@@ -1,7 +1,10 @@
 package database
 
 import (
+	"embed"
+	"io/fs"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -39,6 +42,36 @@ func NewGORM(cfg *config.Config) *gorm.DB {
 	sqlDB.SetConnMaxLifetime(5 * time.Minute)
 
 	return db
+}
+
+// RunMigrations reads every *.sql file from the provided embed.FS (sorted by
+// filename) and executes them against the database in order.  It is safe to
+// call on every startup because migration files use IF NOT EXISTS guards.
+func RunMigrations(db *sqlx.DB, migrations embed.FS) {
+	entries, err := fs.ReadDir(migrations, ".")
+	if err != nil {
+		log.Fatalf("migrations: failed to read embedded FS: %v", err)
+	}
+
+	// Collect only .sql files and sort them (001_, 002_, …)
+	var files []string
+	for _, e := range entries {
+		if !e.IsDir() && len(e.Name()) > 4 && e.Name()[len(e.Name())-4:] == ".sql" {
+			files = append(files, e.Name())
+		}
+	}
+	sort.Strings(files)
+
+	for _, name := range files {
+		content, err := fs.ReadFile(migrations, name)
+		if err != nil {
+			log.Fatalf("migrations: failed to read %s: %v", name, err)
+		}
+		if _, err := db.Exec(string(content)); err != nil {
+			log.Fatalf("migrations: failed to execute %s: %v", name, err)
+		}
+		log.Printf("migrations: applied %s", name)
+	}
 }
 
 func NewSQLX(gormDB *gorm.DB) *sqlx.DB {

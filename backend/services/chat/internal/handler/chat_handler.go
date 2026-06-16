@@ -25,7 +25,7 @@ func New(svc *service.ChatService) *ChatHandler {
 func (h *ChatHandler) GetChatHistory(ctx context.Context, req *chatv1.GetChatHistoryRequest) (*chatv1.GetChatHistoryResponse, error) {
 	result, err := h.svc.GetChatHistory(ctx, uint(req.UserId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	var proto []*chatv1.ChatMessage
@@ -48,12 +48,12 @@ func (h *ChatHandler) SendMessage(ctx context.Context, req *chatv1.SendMessageRe
 	result, err := h.svc.SendMessage(ctx, uint(req.UserId), req.Message)
 	if err != nil {
 		if strings.Contains(err.Error(), "daily limit") {
-			return nil, status.Errorf(codes.ResourceExhausted, err.Error())
+			return nil, status.Error(codes.ResourceExhausted, err.Error())
 		}
 		if strings.Contains(err.Error(), fmt.Sprintf("%d", codes.Internal)) {
-			return nil, status.Errorf(codes.Internal, err.Error())
+			return nil, status.Error(codes.Internal, err.Error())
 		}
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &chatv1.SendMessageResponse{

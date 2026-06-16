@@ -13,6 +13,7 @@ import (
 	chatv1 "github.com/akhilbabu26/jinnx/proto/chat/v1"
 	workoutv1 "github.com/akhilbabu26/jinnx/proto/workout/v1"
 	"github.com/akhilbabu26/jinnx/services/chat/internal/handler"
+	"github.com/akhilbabu26/jinnx/services/chat/internal/migrations"
 	"github.com/akhilbabu26/jinnx/services/chat/internal/repository"
 	"github.com/akhilbabu26/jinnx/services/chat/internal/service"
 )
@@ -22,11 +23,12 @@ func main() {
 
 	gormDB := database.NewGORM(cfg)
 	sqlxDB := database.NewSQLX(gormDB)
+	database.RunMigrations(sqlxDB, migrations.SQL)
 	repo := repository.New(sqlxDB)
 
 	// Dial workout service for context-aware system prompts
 	workoutAddr := "localhost:50053"
-	workoutConn, err := grpc.Dial(workoutAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	workoutConn, err := grpc.NewClient(workoutAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Printf("chat: warning — failed to connect to Workout Service at %s: %v\n", workoutAddr, err)
 	}

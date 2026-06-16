@@ -30,14 +30,6 @@ type RefreshToken struct {
 	CreatedAt time.Time `db:"created_at"`
 }
 
-type OTPCode struct {
-	ID        uint      `db:"id"`
-	Email     string    `db:"email"`
-	Code      string    `db:"code"`
-	ExpiresAt time.Time `db:"expires_at"`
-	Used      bool      `db:"used"`
-	CreatedAt time.Time `db:"created_at"`
-}
 
 type AssignedTask struct {
 	ID          uint         `db:"id"`
@@ -97,18 +89,6 @@ func (r *AuthRepository) UpdateUserStatus(ctx context.Context, id uint, status s
 	return err
 }
 
-func (r *AuthRepository) DeleteUnusedOTPs(ctx context.Context, email string) error {
-	_, err := r.db.ExecContext(ctx, "DELETE FROM otp_codes WHERE email = $1 AND used = false", email)
-	return err
-}
-
-func (r *AuthRepository) CreateOTP(ctx context.Context, email, code string, expiresAt time.Time) error {
-	_, err := r.db.ExecContext(ctx,
-		"INSERT INTO otp_codes (email, code, expires_at) VALUES ($1, $2, $3)",
-		email, code, expiresAt,
-	)
-	return err
-}
 
 func (r *AuthRepository) CreateRefreshToken(ctx context.Context, userID uint, tokenHash string, expiresAt time.Time) error {
 	_, err := r.db.ExecContext(ctx,

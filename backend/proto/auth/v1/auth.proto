@@ -6,6 +6,7 @@ option go_package = "github.com/akhilbabu26/jinnx-fitweb/backend2/proto/auth/v1;
 
 service AuthService {
   rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc VerifyOTP (VerifyOTPRequest) returns (VerifyOTPResponse);
   rpc Login (LoginRequest) returns (LoginResponse);
   rpc GetUserProfile (GetUserProfileRequest) returns (GetUserProfileResponse);
   rpc GetTrainerTasks (GetTrainerTasksRequest) returns (GetTrainerTasksResponse);
@@ -22,6 +23,16 @@ message RegisterResponse {
   uint32 user_id = 1;
   string status = 2;
   string message = 3;
+}
+
+message VerifyOTPRequest {
+  string email = 1;
+  string code  = 2;
+}
+
+message VerifyOTPResponse {
+  bool   success = 1;
+  string message = 2;
 }
 
 message LoginRequest {

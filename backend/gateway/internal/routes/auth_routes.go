@@ -69,6 +69,36 @@ func RegisterAuthRoutes(api fiber.Router, authClient authv1.AuthServiceClient, j
 		})
 	})
 
+	g.Post("/verify-otp", func(c *fiber.Ctx) error {
+		var req struct {
+			Email string `json:"email"`
+			Code  string `json:"code"`
+		}
+		if err := c.BodyParser(&req); err != nil {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "invalid request body"})
+		}
+
+		req.Email = strings.TrimSpace(req.Email)
+		req.Code = strings.TrimSpace(req.Code)
+		if req.Email == "" || req.Code == "" {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "email and verification code are required"})
+		}
+
+		res, err := authClient.VerifyOTP(c.Context(), &authv1.VerifyOTPRequest{
+			Email: req.Email,
+			Code:  req.Code,
+		})
+		if err != nil {
+			appErr := apperr.FromGRPCError(err)
+			return c.Status(appErr.Code).JSON(fiber.Map{"success": false, "message": appErr.Message})
+		}
+
+		return c.JSON(fiber.Map{
+			"success": res.Success,
+			"message": res.Message,
+		})
+	})
+
 	g.Post("/login", func(c *fiber.Ctx) error {
 		var req struct {
 			Email    string `json:"email"`

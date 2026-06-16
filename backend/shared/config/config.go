@@ -36,6 +36,7 @@ type Config struct {
 	AnthropicAPIKey        string
 	ChatbotDailyLimitFree  int
 	ChatbotMaxHistory      int
+	RedisAddr              string
 }
 
 func (c *Config) JWTExpiry() time.Duration {
@@ -81,6 +82,7 @@ func Load() *Config {
 		AnthropicAPIKey:        getEnv("ANTHROPIC_API_KEY", ""),
 		ChatbotDailyLimitFree:  getEnvInt("CHATBOT_DAILY_LIMIT_FREE", 20),
 		ChatbotMaxHistory:      getEnvInt("CHATBOT_MAX_HISTORY", 10),
+		RedisAddr:              getEnv("REDIS_ADDR", "localhost:6379"),
 	}
 }
 

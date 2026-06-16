@@ -27,13 +27,12 @@ func main() {
 	cfg := config.Load()
 
 	// ── Redis ─────────────────────────────────────────────────────────────────
-	redisAddr := getEnv("REDIS_ADDR", "localhost:6379")
-	redisClient := cache.NewRedisClient(redisAddr)
+	redisClient := cache.NewRedisClient(cfg.RedisAddr)
 	if err := redisClient.Ping(context.Background()); err != nil {
-		log.Printf("gateway: warning — Redis not reachable at %s: %v (caching disabled)\n", redisAddr, err)
+		log.Printf("gateway: warning — Redis not reachable at %s: %v (caching disabled)\n", cfg.RedisAddr, err)
 		redisClient = nil // graceful degradation — gateway still works, just no caching
 	} else {
-		log.Printf("gateway: Redis connected at %s\n", redisAddr)
+		log.Printf("gateway: Redis connected at %s\n", cfg.RedisAddr)
 	}
 
 	// ── Resolve service addresses ─────────────────────────────────────────────

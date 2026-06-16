@@ -1,3 +1,4 @@
+
 package handler
 
 import (
@@ -24,7 +25,7 @@ func New(svc *service.VideoService) *VideoHandler {
 func (h *VideoHandler) CreateSessionToken(ctx context.Context, req *videov1.CreateSessionTokenRequest) (*videov1.CreateSessionTokenResponse, error) {
 	result, err := h.svc.CreateSessionToken(ctx, uint(req.UserId), req.RoomName)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &videov1.CreateSessionTokenResponse{
@@ -36,7 +37,7 @@ func (h *VideoHandler) CreateSessionToken(ctx context.Context, req *videov1.Crea
 func (h *VideoHandler) GetSessionList(ctx context.Context, req *videov1.GetSessionListRequest) (*videov1.GetSessionListResponse, error) {
 	sessions, err := h.svc.GetSessionList(ctx, uint(req.UserId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	var protoSessions []*videov1.VideoSession

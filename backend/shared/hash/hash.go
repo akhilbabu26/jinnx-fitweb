@@ -2,6 +2,7 @@ package hash
 
 import (
 	"crypto/sha256"
+	"crypto/subtle"
 	"encoding/hex"
 
 	"golang.org/x/crypto/bcrypt"
@@ -24,4 +25,8 @@ func CheckPassword(plain, hashed string) bool {
 func Token(raw string) string {
 	h := sha256.Sum256([]byte(raw))
 	return hex.EncodeToString(h[:])
+}
+
+func CheckToken(raw, hashed string) bool {
+	return subtle.ConstantTimeCompare([]byte(Token(raw)), []byte(hashed)) == 1
 }

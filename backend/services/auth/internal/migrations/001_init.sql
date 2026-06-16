@@ -12,15 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS otp_codes (
-    id         SERIAL PRIMARY KEY,
-    email      TEXT NOT NULL,
-    code       TEXT NOT NULL,
-    expires_at TIMESTAMPTZ NOT NULL,
-    used       BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
 CREATE TABLE IF NOT EXISTS refresh_tokens (
     id         SERIAL PRIMARY KEY,
     user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,

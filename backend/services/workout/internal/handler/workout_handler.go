@@ -23,7 +23,7 @@ func New(svc *service.WorkoutService) *WorkoutHandler {
 func (h *WorkoutHandler) GetCourses(ctx context.Context, req *workoutv1.GetCoursesRequest) (*workoutv1.GetCoursesResponse, error) {
 	courses, err := h.svc.GetCourses(ctx)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	var proto []*workoutv1.Course
@@ -41,7 +41,7 @@ func (h *WorkoutHandler) GetCourses(ctx context.Context, req *workoutv1.GetCours
 func (h *WorkoutHandler) GetEnrolledCourse(ctx context.Context, req *workoutv1.GetEnrolledCourseRequest) (*workoutv1.GetEnrolledCourseResponse, error) {
 	result, err := h.svc.GetEnrolledCourse(ctx, uint(req.UserId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if !result.IsEnrolled {
 		return &workoutv1.GetEnrolledCourseResponse{IsEnrolled: false}, nil
@@ -64,7 +64,7 @@ func (h *WorkoutHandler) Enroll(ctx context.Context, req *workoutv1.EnrollReques
 		case "course not found":
 			return nil, status.Error(codes.NotFound, err.Error())
 		default:
-			return nil, status.Errorf(codes.Internal, err.Error())
+			return nil, status.Error(codes.Internal, err.Error())
 		}
 	}
 	return &workoutv1.EnrollResponse{Success: true, Message: "Enrolled successfully"}, nil
@@ -75,7 +75,7 @@ func (h *WorkoutHandler) CancelEnrollment(ctx context.Context, req *workoutv1.Ca
 		if err.Error() == "active enrollment not found" {
 			return nil, status.Error(codes.NotFound, err.Error())
 		}
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return &workoutv1.CancelEnrollmentResponse{Success: true}, nil
 }
@@ -89,7 +89,7 @@ func (h *WorkoutHandler) GetTodayWorkout(ctx context.Context, req *workoutv1.Get
 		case "no program setup yet by the admin", "no workout days defined for this week":
 			return nil, status.Error(codes.NotFound, err.Error())
 		default:
-			return nil, status.Errorf(codes.Internal, err.Error())
+			return nil, status.Error(codes.Internal, err.Error())
 		}
 	}
 
@@ -116,7 +116,7 @@ func (h *WorkoutHandler) GetTodayWorkout(ctx context.Context, req *workoutv1.Get
 func (h *WorkoutHandler) GetWorkoutHistory(ctx context.Context, req *workoutv1.GetWorkoutHistoryRequest) (*workoutv1.GetWorkoutHistoryResponse, error) {
 	rows, err := h.svc.GetWorkoutHistory(ctx, uint(req.UserId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	var logs []*workoutv1.WorkoutLog
@@ -132,7 +132,7 @@ func (h *WorkoutHandler) GetWorkoutHistory(ctx context.Context, req *workoutv1.G
 
 func (h *WorkoutHandler) CompleteWorkoutDay(ctx context.Context, req *workoutv1.CompleteWorkoutDayRequest) (*workoutv1.CompleteWorkoutDayResponse, error) {
 	if err := h.svc.CompleteWorkoutDay(ctx, uint(req.UserId), uint(req.DayId)); err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return &workoutv1.CompleteWorkoutDayResponse{Success: true}, nil
 }

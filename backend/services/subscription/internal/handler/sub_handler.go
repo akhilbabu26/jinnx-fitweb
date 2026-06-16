@@ -23,7 +23,7 @@ func New(svc *service.SubscriptionService) *SubscriptionHandler {
 func (h *SubscriptionHandler) GetSubscription(ctx context.Context, req *subv1.GetSubscriptionRequest) (*subv1.GetSubscriptionResponse, error) {
 	result, err := h.svc.GetSubscription(ctx, uint(req.UserId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	var pbPeriodEnd *timestamppb.Timestamp
@@ -42,7 +42,7 @@ func (h *SubscriptionHandler) GetSubscription(ctx context.Context, req *subv1.Ge
 func (h *SubscriptionHandler) CreateRazorpaySubscription(ctx context.Context, req *subv1.CreateRazorpaySubscriptionRequest) (*subv1.CreateRazorpaySubscriptionResponse, error) {
 	checkout, err := h.svc.CreateRazorpaySubscription(ctx, uint(req.UserId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &subv1.CreateRazorpaySubscriptionResponse{
@@ -56,7 +56,7 @@ func (h *SubscriptionHandler) HandleWebhook(ctx context.Context, req *subv1.Hand
 		if err.Error() == "invalid webhook signature" {
 			return nil, status.Error(codes.Unauthenticated, err.Error())
 		}
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return &subv1.HandleWebhookResponse{Success: true}, nil
 }

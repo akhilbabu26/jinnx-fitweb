@@ -13,6 +13,7 @@ import (
 	authv1 "github.com/akhilbabu26/jinnx/proto/auth/v1"
 	videov1 "github.com/akhilbabu26/jinnx/proto/video/v1"
 	"github.com/akhilbabu26/jinnx/services/video/internal/handler"
+	"github.com/akhilbabu26/jinnx/services/video/internal/migrations"
 	"github.com/akhilbabu26/jinnx/services/video/internal/repository"
 	"github.com/akhilbabu26/jinnx/services/video/internal/service"
 )
@@ -22,6 +23,7 @@ func main() {
 
 	gormDB := database.NewGORM(cfg)
 	sqlxDB := database.NewSQLX(gormDB)
+	database.RunMigrations(sqlxDB, migrations.SQL)
 	repo := repository.New(sqlxDB)
 
 	// Dial Auth Service to fetch user display names for LiveKit tokens
