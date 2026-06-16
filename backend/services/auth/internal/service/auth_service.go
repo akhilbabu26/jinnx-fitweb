@@ -19,15 +19,24 @@ import (
 )
 
 type AuthService struct {
-	repo        *repository.AuthRepository
-	mailer      *mailer.Mailer
-	secret      string
-	redisClient *cache.RedisClient // nil if Redis is not available
+	repo          *repository.AuthRepository
+	mailer        *mailer.Mailer
+	secret        string
+	redisClient   *cache.RedisClient // nil if Redis is not available
+	jwtExpiry     time.Duration
+	refreshExpiry time.Duration
 }
 
 // New creates an AuthService. Pass a nil redisClient to run without caching.
-func New(repo *repository.AuthRepository, m *mailer.Mailer, jwtSecret string, redisClient *cache.RedisClient) *AuthService {
-	return &AuthService{repo: repo, mailer: m, secret: jwtSecret, redisClient: redisClient}
+func New(repo *repository.AuthRepository, m *mailer.Mailer, jwtSecret string, redisClient *cache.RedisClient, jwtExpiry, refreshExpiry time.Duration) *AuthService {
+	return &AuthService{
+		repo:          repo,
+		mailer:        m,
+		secret:        jwtSecret,
+		redisClient:   redisClient,
+		jwtExpiry:     jwtExpiry,
+		refreshExpiry: refreshExpiry,
+	}
 }
 
 type RegisterResult struct {
@@ -107,7 +116,7 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (*Login
 		return nil, errors.New("invalid credentials")
 	}
 
-	tokenPair, err := jwt.GenerateTokenPair(user.ID, user.Email, user.Role, s.secret)
+	tokenPair, err := jwt.GenerateTokenPair(user.ID, user.Email, user.Role, s.secret, s.jwtExpiry, s.refreshExpiry)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate tokens: %w", err)
 	}
@@ -118,7 +127,7 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (*Login
 	}
 
 	tokenHash := hash.Token(tokenPair.RefreshToken)
-	if err := s.repo.CreateRefreshToken(ctx, user.ID, tokenHash, time.Now().Add(7*24*time.Hour)); err != nil {
+	if err := s.repo.CreateRefreshToken(ctx, user.ID, tokenHash, time.Now().Add(s.refreshExpiry)); err != nil {
 		return nil, fmt.Errorf("failed to save refresh token: %w", err)
 	}
 

@@ -37,7 +37,7 @@ func main() {
 	database.RunMigrations(sqlxDB, migrations.SQL)
 	repo   := repository.New(sqlxDB)
 	m      := mailer.NewMailer(cfg)
-	svc    := service.New(repo, m, cfg.JWTSecret, redisClient)
+	svc    := service.New(repo, m, cfg.JWTSecret, redisClient, cfg.JWTExpiry(), cfg.RefreshTokenExpiry())
 	h      := handler.New(svc)
 
 	// ── Start gRPC server ─────────────────────────────────────────────────────

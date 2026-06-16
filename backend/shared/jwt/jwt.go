@@ -19,13 +19,13 @@ type TokenPair struct {
 	RefreshToken string
 }
 
-func GenerateTokenPair(userID uint, email, role, secret string) (*TokenPair, error) {
-	accessToken, err := generateToken(userID, email, role, secret, 15*time.Minute)
+func GenerateTokenPair(userID uint, email, role, secret string, accessExpiry, refreshExpiry time.Duration) (*TokenPair, error) {
+	accessToken, err := generateToken(userID, email, role, secret, accessExpiry)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate access token: %w", err)
 	}
 
-	refreshToken, err := generateToken(userID, email, role, secret, 7*24*time.Hour)
+	refreshToken, err := generateToken(userID, email, role, secret, refreshExpiry)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate refresh token: %w", err)
 	}
@@ -36,8 +36,8 @@ func GenerateTokenPair(userID uint, email, role, secret string) (*TokenPair, err
 	}, nil
 }
 
-func GenerateAccessToken(userID uint, email, role, secret string) (string, error) {
-	accessToken, err := generateToken(userID, email, role, secret, 15*time.Minute)
+func GenerateAccessToken(userID uint, email, role, secret string, accessExpiry time.Duration) (string, error) {
+	accessToken, err := generateToken(userID, email, role, secret, accessExpiry)
 	if err != nil {
 		return "", fmt.Errorf("failed to generate access token: %w", err)
 	}
