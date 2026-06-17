@@ -145,3 +145,19 @@ func RequireActiveSubscription(subClient subv1.SubscriptionServiceClient) fiber.
 		return c.Next()
 	}
 }
+
+// RequireAdmin blocks access for any role that is not 'admin'.
+// Must be placed after JWTMiddleware in the handler chain.
+func RequireAdmin() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		role, ok := c.Locals("role").(string)
+		if !ok || role != "admin" {
+			return c.Status(403).JSON(fiber.Map{
+				"success": false,
+				"message": "admin access required",
+				"code":    "FORBIDDEN",
+			})
+		}
+		return c.Next()
+	}
+}

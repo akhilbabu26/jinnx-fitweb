@@ -4,7 +4,7 @@ COPY shared/ ./shared/
 COPY proto/ ./proto/
 COPY gateway/ ./gateway/
 WORKDIR /app/gateway
-RUN go mod download && go build -o /bin/gateway ./cmd/
+RUN go mod tidy && go build -o /bin/gateway ./cmd/
 
 FROM alpine:3.20
 RUN apk --no-cache add ca-certificates

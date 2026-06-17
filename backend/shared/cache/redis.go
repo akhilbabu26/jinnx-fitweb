@@ -101,3 +101,31 @@ func (c *RedisClient) GetOTP(ctx context.Context, email string) (string, error) 
 func (c *RedisClient) DeleteOTP(ctx context.Context, email string) error {
 	return c.rdb.Del(ctx, OTPKey(email)).Err()
 }
+
+// ResetOTPKey returns the canonical Redis key for a pending reset password OTP.
+func ResetOTPKey(email string) string {
+	return "reset_otp:" + email
+}
+
+// SetResetOTP stores a pre-hashed reset OTP string under "reset_otp:<email>" with a 10-minute TTL.
+func (c *RedisClient) SetResetOTP(ctx context.Context, email, hashedCode string) error {
+	return c.rdb.Set(ctx, ResetOTPKey(email), hashedCode, 10*time.Minute).Err()
+}
+
+// GetResetOTP retrieves the stored hashed reset OTP for an email.
+func (c *RedisClient) GetResetOTP(ctx context.Context, email string) (string, error) {
+	val, err := c.rdb.Get(ctx, ResetOTPKey(email)).Result()
+	if errors.Is(err, redis.Nil) {
+		return "", ErrCacheMiss
+	}
+	if err != nil {
+		return "", fmt.Errorf("cache: get reset_otp %q: %w", email, err)
+	}
+	return val, nil
+}
+
+// DeleteResetOTP removes the reset OTP key after successful verification.
+func (c *RedisClient) DeleteResetOTP(ctx context.Context, email string) error {
+	return c.rdb.Del(ctx, ResetOTPKey(email)).Err()
+}
+

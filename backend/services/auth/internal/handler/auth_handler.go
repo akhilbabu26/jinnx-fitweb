@@ -35,7 +35,7 @@ func (h *AuthHandler) Register(ctx context.Context, req *authv1.RegisterRequest)
 
 	return &authv1.RegisterResponse{
 		UserId:  uint32(result.UserID),
-		Status:  result.Status,
+		Status:  string(result.Status),
 		Message: result.Message,
 	}, nil
 }
@@ -101,7 +101,7 @@ func (h *AuthHandler) GetUserProfile(ctx context.Context, req *authv1.GetUserPro
 		Name:   user.Name,
 		Email:  user.Email,
 		Role:   user.Role,
-		Status: user.Status,
+		Status: string(user.Status),
 	}, nil
 }
 
@@ -143,5 +143,125 @@ func (h *AuthHandler) MarkTaskCompleted(ctx context.Context, req *authv1.MarkTas
 		Message: "Task marked as completed",
 	}, nil
 }
+
+func (h *AuthHandler) ForgotPassword(ctx context.Context, req *authv1.ForgotPasswordRequest) (*authv1.ForgotPasswordResponse, error) {
+	err := h.svc.ForgotPassword(ctx, req.Email)
+	if err != nil {
+		switch err.Error() {
+		case "user not found":
+			return nil, status.Error(codes.NotFound, err.Error())
+		case "OTP service unavailable":
+			return nil, status.Error(codes.Unavailable, err.Error())
+		default:
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+	}
+	return &authv1.ForgotPasswordResponse{
+		Success: true,
+		Message: "Password reset OTP sent successfully.",
+	}, nil
+}
+
+func (h *AuthHandler) ResetPassword(ctx context.Context, req *authv1.ResetPasswordRequest) (*authv1.ResetPasswordResponse, error) {
+	err := h.svc.ResetPassword(ctx, req.Email, req.Code, req.NewPassword)
+	if err != nil {
+		switch err.Error() {
+		case "user not found":
+			return nil, status.Error(codes.NotFound, err.Error())
+		case "reset OTP expired or not found":
+			return nil, status.Error(codes.DeadlineExceeded, err.Error())
+		case "invalid reset OTP":
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		case "OTP service unavailable":
+			return nil, status.Error(codes.Unavailable, err.Error())
+		default:
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+	}
+	return &authv1.ResetPasswordResponse{
+		Success: true,
+		Message: "Password reset successful.",
+	}, nil
+}
+
+// ── Admin handlers ────────────────────────────────────────────────────────────
+
+func (h *AuthHandler) ListPendingUsers(ctx context.Context, _ *authv1.ListPendingUsersRequest) (*authv1.ListPendingUsersResponse, error) {
+	users, err := h.svc.ListPendingUsers(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	var protoUsers []*authv1.PendingUser
+	for _, u := range users {
+		protoUsers = append(protoUsers, &authv1.PendingUser{
+			Id:        uint32(u.ID),
+			Email:     u.Email,
+			Name:      u.Name,
+			Role:      u.Role,
+			Status:    string(u.Status),
+			CreatedAt: u.CreatedAt.Format(time.RFC3339),
+		})
+	}
+	return &authv1.ListPendingUsersResponse{Users: protoUsers}, nil
+}
+
+func (h *AuthHandler) UpdateUserStatus(ctx context.Context, req *authv1.UpdateUserStatusRequest) (*authv1.UpdateUserStatusResponse, error) {
+	var err error
+	switch req.Status {
+	case "approved":
+		err = h.svc.ApproveUser(ctx, uint(req.AdminId), uint(req.UserId))
+	case "rejected":
+		err = h.svc.RejectUser(ctx, uint(req.AdminId), uint(req.UserId))
+	default:
+		return nil, status.Error(codes.InvalidArgument, "status must be 'approved' or 'rejected'")
+	}
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	msg := "User " + req.Status
+	return &authv1.UpdateUserStatusResponse{Success: true, Message: msg}, nil
+}
+
+func (h *AuthHandler) BlockUser(ctx context.Context, req *authv1.BlockUserRequest) (*authv1.BlockUserResponse, error) {
+	err := h.svc.BlockUser(ctx, uint(req.AdminId), uint(req.UserId))
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &authv1.BlockUserResponse{Success: true, Message: "User successfully blocked"}, nil
+}
+
+func (h *AuthHandler) UnblockUser(ctx context.Context, req *authv1.UnblockUserRequest) (*authv1.UnblockUserResponse, error) {
+	err := h.svc.UnblockUser(ctx, uint(req.AdminId), uint(req.UserId))
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &authv1.UnblockUserResponse{Success: true, Message: "User successfully unblocked"}, nil
+}
+
+func (h *AuthHandler) ListAllUsers(ctx context.Context, _ *authv1.ListAllUsersRequest) (*authv1.ListAllUsersResponse, error) {
+	users, err := h.svc.ListAllUsers(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	var protoUsers []*authv1.PendingUser
+	for _, u := range users {
+		protoUsers = append(protoUsers, &authv1.PendingUser{
+			Id:        uint32(u.ID),
+			Email:     u.Email,
+			Name:      u.Name,
+			Role:      u.Role,
+			Status:    string(u.Status),
+			CreatedAt: u.CreatedAt.Format(time.RFC3339),
+		})
+	}
+	return &authv1.ListAllUsersResponse{Users: protoUsers}, nil
+}
+
+
+
 
 

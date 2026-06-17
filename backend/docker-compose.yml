@@ -1,15 +1,14 @@
-version: '3.8'
 
 services:
   postgres:
     image: postgres:15-alpine
     container_name: fitweb-postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
-      POSTGRES_DB: jinnxfit
+      POSTGRES_DB: jinnx_fitweb_db
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: 123
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -42,8 +41,10 @@ services:
     ports:
       - "50051:50051"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - DATABASE_URL=postgres://postgres:123@postgres:5432/jinnx_fitweb_db?sslmode=disable
       - JWT_SECRET=${JWT_SECRET:-supersecretkey}
+      - JWT_EXPIRY_MINUTES=${JWT_EXPIRY_MINUTES:-15}
+      - REFRESH_TOKEN_EXPIRY_DAYS=${REFRESH_TOKEN_EXPIRY_DAYS:-30}
       - RESEND_API_KEY=${RESEND_API_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
       - SMTP_HOST=${SMTP_HOST}
@@ -67,7 +68,7 @@ services:
     ports:
       - "50052:50052"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - DATABASE_URL=postgres://postgres:123@postgres:5432/jinnx_fitweb_db?sslmode=disable
       - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
       - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
       - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET}
@@ -85,7 +86,7 @@ services:
     ports:
       - "50053:50053"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - DATABASE_URL=postgres://postgres:123@postgres:5432/jinnx_fitweb_db?sslmode=disable
     depends_on:
       postgres:
         condition: service_healthy
@@ -99,7 +100,7 @@ services:
     ports:
       - "50054:50054"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - DATABASE_URL=postgres://postgres:123@postgres:5432/jinnx_fitweb_db?sslmode=disable
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - CHATBOT_DAILY_LIMIT_FREE=${CHATBOT_DAILY_LIMIT_FREE:-20}
       - CHATBOT_MAX_HISTORY=${CHATBOT_MAX_HISTORY:-10}
@@ -119,7 +120,7 @@ services:
     ports:
       - "50055:50055"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/jinnxfit?sslmode=disable
+      - DATABASE_URL=postgres://postgres:123@postgres:5432/jinnx_fitweb_db?sslmode=disable
       - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
       - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
       - LIVEKIT_HOST=${LIVEKIT_HOST}

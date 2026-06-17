@@ -8,17 +8,30 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// --- Domain Models ---
+type UserStatus string
+
+const (
+	RoleAdmin string = "admin"
+	RoleUser  string = "user"
+)
+
+const (
+	StatusPendingOTP      UserStatus = "pending_otp"
+	StatusPendingApproval UserStatus = "pending_approval"
+	StatusApproved        UserStatus = "approved"
+	StatusRejected        UserStatus = "rejected"
+	StatusBlocked         UserStatus = "blocked"
+)
 
 type User struct {
-	ID        uint      `db:"id"`
-	Email     string    `db:"email"`
-	Name      string    `db:"name"`
-	Password  string    `db:"password"`
-	Role      string    `db:"role"`
-	Status    string    `db:"status"`
-	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt time.Time `db:"updated_at"`
+	ID        uint       `db:"id"`
+	Email     string     `db:"email"`
+	Name      string     `db:"name"`
+	Password  string     `db:"password"`
+	Role      string     `db:"role"`
+	Status    UserStatus `db:"status"`
+	CreatedAt time.Time  `db:"created_at"`
+	UpdatedAt time.Time  `db:"updated_at"`
 }
 
 type RefreshToken struct {
@@ -84,8 +97,8 @@ func (r *AuthRepository) DeleteUserByID(ctx context.Context, id uint) error {
 	return err
 }
 
-func (r *AuthRepository) UpdateUserStatus(ctx context.Context, id uint, status string) error {
-	_, err := r.db.ExecContext(ctx, "UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2", status, id)
+func (r *AuthRepository) UpdateUserStatus(ctx context.Context, id uint, status UserStatus) error {
+	_, err := r.db.ExecContext(ctx, "UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2", string(status), id)
 	return err
 }
 
@@ -108,6 +121,11 @@ func (r *AuthRepository) RevokeAllRefreshTokensForUser(ctx context.Context, user
 	return err
 }
 
+func (r *AuthRepository) DeleteExpiredOrRevokedTokens(ctx context.Context) error {
+	_, err := r.db.ExecContext(ctx, "DELETE FROM refresh_tokens WHERE expires_at < NOW() OR revoked = true")
+	return err
+}
+
 func (r *AuthRepository) GetTasksByUserID(ctx context.Context, userID uint) ([]AssignedTask, error) {
 	var tasks []AssignedTask
 	err := r.db.SelectContext(ctx, &tasks,
@@ -126,3 +144,23 @@ func (r *AuthRepository) MarkTaskCompleted(ctx context.Context, taskID, userID u
 	rows, _ := res.RowsAffected()
 	return rows, nil
 }
+
+func (r *AuthRepository) UpdateUserPassword(ctx context.Context, id uint, hashedPassword string) error {
+	_, err := r.db.ExecContext(ctx, "UPDATE users SET password = $1, updated_at = NOW() WHERE id = $2", hashedPassword, id)
+	return err
+}
+
+func (r *AuthRepository) ListPendingUsers(ctx context.Context) ([]User, error) {
+	var users []User
+	err := r.db.SelectContext(ctx, &users,
+		"SELECT * FROM users WHERE status = 'pending_approval' ORDER BY created_at ASC")
+	return users, err
+}
+
+func (r *AuthRepository) ListAllUsers(ctx context.Context) ([]User, error) {
+	var users []User
+	err := r.db.SelectContext(ctx, &users,
+		"SELECT * FROM users WHERE role != 'admin' ORDER BY created_at ASC")
+	return users, err
+}
+

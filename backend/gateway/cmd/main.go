@@ -71,6 +71,7 @@ func main() {
 
 	// ── Mount route groups ────────────────────────────────────────────────────
 	routes.RegisterAuthRoutes(api, authClient, cfg.JWTSecret, redisClient)
+	routes.RegisterAdminRoutes(api, authClient, cfg.JWTSecret, redisClient)
 	routes.RegisterSubscriptionRoutes(api, subClient, authClient, cfg.JWTSecret, redisClient)
 	routes.RegisterWorkoutRoutes(api, workoutClient, authClient, subClient, cfg.JWTSecret, redisClient)
 	routes.RegisterChatRoutes(api, chatClient, authClient, subClient, cfg.JWTSecret, redisClient)

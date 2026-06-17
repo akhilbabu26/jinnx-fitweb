@@ -11,6 +11,14 @@ service AuthService {
   rpc GetUserProfile (GetUserProfileRequest) returns (GetUserProfileResponse);
   rpc GetTrainerTasks (GetTrainerTasksRequest) returns (GetTrainerTasksResponse);
   rpc MarkTaskCompleted (MarkTaskCompletedRequest) returns (MarkTaskCompletedResponse);
+  rpc ForgotPassword (ForgotPasswordRequest) returns (ForgotPasswordResponse);
+  rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+  // Admin RPCs
+  rpc ListPendingUsers (ListPendingUsersRequest) returns (ListPendingUsersResponse);
+  rpc UpdateUserStatus (UpdateUserStatusRequest) returns (UpdateUserStatusResponse);
+  rpc BlockUser (BlockUserRequest) returns (BlockUserResponse);
+  rpc UnblockUser (UnblockUserRequest) returns (UnblockUserResponse);
+  rpc ListAllUsers (ListAllUsersRequest) returns (ListAllUsersResponse);
 }
 
 message RegisterRequest {
@@ -83,4 +91,78 @@ message MarkTaskCompletedRequest {
 message MarkTaskCompletedResponse {
   bool success = 1;
   string message = 2;
+}
+
+message ForgotPasswordRequest {
+  string email = 1;
+}
+
+message ForgotPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ResetPasswordRequest {
+  string email = 1;
+  string code = 2;
+  string new_password = 3;
+}
+
+message ResetPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// ── Admin messages ─────────────────────────────────────────────────────────
+
+message PendingUser {
+  uint32 id    = 1;
+  string email = 2;
+  string name  = 3;
+  string role  = 4;
+  string status = 5;
+  string created_at = 6;
+}
+
+message ListPendingUsersRequest {}
+
+message ListPendingUsersResponse {
+  repeated PendingUser users = 1;
+}
+
+message UpdateUserStatusRequest {
+  uint32 user_id  = 1;
+  string status   = 2; // "approved" or "rejected"
+  uint32 admin_id = 3;
+}
+
+message UpdateUserStatusResponse {
+  bool   success = 1;
+  string message = 2;
+}
+
+message BlockUserRequest {
+  uint32 admin_id = 1;
+  uint32 user_id  = 2;
+}
+
+message BlockUserResponse {
+  bool   success = 1;
+  string message = 2;
+}
+
+message UnblockUserRequest {
+  uint32 admin_id = 1;
+  uint32 user_id  = 2;
+}
+
+message UnblockUserResponse {
+  bool   success = 1;
+  string message = 2;
+}
+
+message ListAllUsersRequest {}
+
+message ListAllUsersResponse {
+  repeated PendingUser users = 1;
 }

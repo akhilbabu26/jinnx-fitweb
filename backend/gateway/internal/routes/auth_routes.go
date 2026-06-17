@@ -136,6 +136,74 @@ func RegisterAuthRoutes(api fiber.Router, authClient authv1.AuthServiceClient, j
 		})
 	})
 
+	g.Post("/forgot-password", func(c *fiber.Ctx) error {
+		var req struct {
+			Email string `json:"email"`
+		}
+		if err := c.BodyParser(&req); err != nil {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "invalid request body"})
+		}
+
+		req.Email = strings.TrimSpace(req.Email)
+		if req.Email == "" || !strings.Contains(req.Email, "@") {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "a valid email address is required"})
+		}
+
+		res, err := authClient.ForgotPassword(c.Context(), &authv1.ForgotPasswordRequest{
+			Email: req.Email,
+		})
+		if err != nil {
+			appErr := apperr.FromGRPCError(err)
+			return c.Status(appErr.Code).JSON(fiber.Map{"success": false, "message": appErr.Message})
+		}
+
+		return c.JSON(fiber.Map{
+			"success": res.Success,
+			"message": res.Message,
+		})
+	})
+
+	g.Post("/reset-password", func(c *fiber.Ctx) error {
+		var req struct {
+			Email           string `json:"email"`
+			Code            string `json:"code"`
+			NewPassword     string `json:"new_password"`
+			ConfirmPassword string `json:"confirm_password"`
+		}
+		if err := c.BodyParser(&req); err != nil {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "invalid request body"})
+		}
+
+		req.Email = strings.TrimSpace(req.Email)
+		req.Code = strings.TrimSpace(req.Code)
+		if req.Email == "" || req.Code == "" {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "email and verification code are required"})
+		}
+
+		if len(req.NewPassword) < 8 {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "new password must be at least 8 characters"})
+		}
+
+		if req.NewPassword != req.ConfirmPassword {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "passwords do not match"})
+		}
+
+		res, err := authClient.ResetPassword(c.Context(), &authv1.ResetPasswordRequest{
+			Email:       req.Email,
+			Code:        req.Code,
+			NewPassword: req.NewPassword,
+		})
+		if err != nil {
+			appErr := apperr.FromGRPCError(err)
+			return c.Status(appErr.Code).JSON(fiber.Map{"success": false, "message": appErr.Message})
+		}
+
+		return c.JSON(fiber.Map{
+			"success": res.Success,
+			"message": res.Message,
+		})
+	})
+
 	g.Get("/me", middleware.JWTMiddleware(jwtSecret, authClient, redisClient), func(c *fiber.Ctx) error {
 		userID := c.Locals("userID").(uint)
 		res, err := authClient.GetUserProfile(c.Context(), &authv1.GetUserProfileRequest{

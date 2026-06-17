@@ -179,20 +179,60 @@ func (m *Mailer) SendOTP(ctx context.Context, email, code string) error {
 
 func (m *Mailer) SendApprovalNotification(ctx context.Context, email, name string) error {
 	body := fmt.Sprintf(`
-		<h2 style="font-size: 20px; font-weight: 700; color: #111827; margin-top: 0; margin-bottom: 16px;">Welcome, %s!</h2>
-		<p style="margin-bottom: 16px; color: #374151;">Your registration has been <strong>approved</strong> by your trainer.</p>
-		<p style="margin-bottom: 24px; color: #374151;">You can now log in and start your fitness journey.</p>
+		<div style="text-align: center; margin-bottom: 28px;">
+			<div style="display: inline-block; background-color: #d1fae5; border-radius: 50%%; padding: 16px;">
+				<span style="font-size: 36px;">✅</span>
+			</div>
+		</div>
+		<h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-top: 0; margin-bottom: 12px; text-align: center;">
+			You're Approved, %s!
+		</h2>
+		<p style="margin-bottom: 16px; color: #374151; text-align: center;">
+			Great news! Your Jinnx Fit account has been <strong style="color: #059669;">approved</strong> by your trainer.
+			You're all set to begin your fitness journey.
+		</p>
+		<div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 20px; margin: 24px 0;">
+			<p style="margin: 0; font-size: 15px; color: #065f46; font-weight: 600;">What's next?</p>
+			<ul style="margin: 12px 0 0 0; padding-left: 20px; color: #065f46; font-size: 14px; line-height: 1.8;">
+				<li>Log in to the Jinnx Fit app</li>
+				<li>Complete your fitness profile</li>
+				<li>Explore your personalised workout plan</li>
+				<li>Track your progress and stay consistent!</li>
+			</ul>
+		</div>
+		<p style="color: #6b7280; font-size: 13px; text-align: center; margin-top: 24px;">
+			If you have any questions, reach out to your trainer directly.
+		</p>
 	`, name)
-	return m.send(ctx, email, "Your registration has been approved!", buildHTMLTemplate("Registration Approved", body))
+	return m.send(ctx, email, "🎉 Your Jinnx Fit account is approved!", buildHTMLTemplate("Account Approved", body))
 }
 
 func (m *Mailer) SendRejectionNotification(ctx context.Context, email, name string) error {
 	body := fmt.Sprintf(`
-		<h2 style="font-size: 20px; font-weight: 700; color: #111827; margin-top: 0; margin-bottom: 16px;">Hi %s,</h2>
-		<p style="margin-bottom: 16px; color: #374151;">Unfortunately, your registration could not be approved at this time.</p>
-		<p style="margin-bottom: 24px; color: #374151;">Please contact your trainer directly for more information.</p>
+		<div style="text-align: center; margin-bottom: 28px;">
+			<div style="display: inline-block; background-color: #fef3c7; border-radius: 50%%; padding: 16px;">
+				<span style="font-size: 36px;">⚠️</span>
+			</div>
+		</div>
+		<h2 style="font-size: 22px; font-weight: 700; color: #111827; margin-top: 0; margin-bottom: 12px; text-align: center;">
+			Hi %s,
+		</h2>
+		<p style="margin-bottom: 16px; color: #374151; text-align: center;">
+			After careful review, your Jinnx Fit registration has <strong style="color: #dc2626;">not been approved</strong> at this time.
+		</p>
+		<div style="background-color: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 20px; margin: 24px 0;">
+			<p style="margin: 0; font-size: 15px; color: #92400e; font-weight: 600;">What can you do?</p>
+			<ul style="margin: 12px 0 0 0; padding-left: 20px; color: #92400e; font-size: 14px; line-height: 1.8;">
+				<li>Contact your trainer directly for the reason</li>
+				<li>Address any concerns your trainer may have</li>
+				<li>Re-apply once the issues are resolved</li>
+			</ul>
+		</div>
+		<p style="color: #6b7280; font-size: 13px; text-align: center; margin-top: 24px;">
+			We appreciate your interest in Jinnx Fit and hope to welcome you soon.
+		</p>
 	`, name)
-	return m.send(ctx, email, "Update on your registration", buildHTMLTemplate("Registration Update", body))
+	return m.send(ctx, email, "Update on your Jinnx Fit registration", buildHTMLTemplate("Registration Update", body))
 }
 
 func (m *Mailer) SendAdminNotification(ctx context.Context, userName, userEmail string) error {
@@ -208,3 +248,16 @@ func (m *Mailer) SendAdminNotification(ctx context.Context, userName, userEmail 
 	}
 	return m.send(ctx, target, "New registration pending approval", buildHTMLTemplate("New User Waiting Approval", body))
 }
+
+func (m *Mailer) SendResetPasswordOTP(ctx context.Context, email, code string) error {
+	body := fmt.Sprintf(`
+		<h2 style="font-size: 20px; font-weight: 700; color: #111827; margin-top: 0; margin-bottom: 16px;">Reset Password</h2>
+		<p style="margin-bottom: 24px; color: #374151;">You requested a password reset. Use the verification OTP code below to reset your password.</p>
+		<div style="background-color: #f3f4f6; border-radius: 8px; padding: 24px; text-align: center; margin: 30px 0; border: 1px dashed #cbd5e1;">
+			<h1 style="font-family: 'Courier New', Courier, monospace; font-size: 38px; font-weight: 700; letter-spacing: 8px; color: #dc2626; margin: 0; padding-left: 8px;">%s</h1>
+		</div>
+		<p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">This code expires in <strong>10 minutes</strong>. If you did not request a password reset, you can safely ignore this email.</p>
+	`, code)
+	return m.send(ctx, email, "Reset your password", buildHTMLTemplate("Reset Password", body))
+}
+

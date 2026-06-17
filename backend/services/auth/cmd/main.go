@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net"
+	"time"
 
 	"google.golang.org/grpc"
 
@@ -37,6 +38,27 @@ func main() {
 	database.RunMigrations(sqlxDB, migrations.SQL)
 	repo   := repository.New(sqlxDB)
 	m      := mailer.NewMailer(cfg)
+
+	// ── Expired/revoked token cleanup worker ──────────────────────────────────
+	go func() {
+		ctx := context.Background()
+		ticker := time.NewTicker(12 * time.Hour)
+		defer ticker.Stop()
+
+		// Run immediately on startup
+		log.Println("auth: cleaning up expired or revoked refresh tokens...")
+		if err := repo.DeleteExpiredOrRevokedTokens(ctx); err != nil {
+			log.Printf("auth: warning — failed to clean up expired refresh tokens: %v\n", err)
+		}
+
+		for range ticker.C {
+			log.Println("auth: cleaning up expired or revoked refresh tokens...")
+			if err := repo.DeleteExpiredOrRevokedTokens(ctx); err != nil {
+				log.Printf("auth: warning — failed to clean up expired refresh tokens: %v\n", err)
+			}
+		}
+	}()
+
 	svc    := service.New(repo, m, cfg.JWTSecret, redisClient, cfg.JWTExpiry(), cfg.RefreshTokenExpiry())
 	h      := handler.New(svc)
 

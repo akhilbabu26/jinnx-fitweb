@@ -9,7 +9,7 @@ COPY proto/ ./proto/
 COPY services/auth/ ./services/auth/
 
 WORKDIR /app/services/auth
-RUN go mod download && go build -o /bin/auth-service ./cmd/
+RUN go mod tidy && go build -o /bin/auth-service ./cmd/
 
 FROM alpine:3.20
 RUN apk --no-cache add ca-certificates
