@@ -57,7 +57,7 @@ func (s *VideoService) CreateSessionToken(ctx context.Context, userID uint, room
 	_, err = s.repo.FindActiveSession(ctx, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			if err := s.repo.CreateSession(ctx, userID, roomName); err != nil {
+			if _, err := s.repo.CreateSession(ctx, userID, roomName); err != nil {
 				return nil, fmt.Errorf("failed to create video session: %w", err)
 			}
 		} else {
@@ -75,6 +75,51 @@ func (s *VideoService) CreateSessionToken(ctx context.Context, userID uint, room
 		Token:      token,
 		LivekitURL: s.livekitHost,
 	}, nil
+}
+
+func (s *VideoService) CreateRoom(ctx context.Context, adminID, userID uint) (string, uint, error) {
+	roomName := fmt.Sprintf("room_user_%d", userID)
+
+	// End any existing active sessions first
+	active, err := s.repo.FindActiveSession(ctx, userID)
+	if err == nil && active != nil {
+		_ = s.repo.EndSession(ctx, active.ID)
+	}
+
+	sessionID, err := s.repo.CreateSession(ctx, userID, roomName)
+	if err != nil {
+		return "", 0, fmt.Errorf("failed to create session: %w", err)
+	}
+
+	return roomName, sessionID, nil
+}
+
+func (s *VideoService) GenerateToken(ctx context.Context, userID uint, roomName string, isAdmin bool) (string, error) {
+	// Fetch user profile via Auth service for display name
+	userProfile, err := s.authClient.GetUserProfile(ctx, &authv1.GetUserProfileRequest{
+		UserId: uint32(userID),
+	})
+	if err != nil {
+		return "", fmt.Errorf("user profile fetch failed: %w", err)
+	}
+
+	displayName := userProfile.Name
+	identity := fmt.Sprintf("user_%d", userID)
+	if isAdmin {
+		displayName = "Trainer"
+		identity = fmt.Sprintf("admin_%d", userID)
+	}
+
+	token, err := s.generateLivekitToken(roomName, identity, displayName)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate LiveKit token: %w", err)
+	}
+
+	return token, nil
+}
+
+func (s *VideoService) EndSession(ctx context.Context, adminID, sessionID uint) error {
+	return s.repo.EndSession(ctx, sessionID)
 }
 
 func (s *VideoService) GetSessionList(ctx context.Context, userID uint) ([]repository.VideoSession, error) {
@@ -103,4 +148,8 @@ func (s *VideoService) generateLivekitToken(roomName, identity, name string) (st
 	at.SetValidFor(2 * time.Hour)
 
 	return at.ToJWT()
+}
+
+func (s *VideoService) GetLivekitHost() string {
+	return s.livekitHost
 }

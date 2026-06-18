@@ -8,12 +8,14 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type UserStatus string
+type UserRole string
 
 const (
-	RoleAdmin string = "admin"
-	RoleUser  string = "user"
+	RoleAdmin UserRole = "admin"
+	RoleUser  UserRole = "user"
 )
+
+type UserStatus string
 
 const (
 	StatusPendingOTP      UserStatus = "pending_otp"
@@ -28,7 +30,7 @@ type User struct {
 	Email     string     `db:"email"`
 	Name      string     `db:"name"`
 	Password  string     `db:"password"`
-	Role      string     `db:"role"`
+	Role      UserRole   `db:"role"`
 	Status    UserStatus `db:"status"`
 	CreatedAt time.Time  `db:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at"`
@@ -44,6 +46,13 @@ type RefreshToken struct {
 }
 
 
+type TaskStatus string
+
+const (
+	TaskStatusPending   TaskStatus = "pending"
+	TaskStatusCompleted TaskStatus = "completed"
+)
+
 type AssignedTask struct {
 	ID          uint         `db:"id"`
 	AdminID     uint         `db:"admin_id"`
@@ -51,7 +60,7 @@ type AssignedTask struct {
 	Title       string       `db:"title"`
 	Description string       `db:"description"`
 	DueDate     sql.NullTime `db:"due_date"`
-	Status      string       `db:"status"`
+	Status      TaskStatus   `db:"status"`
 	CreatedAt   time.Time    `db:"created_at"`
 	UpdatedAt   time.Time    `db:"updated_at"`
 }
@@ -87,8 +96,8 @@ func (r *AuthRepository) FindUserByID(ctx context.Context, id uint) (*User, erro
 func (r *AuthRepository) CreateUser(ctx context.Context, email, name, hashedPassword string) (uint, error) {
 	var id uint
 	query := `INSERT INTO users (email, name, password, role, status)
-	          VALUES ($1, $2, $3, 'user', 'pending_otp') RETURNING id`
-	err := r.db.QueryRowContext(ctx, query, email, name, hashedPassword).Scan(&id)
+	          VALUES ($1, $2, $3, $4, $5) RETURNING id`
+	err := r.db.QueryRowContext(ctx, query, email, name, hashedPassword, string(RoleUser), string(StatusPendingOTP)).Scan(&id)
 	return id, err
 }
 
@@ -135,8 +144,8 @@ func (r *AuthRepository) GetTasksByUserID(ctx context.Context, userID uint) ([]A
 
 func (r *AuthRepository) MarkTaskCompleted(ctx context.Context, taskID, userID uint) (int64, error) {
 	res, err := r.db.ExecContext(ctx,
-		"UPDATE assigned_tasks SET status = 'completed', updated_at = NOW() WHERE id = $1 AND user_id = $2",
-		taskID, userID,
+		"UPDATE assigned_tasks SET status = $1, updated_at = NOW() WHERE id = $2 AND user_id = $3",
+		string(TaskStatusCompleted), taskID, userID,
 	)
 	if err != nil {
 		return 0, err
@@ -153,14 +162,40 @@ func (r *AuthRepository) UpdateUserPassword(ctx context.Context, id uint, hashed
 func (r *AuthRepository) ListPendingUsers(ctx context.Context) ([]User, error) {
 	var users []User
 	err := r.db.SelectContext(ctx, &users,
-		"SELECT * FROM users WHERE status = 'pending_approval' ORDER BY created_at ASC")
+		"SELECT * FROM users WHERE status = $1 ORDER BY created_at ASC", string(StatusPendingApproval))
 	return users, err
 }
 
 func (r *AuthRepository) ListAllUsers(ctx context.Context) ([]User, error) {
 	var users []User
 	err := r.db.SelectContext(ctx, &users,
-		"SELECT * FROM users WHERE role != 'admin' ORDER BY created_at ASC")
+		"SELECT * FROM users WHERE role != $1 ORDER BY created_at ASC", string(RoleAdmin))
 	return users, err
+}
+
+func (r *AuthRepository) CreateTask(ctx context.Context, adminID, userID uint, title, description string, dueDate time.Time) (uint, error) {
+	var id uint
+	var err error
+	if !dueDate.IsZero() {
+		err = r.db.QueryRowContext(ctx,
+			"INSERT INTO assigned_tasks (admin_id, user_id, title, description, due_date) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+			adminID, userID, title, description, dueDate,
+		).Scan(&id)
+	} else {
+		err = r.db.QueryRowContext(ctx,
+			"INSERT INTO assigned_tasks (admin_id, user_id, title, description, due_date) VALUES ($1, $2, $3, $4, NULL) RETURNING id",
+			adminID, userID, title, description,
+		).Scan(&id)
+	}
+	return id, err
+}
+
+func (r *AuthRepository) DeleteTask(ctx context.Context, taskID uint) (int64, error) {
+	res, err := r.db.ExecContext(ctx, "DELETE FROM assigned_tasks WHERE id = $1", taskID)
+	if err != nil {
+		return 0, err
+	}
+	rows, _ := res.RowsAffected()
+	return rows, nil
 }
 

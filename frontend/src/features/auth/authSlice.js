@@ -40,6 +40,42 @@ export const verifyOTP = createAsyncThunk(
   }
 );
 
+export const resendOTP = createAsyncThunk(
+  'auth/resendOTP',
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await authApi.resendOTP(email);
+      return response.data.message || 'Verification code resent successfully';
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to resend OTP');
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk(
+  'auth/forgotPassword',
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await authApi.forgotPassword(email);
+      return response.data.message || 'Verification code sent for password reset';
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to send recovery email');
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async (details, { rejectWithValue }) => {
+    try {
+      const response = await authApi.resetPassword(details);
+      return response.data.message || 'Password reset successfully';
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to reset password');
+    }
+  }
+);
+
 export const checkAuth = createAsyncThunk(
   'auth/checkAuth',
   async (_, { rejectWithValue }) => {
@@ -81,6 +117,12 @@ const initialState = {
   registerMessage: '',
   otpStatus: 'idle', // idle | loading | success | failed
   otpMessage: '',
+  resendOTPStatus: 'idle', // idle | loading | success | failed
+  resendOTPMessage: '',
+  forgotPasswordStatus: 'idle', // idle | loading | success | failed
+  forgotPasswordMessage: '',
+  resetPasswordStatus: 'idle', // idle | loading | success | failed
+  resetPasswordMessage: '',
 };
 
 const authSlice = createSlice({
@@ -101,10 +143,19 @@ const authSlice = createSlice({
       state.error = null;
       state.registerMessage = '';
       state.otpMessage = '';
+      state.resendOTPMessage = '';
+      state.forgotPasswordMessage = '';
+      state.resetPasswordMessage = '';
     },
     resetRegisterState(state) {
       state.registerStatus = 'idle';
       state.otpStatus = 'idle';
+      state.resendOTPStatus = 'idle';
+      state.resendOTPMessage = '';
+      state.forgotPasswordStatus = 'idle';
+      state.forgotPasswordMessage = '';
+      state.resetPasswordStatus = 'idle';
+      state.resetPasswordMessage = '';
     }
   },
   extraReducers: (builder) => {
@@ -147,6 +198,45 @@ const authSlice = createSlice({
       })
       .addCase(verifyOTP.rejected, (state, action) => {
         state.otpStatus = 'failed';
+        state.error = action.payload;
+      })
+      // Resend OTP
+      .addCase(resendOTP.pending, (state) => {
+        state.resendOTPStatus = 'loading';
+        state.error = null;
+      })
+      .addCase(resendOTP.fulfilled, (state, action) => {
+        state.resendOTPStatus = 'success';
+        state.resendOTPMessage = action.payload;
+      })
+      .addCase(resendOTP.rejected, (state, action) => {
+        state.resendOTPStatus = 'failed';
+        state.error = action.payload;
+      })
+      // Forgot Password
+      .addCase(forgotPassword.pending, (state) => {
+        state.forgotPasswordStatus = 'loading';
+        state.error = null;
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.forgotPasswordStatus = 'success';
+        state.forgotPasswordMessage = action.payload;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.forgotPasswordStatus = 'failed';
+        state.error = action.payload;
+      })
+      // Reset Password
+      .addCase(resetPassword.pending, (state) => {
+        state.resetPasswordStatus = 'loading';
+        state.error = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.resetPasswordStatus = 'success';
+        state.resetPasswordMessage = action.payload;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.resetPasswordStatus = 'failed';
         state.error = action.payload;
       })
       // Check Auth

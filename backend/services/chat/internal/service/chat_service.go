@@ -124,12 +124,12 @@ func (s *ChatService) SendMessage(ctx context.Context, userID uint, message stri
 
 	var anthMessages []anthropicMessage
 	for _, m := range dbHistory {
-		anthMessages = append(anthMessages, anthropicMessage{Role: m.Role, Content: m.Content})
+		anthMessages = append(anthMessages, anthropicMessage{Role: string(m.Role), Content: m.Content})
 	}
-	anthMessages = append(anthMessages, anthropicMessage{Role: "user", Content: message})
+	anthMessages = append(anthMessages, anthropicMessage{Role: string(repository.RoleUser), Content: message})
 
 	// Persist user message
-	_ = s.repo.SaveMessage(ctx, userID, "user", message)
+	_ = s.repo.SaveMessage(ctx, userID, repository.RoleUser, message)
 
 	// Call Anthropic Claude API
 	reqPayload := anthropicRequest{
@@ -173,7 +173,7 @@ func (s *ChatService) SendMessage(ctx context.Context, userID uint, message stri
 	}
 
 	reply := anthResp.Content[0].Text
-	_ = s.repo.SaveMessage(ctx, userID, "assistant", reply)
+	_ = s.repo.SaveMessage(ctx, userID, repository.RoleAssistant, reply)
 
 	remaining := s.dailyLimit - (dailyCount + 1)
 	if remaining < 0 {

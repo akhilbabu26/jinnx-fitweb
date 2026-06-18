@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/akhilbabu26/jinnx/shared/kafka"
 	"github.com/akhilbabu26/jinnx/services/subscription/internal/repository"
 )
 
@@ -23,11 +24,13 @@ type SubscriptionService struct {
 	razorpayKeySecret string
 	razorpayPlanID    string
 	webhookSecret     string
+	kafka             *kafka.Producer // nil if Kafka unavailable
 }
 
 func New(
 	repo *repository.SubscriptionRepository,
 	keyID, keySecret, planID, webhookSecret string,
+	kafkaProducer *kafka.Producer,
 ) *SubscriptionService {
 	return &SubscriptionService{
 		repo:              repo,
@@ -35,6 +38,7 @@ func New(
 		razorpayKeySecret: keySecret,
 		razorpayPlanID:    planID,
 		webhookSecret:     webhookSecret,
+		kafka:             kafkaProducer,
 	}
 }
 
@@ -48,7 +52,7 @@ func (s *SubscriptionService) GetSubscription(ctx context.Context, userID uint) 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return &SubscriptionStatus{
-				Sub:      &repository.Subscription{Status: "trial"},
+				Sub:      &repository.Subscription{Status: repository.StatusTrial},
 				IsActive: false,
 			}, nil
 		}
@@ -57,16 +61,16 @@ func (s *SubscriptionService) GetSubscription(ctx context.Context, userID uint) 
 
 	now := time.Now()
 	// Auto-expire trial
-	if sub.Status == "trial" && sub.CurrentPeriodEnd.Valid && now.After(sub.CurrentPeriodEnd.Time) {
-		sub.Status = "cancelled"
-		_ = s.repo.UpdateStatus(ctx, sub.ID, "cancelled")
+	if sub.Status == repository.StatusTrial && sub.CurrentPeriodEnd.Valid && now.After(sub.CurrentPeriodEnd.Time) {
+		sub.Status = repository.StatusCancelled
+		_ = s.repo.UpdateStatus(ctx, sub.ID, repository.StatusCancelled)
 	}
 
 	isActive := false
 	switch sub.Status {
-	case "active":
+	case repository.StatusActive:
 		isActive = true
-	case "trial", "past_due", "cancelled":
+	case repository.StatusTrial, repository.StatusPastDue, repository.StatusCancelled:
 		if sub.CurrentPeriodEnd.Valid && now.Before(sub.CurrentPeriodEnd.Time) {
 			isActive = true
 		}
@@ -85,11 +89,11 @@ func (s *SubscriptionService) CreateRazorpaySubscription(ctx context.Context, us
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			trialEnd := time.Now().AddDate(0, 0, 7)
-			if _, err := s.repo.Create(ctx, userID, "trial", trialEnd); err != nil {
+			if _, err := s.repo.Create(ctx, userID, repository.StatusTrial, trialEnd); err != nil {
 				return nil, fmt.Errorf("failed to initialize subscription: %w", err)
 			}
 			sub = &repository.Subscription{
-				Status:           "trial",
+				Status:           repository.StatusTrial,
 				CurrentPeriodEnd: sql.NullTime{Time: trialEnd, Valid: true},
 			}
 		} else {
@@ -160,14 +164,14 @@ func (s *SubscriptionService) HandleWebhook(ctx context.Context, payload []byte,
 		return fmt.Errorf("failed to decode payload: %w", err)
 	}
 
-	var targetStatus string
-	switch webhookBody.Event {
-	case "subscription.charged":
-		targetStatus = "active"
-	case "subscription.cancelled":
-		targetStatus = "cancelled"
-	case "subscription.halted":
-		targetStatus = "past_due"
+	var targetStatus repository.SubscriptionStatus
+	switch repository.WebhookEvent(webhookBody.Event) {
+	case repository.EventCharged:
+		targetStatus = repository.StatusActive
+	case repository.EventCancelled:
+		targetStatus = repository.StatusCancelled
+	case repository.EventHalted:
+		targetStatus = repository.StatusPastDue
 	default:
 		return nil // unhandled event — OK
 	}
@@ -190,7 +194,29 @@ func (s *SubscriptionService) HandleWebhook(ctx context.Context, payload []byte,
 		periodEnd = time.Unix(int64(v), 0)
 	}
 
-	return s.repo.UpdateByRazorpaySubID(ctx, razorpaySubID, targetStatus, periodEnd)
+	if err := s.repo.UpdateByRazorpaySubID(ctx, razorpaySubID, targetStatus, periodEnd); err != nil {
+		return err
+	}
+
+	// Publish real-time event → admin WebSocket gets notified instantly
+	if s.kafka != nil {
+		eventType := kafka.EventSubscriptionCharged
+		if targetStatus == repository.StatusCancelled || targetStatus == repository.StatusPastDue {
+			eventType = kafka.EventSubscriptionCancelled
+		}
+		sub, _ := s.repo.FindByRazorpaySubID(ctx, razorpaySubID)
+		if sub != nil {
+			_ = s.kafka.Publish(ctx, kafka.Event{
+				Type:    eventType,
+				ActorID: sub.UserID,
+				Payload: map[string]any{
+					"razorpay_sub_id": razorpaySubID,
+					"status":          string(targetStatus),
+				},
+			})
+		}
+	}
+	return nil
 }
 
 func (s *SubscriptionService) verifySignature(payload []byte, signature string) bool {

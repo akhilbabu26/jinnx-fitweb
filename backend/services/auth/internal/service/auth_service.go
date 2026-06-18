@@ -13,6 +13,7 @@ import (
 	"github.com/akhilbabu26/jinnx/shared/cache"
 	"github.com/akhilbabu26/jinnx/shared/hash"
 	"github.com/akhilbabu26/jinnx/shared/jwt"
+	"github.com/akhilbabu26/jinnx/shared/kafka"
 	"github.com/akhilbabu26/jinnx/shared/mailer"
 
 	"github.com/akhilbabu26/jinnx/services/auth/internal/repository"
@@ -22,18 +23,27 @@ type AuthService struct {
 	repo          *repository.AuthRepository
 	mailer        *mailer.Mailer
 	secret        string
-	redisClient   *cache.RedisClient // nil if Redis is not available
+	redisClient   *cache.RedisClient
+	kafka         *kafka.Producer // nil if Kafka unavailable
 	jwtExpiry     time.Duration
 	refreshExpiry time.Duration
 }
 
-// New creates an AuthService. Pass a nil redisClient to run without caching.
-func New(repo *repository.AuthRepository, m *mailer.Mailer, jwtSecret string, redisClient *cache.RedisClient, jwtExpiry, refreshExpiry time.Duration) *AuthService {
+// New creates an AuthService. Pass nil redisClient or kafkaProducer to run without them.
+func New(
+	repo *repository.AuthRepository,
+	m *mailer.Mailer,
+	jwtSecret string,
+	redisClient *cache.RedisClient,
+	kafkaProducer *kafka.Producer,
+	jwtExpiry, refreshExpiry time.Duration,
+) *AuthService {
 	return &AuthService{
 		repo:          repo,
 		mailer:        m,
 		secret:        jwtSecret,
 		redisClient:   redisClient,
+		kafka:         kafkaProducer,
 		jwtExpiry:     jwtExpiry,
 		refreshExpiry: refreshExpiry,
 	}
@@ -75,8 +85,10 @@ func (s *AuthService) Register(ctx context.Context, email, name, password string
 		return nil, errors.New("OTP service unavailable")
 	}
 
-	log.Printf("[Register] OTP dispatched to %s\n", email)
-	_ = s.mailer.SendOTP(ctx, email, code)
+	log.Printf("[Register] OTP code %s generated for %s\n", code, email)
+	if err := s.mailer.SendOTP(ctx, email, code); err != nil {
+		log.Printf("[Register] error sending OTP to %s: %v\n", email, err)
+	}
 
 	return &RegisterResult{
 		UserID:  userID,
@@ -118,7 +130,7 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (*Login
 		return nil, errors.New("invalid credentials")
 	}
 
-	tokenPair, err := jwt.GenerateTokenPair(user.ID, user.Email, user.Role, s.secret, s.jwtExpiry, s.refreshExpiry)
+	tokenPair, err := jwt.GenerateTokenPair(user.ID, user.Email, string(user.Role), s.secret, s.jwtExpiry, s.refreshExpiry)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate tokens: %w", err)
 	}
@@ -137,7 +149,7 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (*Login
 		AccessToken:  tokenPair.AccessToken,
 		RefreshToken: tokenPair.RefreshToken,
 		UserID:       user.ID,
-		Role:         user.Role,
+		Role:         string(user.Role),
 	}, nil
 }
 
@@ -215,7 +227,7 @@ func (s *AuthService) VerifyOTP(ctx context.Context, email, code string) (bool, 
 		return false, fmt.Errorf("user not found: %w", err)
 	}
 
-	if user.Status != "pending_otp" {
+	if user.Status != repository.StatusPendingOTP {
 		return false, errors.New("user is already verified or not pending verification")
 	}
 
@@ -228,6 +240,18 @@ func (s *AuthService) VerifyOTP(ctx context.Context, email, code string) (bool, 
 		log.Printf("[VerifyOTP] warning: failed to send admin approval notification for %s (%s): %v\n", user.Name, user.Email, err)
 	} else {
 		log.Printf("[VerifyOTP] Admin approval notification sent for %s (%s)\n", user.Name, user.Email)
+	}
+
+	// Publish real-time event → admin WebSocket gets notified instantly
+	if s.kafka != nil {
+		_ = s.kafka.Publish(ctx, kafka.Event{
+			Type:    kafka.EventSignupPending,
+			ActorID: user.ID,
+			Payload: map[string]any{
+				"name":  user.Name,
+				"email": user.Email,
+			},
+		})
 	}
 
 	return true, nil
@@ -376,6 +400,21 @@ func (s *AuthService) RejectUser(ctx context.Context, adminID, userID uint) erro
 	return nil
 }
 
+func (s *AuthService) ReApproveUser(ctx context.Context, adminID, userID uint) error {
+	_, err := s.validateAdminAction(ctx, adminID, userID)
+	if err != nil {
+		return err
+	}
+
+	if err := s.UpdateUserStatus(ctx, userID, repository.StatusPendingApproval); err != nil {
+		return err
+	}
+
+	log.Printf("[Admin] User %d reset to pending_approval by admin %d\n", userID, adminID)
+	return nil
+}
+
+
 func (s *AuthService) BlockUser(ctx context.Context, adminID, userID uint) error {
 	_, err := s.validateAdminAction(ctx, adminID, userID)
 	if err != nil {
@@ -417,4 +456,67 @@ func generateOTP() string {
 		return fmt.Sprintf("%06d", time.Now().UnixNano()%1000000)
 	}
 	return fmt.Sprintf("%06d", num.Uint64())
+}
+
+func (s *AuthService) AssignTask(ctx context.Context, adminID, userID uint, title, description string, dueDateStr string) (uint, error) {
+	var dueDate time.Time
+	var err error
+	if dueDateStr != "" {
+		dueDate, err = time.Parse(time.RFC3339, dueDateStr)
+		if err != nil {
+			return 0, fmt.Errorf("invalid due date format: %w", err)
+		}
+	}
+	return s.repo.CreateTask(ctx, adminID, userID, title, description, dueDate)
+}
+
+func (s *AuthService) DeleteTask(ctx context.Context, taskID uint) error {
+	rows, err := s.repo.DeleteTask(ctx, taskID)
+	if err != nil {
+		return fmt.Errorf("database error: %w", err)
+	}
+	if rows == 0 {
+		return errors.New("task not found")
+	}
+	return nil
+}
+
+func (s *AuthService) ResendOTP(ctx context.Context, email string) error {
+	user, err := s.repo.FindUserByEmail(ctx, email)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return errors.New("user not found")
+		}
+		return fmt.Errorf("database error: %w", err)
+	}
+
+	if user.Status != repository.StatusPendingOTP {
+		return errors.New("user is already verified or not pending verification")
+	}
+
+	if s.redisClient == nil {
+		return errors.New("OTP service unavailable")
+	}
+
+	// Delete previously sent OTP from Redis
+	if err := s.redisClient.DeleteOTP(ctx, email); err != nil {
+		// Log the error but don't block the resend flow, just in case it wasn't set or already expired
+		log.Printf("[ResendOTP] warning: failed to delete old OTP for %s: %v\n", email, err)
+	} else {
+		log.Printf("[ResendOTP] Deleted old OTP from Redis for %s\n", email)
+	}
+
+	// Generate and send new OTP
+	code := generateOTP()
+	hashedCode := hash.Token(code)
+	if err := s.redisClient.SetOTP(ctx, email, hashedCode); err != nil {
+		return fmt.Errorf("failed to store new OTP in cache: %w", err)
+	}
+
+	log.Printf("[ResendOTP] New OTP code %s generated for %s\n", code, email)
+	if err := s.mailer.SendOTP(ctx, email, code); err != nil {
+		log.Printf("[ResendOTP] error sending new OTP to %s: %v\n", email, err)
+	}
+
+	return nil
 }

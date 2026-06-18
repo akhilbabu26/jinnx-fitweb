@@ -7,10 +7,18 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type ChatRole string
+
+const (
+	RoleUser      ChatRole = "user"
+	RoleAssistant ChatRole = "assistant"
+	RoleSystem    ChatRole = "system"
+)
+
 type ChatMessage struct {
 	ID        uint      `db:"id"`
 	UserID    uint      `db:"user_id"`
-	Role      string    `db:"role"`
+	Role      ChatRole  `db:"role"`
 	Content   string    `db:"content"`
 	CreatedAt time.Time `db:"created_at"`
 }
@@ -36,16 +44,16 @@ func (r *ChatRepository) CountTodayUserMessages(ctx context.Context, userID uint
 	var count int
 	err := r.db.GetContext(ctx, &count, `
 		SELECT COUNT(*) FROM chat_messages
-		WHERE user_id = $1 AND role = 'user' AND created_at >= CURRENT_DATE`,
-		userID,
+		WHERE user_id = $1 AND role = $2 AND created_at >= CURRENT_DATE`,
+		userID, string(RoleUser),
 	)
 	return count, err
 }
 
-func (r *ChatRepository) SaveMessage(ctx context.Context, userID uint, role, content string) error {
+func (r *ChatRepository) SaveMessage(ctx context.Context, userID uint, role ChatRole, content string) error {
 	_, err := r.db.ExecContext(ctx,
 		"INSERT INTO chat_messages (user_id, role, content) VALUES ($1, $2, $3)",
-		userID, role, content,
+		userID, string(role), content,
 	)
 	return err
 }

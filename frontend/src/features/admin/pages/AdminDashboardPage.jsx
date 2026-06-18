@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { userApi }    from '../../../shared/services/userApi';
@@ -7,6 +7,7 @@ import { workoutApi } from '../../../shared/services/workoutApi';
 
 import Toast  from '../../../shared/components/ui/Toast';
 import Loader from '../../../shared/components/ui/Loader';
+import { useWebSocket } from '../../../shared/hooks/useWebSocket';
 
 // ── Section components ────────────────────────────────────────────────────────
 import AdminOverview          from '../components/AdminOverview';
@@ -23,6 +24,8 @@ export default function AdminDashboardPage() {
   const [usersLoading,   setUsersLoading]   = useState(false);
   const [toastMsg,       setToastMsg]       = useState(null);
   const [compilingPdfId, setCompilingPdfId] = useState(null);
+  // ── Live notifications from WebSocket ─────────────────────────────────────
+  const [liveNotifs,     setLiveNotifs]     = useState([]); // [{id, text, type}]
 
   // ── Fetch users (shared across multiple sections) ──────────────────────────
   const fetchUsers = async () => {
@@ -59,6 +62,29 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => { fetchUsers(); }, []);
+
+  // ── WebSocket: receive live admin events ───────────────────────────────────
+  const handleWSMessage = useCallback((data) => {
+    const labelMap = {
+      signup_pending:           '🆕 New signup pending approval',
+      day_completed:            '✅ User completed a workout day',
+      trial_expiring:           '⏰ User trial expiring soon',
+      subscription_charged:     '💳 Subscription payment successful',
+      subscription_cancelled:   '❌ Subscription cancelled',
+    };
+    const text = data.payload
+      ? `${labelMap[data.type] || data.type} — ${data.payload.name || data.payload.email || `User #${data.actor_id}`}`
+      : (labelMap[data.type] || data.type);
+
+    const id = Date.now();
+    setLiveNotifs((prev) => [{ id, text, type: data.type }, ...prev.slice(0, 9)]);
+    // Auto-dismiss toast after 6s
+    setToastMsg({ message: text, type: 'info' });
+    // If signup pending, refresh users list so admin sees them immediately
+    if (data.type === 'signup_pending') fetchUsers();
+  }, []);
+
+  useWebSocket(handleWSMessage, true);
 
   // ── Shared action handlers ─────────────────────────────────────────────────
   const handleApprove = async (id, name) => {
@@ -142,6 +168,7 @@ export default function AdminDashboardPage() {
             courses={[]}
             onApprove={handleApprove}
             onReject={handleReject}
+            liveNotifs={liveNotifs}
           />
         );
 
@@ -195,6 +222,7 @@ export default function AdminDashboardPage() {
             courses={[]}
             onApprove={handleApprove}
             onReject={handleReject}
+            liveNotifs={liveNotifs}
           />
         );
     }

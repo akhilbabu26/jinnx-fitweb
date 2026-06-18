@@ -52,3 +52,34 @@ func (h *VideoHandler) GetSessionList(ctx context.Context, req *videov1.GetSessi
 
 	return &videov1.GetSessionListResponse{Sessions: protoSessions}, nil
 }
+
+func (h *VideoHandler) CreateRoom(ctx context.Context, req *videov1.CreateRoomRequest) (*videov1.CreateRoomResponse, error) {
+	roomName, sessionID, err := h.svc.CreateRoom(ctx, uint(req.AdminId), uint(req.UserId))
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &videov1.CreateRoomResponse{
+		RoomName:  roomName,
+		SessionId: uint32(sessionID),
+		Success:   true,
+	}, nil
+}
+
+func (h *VideoHandler) GenerateToken(ctx context.Context, req *videov1.GenerateTokenRequest) (*videov1.GenerateTokenResponse, error) {
+	token, err := h.svc.GenerateToken(ctx, uint(req.UserId), req.RoomName, req.IsAdmin)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &videov1.GenerateTokenResponse{
+		Token:      token,
+		LivekitUrl: h.svc.GetLivekitHost(),
+	}, nil
+}
+
+func (h *VideoHandler) EndSession(ctx context.Context, req *videov1.EndSessionRequest) (*videov1.EndSessionResponse, error) {
+	err := h.svc.EndSession(ctx, uint(req.AdminId), uint(req.SessionId))
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &videov1.EndSessionResponse{Success: true}, nil
+}

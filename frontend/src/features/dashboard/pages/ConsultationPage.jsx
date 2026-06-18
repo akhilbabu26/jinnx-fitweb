@@ -1,16 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { sessionApi } from '../../../shared/services/sessionApi';
+import { workoutApi } from '../../../shared/services/workoutApi';
+import { subscriptionApi } from '../../../shared/services/subscriptionApi';
 import Card from '../../../shared/components/ui/Card';
 import Button from '../../../shared/components/ui/Button';
 import Toast from '../../../shared/components/ui/Toast';
 import Loader from '../../../shared/components/ui/Loader';
 
 export default function ConsultationPage() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
   const [toastMsg, setToastMsg] = useState(null);
   const [activeCall, setActiveCall] = useState(false);
   const [sandboxMode, setSandboxMode] = useState(false);
+  const [enrolledCourse, setEnrolledCourse] = useState(null);
+  const [subscriptionRequired, setSubscriptionRequired] = useState(false);
+  const [videoAccessEnabled, setVideoAccessEnabled] = useState(false);
 
   // WebRTC States
   const [micMuted, setMicMuted] = useState(false);
@@ -20,17 +27,53 @@ export default function ConsultationPage() {
 
   const checkActiveSession = async () => {
     setLoading(true);
+    setSubscriptionRequired(false);
     try {
+      // 1. Check user enrollment course & video toggles
+      try {
+        const courseRes = await workoutApi.getEnrolledCourse();
+        if (courseRes.data?.success && courseRes.data?.data) {
+          setEnrolledCourse(courseRes.data.data);
+          setVideoAccessEnabled(courseRes.data.data.video_access_enabled);
+        } else {
+          setEnrolledCourse(null);
+          setVideoAccessEnabled(false);
+        }
+      } catch (e) {
+        console.error('Failed to load user enrollment status:', e);
+      }
+
+      // 2. Fetch active session token details
       const res = await sessionApi.joinSession();
       if (res.data?.success && res.data?.data) {
         setSession(res.data.data);
       }
     } catch (err) {
-      // Expect 400 Bad Request if no active session is initialized by trainer
-      console.log('No active trainer session found:', err.response?.data?.message);
-      setSession(null);
+      if (err.response?.status === 403 || err.response?.data?.code === 'SUBSCRIPTION_REQUIRED') {
+        setSubscriptionRequired(true);
+      } else {
+        // Expect 400 Bad Request if no active session is initialized by trainer
+        console.log('No active trainer session found:', err.response?.data?.message);
+        setSession(null);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSubscribe = async () => {
+    try {
+      const res = await subscriptionApi.createRazorpaySubscription();
+      if (res.data?.success) {
+        setToastMsg({ message: 'Subscription request sent successfully!', type: 'success' });
+        // Simulating immediate payment confirmation for developer convenience
+        setTimeout(() => {
+          setToastMsg({ message: 'Simulated payment success! Re-fetching consultation status.', type: 'success' });
+          checkActiveSession();
+        }, 1500);
+      }
+    } catch (err) {
+      setToastMsg({ message: err.response?.data?.message || 'Failed to trigger subscription checkout', type: 'error' });
     }
   };
 
@@ -117,6 +160,69 @@ export default function ConsultationPage() {
     return (
       <div className="py-24 flex items-center justify-center">
         <Loader size="lg" />
+      </div>
+    );
+  }
+
+  if (subscriptionRequired) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 animate-fade-in-up">
+        <Card className="p-12 text-center text-white/30 space-y-6 bg-[#08080c] border-white/5">
+          <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-full flex items-center justify-center text-red-500 mx-auto text-2xl font-bold shadow-lg">
+            🔒
+          </div>
+          <div className="space-y-2">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Premium Feature Locked</h4>
+            <p className="text-xs text-white/45 max-w-sm mx-auto leading-relaxed">
+              LiveKit video consultations with your personal trainer are exclusive to Premium members. Please subscribe to unlock consultations.
+            </p>
+          </div>
+          <Button variant="neon" className="px-8 py-3 mx-auto uppercase font-black" onClick={handleSubscribe}>
+            Upgrade to Premium
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!enrolledCourse) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 animate-fade-in-up">
+        <Card className="p-12 text-center text-white/30 space-y-6 bg-[#08080c] border-white/5">
+          <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-white/60 mx-auto text-2xl font-bold">
+            🏋️
+          </div>
+          <div className="space-y-2">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">No Active Program</h4>
+            <p className="text-xs text-white/45 max-w-sm mx-auto leading-relaxed">
+              Please enroll in a training program (Hypertrophy, Strength, or Endurance) from your dashboard before initiating video consultations.
+            </p>
+          </div>
+          <Button variant="neon" className="px-8 py-3 mx-auto uppercase font-black" onClick={() => navigate('/dashboard')}>
+            Go to Dashboard
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!videoAccessEnabled) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 animate-fade-in-up">
+        <Card className="p-12 text-center text-white/30 space-y-6 bg-[#08080c] border-white/5">
+          <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full flex items-center justify-center text-2xl font-bold mx-auto shadow-lg animate-pulse">
+            🔒
+          </div>
+          <div className="space-y-2">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Consultation Access Locked</h4>
+            <p className="text-xs text-white/45 max-w-sm mx-auto leading-relaxed">
+              Your personal trainer has not enabled video consultations for your account. Please ask your trainer to enable video access in your profile.
+            </p>
+          </div>
+          <Button variant="transparent" className="px-6 py-3 border border-white/10 text-white/70 hover:bg-white/5 mx-auto" onClick={checkActiveSession}>
+            Refresh Access Status
+          </Button>
+        </Card>
       </div>
     );
   }

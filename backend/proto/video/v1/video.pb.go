@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.35.0
-// source: proto/video/v1/video.proto
+// source: video/v1/video.proto
 
 package videov1
 
@@ -31,7 +31,7 @@ type CreateSessionTokenRequest struct {
 
 func (x *CreateSessionTokenRequest) Reset() {
 	*x = CreateSessionTokenRequest{}
-	mi := &file_proto_video_v1_video_proto_msgTypes[0]
+	mi := &file_video_v1_video_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +43,7 @@ func (x *CreateSessionTokenRequest) String() string {
 func (*CreateSessionTokenRequest) ProtoMessage() {}
 
 func (x *CreateSessionTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_video_v1_video_proto_msgTypes[0]
+	mi := &file_video_v1_video_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +56,7 @@ func (x *CreateSessionTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSessionTokenRequest.ProtoReflect.Descriptor instead.
 func (*CreateSessionTokenRequest) Descriptor() ([]byte, []int) {
-	return file_proto_video_v1_video_proto_rawDescGZIP(), []int{0}
+	return file_video_v1_video_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CreateSessionTokenRequest) GetUserId() uint32 {
@@ -83,7 +83,7 @@ type CreateSessionTokenResponse struct {
 
 func (x *CreateSessionTokenResponse) Reset() {
 	*x = CreateSessionTokenResponse{}
-	mi := &file_proto_video_v1_video_proto_msgTypes[1]
+	mi := &file_video_v1_video_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -95,7 +95,7 @@ func (x *CreateSessionTokenResponse) String() string {
 func (*CreateSessionTokenResponse) ProtoMessage() {}
 
 func (x *CreateSessionTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_video_v1_video_proto_msgTypes[1]
+	mi := &file_video_v1_video_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -108,7 +108,7 @@ func (x *CreateSessionTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSessionTokenResponse.ProtoReflect.Descriptor instead.
 func (*CreateSessionTokenResponse) Descriptor() ([]byte, []int) {
-	return file_proto_video_v1_video_proto_rawDescGZIP(), []int{1}
+	return file_video_v1_video_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateSessionTokenResponse) GetToken() string {
@@ -134,7 +134,7 @@ type GetSessionListRequest struct {
 
 func (x *GetSessionListRequest) Reset() {
 	*x = GetSessionListRequest{}
-	mi := &file_proto_video_v1_video_proto_msgTypes[2]
+	mi := &file_video_v1_video_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -146,7 +146,7 @@ func (x *GetSessionListRequest) String() string {
 func (*GetSessionListRequest) ProtoMessage() {}
 
 func (x *GetSessionListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_video_v1_video_proto_msgTypes[2]
+	mi := &file_video_v1_video_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -159,7 +159,7 @@ func (x *GetSessionListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSessionListRequest.ProtoReflect.Descriptor instead.
 func (*GetSessionListRequest) Descriptor() ([]byte, []int) {
-	return file_proto_video_v1_video_proto_rawDescGZIP(), []int{2}
+	return file_video_v1_video_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetSessionListRequest) GetUserId() uint32 {
@@ -181,7 +181,7 @@ type VideoSession struct {
 
 func (x *VideoSession) Reset() {
 	*x = VideoSession{}
-	mi := &file_proto_video_v1_video_proto_msgTypes[3]
+	mi := &file_video_v1_video_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -193,7 +193,7 @@ func (x *VideoSession) String() string {
 func (*VideoSession) ProtoMessage() {}
 
 func (x *VideoSession) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_video_v1_video_proto_msgTypes[3]
+	mi := &file_video_v1_video_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -206,7 +206,7 @@ func (x *VideoSession) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VideoSession.ProtoReflect.Descriptor instead.
 func (*VideoSession) Descriptor() ([]byte, []int) {
-	return file_proto_video_v1_video_proto_rawDescGZIP(), []int{3}
+	return file_video_v1_video_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *VideoSession) GetId() uint32 {
@@ -246,7 +246,7 @@ type GetSessionListResponse struct {
 
 func (x *GetSessionListResponse) Reset() {
 	*x = GetSessionListResponse{}
-	mi := &file_proto_video_v1_video_proto_msgTypes[4]
+	mi := &file_video_v1_video_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -258,7 +258,7 @@ func (x *GetSessionListResponse) String() string {
 func (*GetSessionListResponse) ProtoMessage() {}
 
 func (x *GetSessionListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_video_v1_video_proto_msgTypes[4]
+	mi := &file_video_v1_video_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -271,7 +271,7 @@ func (x *GetSessionListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSessionListResponse.ProtoReflect.Descriptor instead.
 func (*GetSessionListResponse) Descriptor() ([]byte, []int) {
-	return file_proto_video_v1_video_proto_rawDescGZIP(), []int{4}
+	return file_video_v1_video_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetSessionListResponse) GetSessions() []*VideoSession {
@@ -281,11 +281,331 @@ func (x *GetSessionListResponse) GetSessions() []*VideoSession {
 	return nil
 }
 
-var File_proto_video_v1_video_proto protoreflect.FileDescriptor
+type CreateRoomRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	UserId        uint32                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_proto_video_v1_video_proto_rawDesc = "" +
+func (x *CreateRoomRequest) Reset() {
+	*x = CreateRoomRequest{}
+	mi := &file_video_v1_video_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRoomRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRoomRequest) ProtoMessage() {}
+
+func (x *CreateRoomRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_video_v1_video_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRoomRequest.ProtoReflect.Descriptor instead.
+func (*CreateRoomRequest) Descriptor() ([]byte, []int) {
+	return file_video_v1_video_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CreateRoomRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *CreateRoomRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type CreateRoomResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RoomName      string                 `protobuf:"bytes,1,opt,name=room_name,json=roomName,proto3" json:"room_name,omitempty"`
+	SessionId     uint32                 `protobuf:"varint,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRoomResponse) Reset() {
+	*x = CreateRoomResponse{}
+	mi := &file_video_v1_video_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRoomResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRoomResponse) ProtoMessage() {}
+
+func (x *CreateRoomResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_video_v1_video_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRoomResponse.ProtoReflect.Descriptor instead.
+func (*CreateRoomResponse) Descriptor() ([]byte, []int) {
+	return file_video_v1_video_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CreateRoomResponse) GetRoomName() string {
+	if x != nil {
+		return x.RoomName
+	}
+	return ""
+}
+
+func (x *CreateRoomResponse) GetSessionId() uint32 {
+	if x != nil {
+		return x.SessionId
+	}
+	return 0
+}
+
+func (x *CreateRoomResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type GenerateTokenRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	RoomName      string                 `protobuf:"bytes,2,opt,name=room_name,json=roomName,proto3" json:"room_name,omitempty"`
+	IsAdmin       bool                   `protobuf:"varint,3,opt,name=is_admin,json=isAdmin,proto3" json:"is_admin,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateTokenRequest) Reset() {
+	*x = GenerateTokenRequest{}
+	mi := &file_video_v1_video_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateTokenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateTokenRequest) ProtoMessage() {}
+
+func (x *GenerateTokenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_video_v1_video_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateTokenRequest.ProtoReflect.Descriptor instead.
+func (*GenerateTokenRequest) Descriptor() ([]byte, []int) {
+	return file_video_v1_video_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GenerateTokenRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *GenerateTokenRequest) GetRoomName() string {
+	if x != nil {
+		return x.RoomName
+	}
+	return ""
+}
+
+func (x *GenerateTokenRequest) GetIsAdmin() bool {
+	if x != nil {
+		return x.IsAdmin
+	}
+	return false
+}
+
+type GenerateTokenResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	LivekitUrl    string                 `protobuf:"bytes,2,opt,name=livekit_url,json=livekitUrl,proto3" json:"livekit_url,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateTokenResponse) Reset() {
+	*x = GenerateTokenResponse{}
+	mi := &file_video_v1_video_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateTokenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateTokenResponse) ProtoMessage() {}
+
+func (x *GenerateTokenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_video_v1_video_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateTokenResponse.ProtoReflect.Descriptor instead.
+func (*GenerateTokenResponse) Descriptor() ([]byte, []int) {
+	return file_video_v1_video_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GenerateTokenResponse) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *GenerateTokenResponse) GetLivekitUrl() string {
+	if x != nil {
+		return x.LivekitUrl
+	}
+	return ""
+}
+
+type EndSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	SessionId     uint32                 `protobuf:"varint,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EndSessionRequest) Reset() {
+	*x = EndSessionRequest{}
+	mi := &file_video_v1_video_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EndSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EndSessionRequest) ProtoMessage() {}
+
+func (x *EndSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_video_v1_video_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EndSessionRequest.ProtoReflect.Descriptor instead.
+func (*EndSessionRequest) Descriptor() ([]byte, []int) {
+	return file_video_v1_video_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *EndSessionRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *EndSessionRequest) GetSessionId() uint32 {
+	if x != nil {
+		return x.SessionId
+	}
+	return 0
+}
+
+type EndSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EndSessionResponse) Reset() {
+	*x = EndSessionResponse{}
+	mi := &file_video_v1_video_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EndSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EndSessionResponse) ProtoMessage() {}
+
+func (x *EndSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_video_v1_video_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EndSessionResponse.ProtoReflect.Descriptor instead.
+func (*EndSessionResponse) Descriptor() ([]byte, []int) {
+	return file_video_v1_video_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *EndSessionResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+var File_video_v1_video_proto protoreflect.FileDescriptor
+
+const file_video_v1_video_proto_rawDesc = "" +
 	"\n" +
-	"\x1aproto/video/v1/video.proto\x12\bvideo.v1\"Q\n" +
+	"\x14video/v1/video.proto\x12\bvideo.v1\"Q\n" +
 	"\x19CreateSessionTokenRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\rR\x06userId\x12\x1b\n" +
 	"\troom_name\x18\x02 \x01(\tR\broomName\"S\n" +
@@ -301,64 +621,103 @@ const file_proto_video_v1_video_proto_rawDesc = "" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12!\n" +
 	"\fscheduled_at\x18\x04 \x01(\tR\vscheduledAt\"L\n" +
 	"\x16GetSessionListResponse\x122\n" +
-	"\bsessions\x18\x01 \x03(\v2\x16.video.v1.VideoSessionR\bsessions2\xc4\x01\n" +
+	"\bsessions\x18\x01 \x03(\v2\x16.video.v1.VideoSessionR\bsessions\"G\n" +
+	"\x11CreateRoomRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\rR\x06userId\"j\n" +
+	"\x12CreateRoomResponse\x12\x1b\n" +
+	"\troom_name\x18\x01 \x01(\tR\broomName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x02 \x01(\rR\tsessionId\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\"g\n" +
+	"\x14GenerateTokenRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\rR\x06userId\x12\x1b\n" +
+	"\troom_name\x18\x02 \x01(\tR\broomName\x12\x19\n" +
+	"\bis_admin\x18\x03 \x01(\bR\aisAdmin\"N\n" +
+	"\x15GenerateTokenResponse\x12\x14\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1f\n" +
+	"\vlivekit_url\x18\x02 \x01(\tR\n" +
+	"livekitUrl\"M\n" +
+	"\x11EndSessionRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x02 \x01(\rR\tsessionId\".\n" +
+	"\x12EndSessionResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xa8\x03\n" +
 	"\fVideoService\x12_\n" +
 	"\x12CreateSessionToken\x12#.video.v1.CreateSessionTokenRequest\x1a$.video.v1.CreateSessionTokenResponse\x12S\n" +
-	"\x0eGetSessionList\x12\x1f.video.v1.GetSessionListRequest\x1a .video.v1.GetSessionListResponseBEZCgithub.com/akhilbabu26/jinnx-fitweb/backend2/proto/video/v1;videov1b\x06proto3"
+	"\x0eGetSessionList\x12\x1f.video.v1.GetSessionListRequest\x1a .video.v1.GetSessionListResponse\x12G\n" +
+	"\n" +
+	"CreateRoom\x12\x1b.video.v1.CreateRoomRequest\x1a\x1c.video.v1.CreateRoomResponse\x12P\n" +
+	"\rGenerateToken\x12\x1e.video.v1.GenerateTokenRequest\x1a\x1f.video.v1.GenerateTokenResponse\x12G\n" +
+	"\n" +
+	"EndSession\x12\x1b.video.v1.EndSessionRequest\x1a\x1c.video.v1.EndSessionResponseBEZCgithub.com/akhilbabu26/jinnx-fitweb/backend2/proto/video/v1;videov1b\x06proto3"
 
 var (
-	file_proto_video_v1_video_proto_rawDescOnce sync.Once
-	file_proto_video_v1_video_proto_rawDescData []byte
+	file_video_v1_video_proto_rawDescOnce sync.Once
+	file_video_v1_video_proto_rawDescData []byte
 )
 
-func file_proto_video_v1_video_proto_rawDescGZIP() []byte {
-	file_proto_video_v1_video_proto_rawDescOnce.Do(func() {
-		file_proto_video_v1_video_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_video_v1_video_proto_rawDesc), len(file_proto_video_v1_video_proto_rawDesc)))
+func file_video_v1_video_proto_rawDescGZIP() []byte {
+	file_video_v1_video_proto_rawDescOnce.Do(func() {
+		file_video_v1_video_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_video_v1_video_proto_rawDesc), len(file_video_v1_video_proto_rawDesc)))
 	})
-	return file_proto_video_v1_video_proto_rawDescData
+	return file_video_v1_video_proto_rawDescData
 }
 
-var file_proto_video_v1_video_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-var file_proto_video_v1_video_proto_goTypes = []any{
+var file_video_v1_video_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_video_v1_video_proto_goTypes = []any{
 	(*CreateSessionTokenRequest)(nil),  // 0: video.v1.CreateSessionTokenRequest
 	(*CreateSessionTokenResponse)(nil), // 1: video.v1.CreateSessionTokenResponse
 	(*GetSessionListRequest)(nil),      // 2: video.v1.GetSessionListRequest
 	(*VideoSession)(nil),               // 3: video.v1.VideoSession
 	(*GetSessionListResponse)(nil),     // 4: video.v1.GetSessionListResponse
+	(*CreateRoomRequest)(nil),          // 5: video.v1.CreateRoomRequest
+	(*CreateRoomResponse)(nil),         // 6: video.v1.CreateRoomResponse
+	(*GenerateTokenRequest)(nil),       // 7: video.v1.GenerateTokenRequest
+	(*GenerateTokenResponse)(nil),      // 8: video.v1.GenerateTokenResponse
+	(*EndSessionRequest)(nil),          // 9: video.v1.EndSessionRequest
+	(*EndSessionResponse)(nil),         // 10: video.v1.EndSessionResponse
 }
-var file_proto_video_v1_video_proto_depIdxs = []int32{
-	3, // 0: video.v1.GetSessionListResponse.sessions:type_name -> video.v1.VideoSession
-	0, // 1: video.v1.VideoService.CreateSessionToken:input_type -> video.v1.CreateSessionTokenRequest
-	2, // 2: video.v1.VideoService.GetSessionList:input_type -> video.v1.GetSessionListRequest
-	1, // 3: video.v1.VideoService.CreateSessionToken:output_type -> video.v1.CreateSessionTokenResponse
-	4, // 4: video.v1.VideoService.GetSessionList:output_type -> video.v1.GetSessionListResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+var file_video_v1_video_proto_depIdxs = []int32{
+	3,  // 0: video.v1.GetSessionListResponse.sessions:type_name -> video.v1.VideoSession
+	0,  // 1: video.v1.VideoService.CreateSessionToken:input_type -> video.v1.CreateSessionTokenRequest
+	2,  // 2: video.v1.VideoService.GetSessionList:input_type -> video.v1.GetSessionListRequest
+	5,  // 3: video.v1.VideoService.CreateRoom:input_type -> video.v1.CreateRoomRequest
+	7,  // 4: video.v1.VideoService.GenerateToken:input_type -> video.v1.GenerateTokenRequest
+	9,  // 5: video.v1.VideoService.EndSession:input_type -> video.v1.EndSessionRequest
+	1,  // 6: video.v1.VideoService.CreateSessionToken:output_type -> video.v1.CreateSessionTokenResponse
+	4,  // 7: video.v1.VideoService.GetSessionList:output_type -> video.v1.GetSessionListResponse
+	6,  // 8: video.v1.VideoService.CreateRoom:output_type -> video.v1.CreateRoomResponse
+	8,  // 9: video.v1.VideoService.GenerateToken:output_type -> video.v1.GenerateTokenResponse
+	10, // 10: video.v1.VideoService.EndSession:output_type -> video.v1.EndSessionResponse
+	6,  // [6:11] is the sub-list for method output_type
+	1,  // [1:6] is the sub-list for method input_type
+	1,  // [1:1] is the sub-list for extension type_name
+	1,  // [1:1] is the sub-list for extension extendee
+	0,  // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_proto_video_v1_video_proto_init() }
-func file_proto_video_v1_video_proto_init() {
-	if File_proto_video_v1_video_proto != nil {
+func init() { file_video_v1_video_proto_init() }
+func file_video_v1_video_proto_init() {
+	if File_video_v1_video_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_video_v1_video_proto_rawDesc), len(file_proto_video_v1_video_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_video_v1_video_proto_rawDesc), len(file_video_v1_video_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_video_v1_video_proto_goTypes,
-		DependencyIndexes: file_proto_video_v1_video_proto_depIdxs,
-		MessageInfos:      file_proto_video_v1_video_proto_msgTypes,
+		GoTypes:           file_video_v1_video_proto_goTypes,
+		DependencyIndexes: file_video_v1_video_proto_depIdxs,
+		MessageInfos:      file_video_v1_video_proto_msgTypes,
 	}.Build()
-	File_proto_video_v1_video_proto = out.File
-	file_proto_video_v1_video_proto_goTypes = nil
-	file_proto_video_v1_video_proto_depIdxs = nil
+	File_video_v1_video_proto = out.File
+	file_video_v1_video_proto_goTypes = nil
+	file_video_v1_video_proto_depIdxs = nil
 }

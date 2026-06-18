@@ -9,6 +9,6 @@ export const userApi = {
   // Admin endpoints
   getApprovedUsers: () => api.get('/admin/users'),
   getPendingUsers: () => api.get('/admin/users/pending'),
-  approveUser: (id) => api.patch(`/admin/users/${id}/approve`),
-  rejectUser: (id) => api.patch(`/admin/users/${id}/reject`),
+  approveUser: (id) => api.put(`/admin/users/${id}/approve`),
+  rejectUser: (id) => api.put(`/admin/users/${id}/reject`),
 };

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.35.0
-// source: proto/video/v1/video.proto
+// source: video/v1/video.proto
 
 package videov1
 
@@ -21,6 +21,9 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	VideoService_CreateSessionToken_FullMethodName = "/video.v1.VideoService/CreateSessionToken"
 	VideoService_GetSessionList_FullMethodName     = "/video.v1.VideoService/GetSessionList"
+	VideoService_CreateRoom_FullMethodName         = "/video.v1.VideoService/CreateRoom"
+	VideoService_GenerateToken_FullMethodName      = "/video.v1.VideoService/GenerateToken"
+	VideoService_EndSession_FullMethodName         = "/video.v1.VideoService/EndSession"
 )
 
 // VideoServiceClient is the client API for VideoService service.
@@ -29,6 +32,9 @@ const (
 type VideoServiceClient interface {
 	CreateSessionToken(ctx context.Context, in *CreateSessionTokenRequest, opts ...grpc.CallOption) (*CreateSessionTokenResponse, error)
 	GetSessionList(ctx context.Context, in *GetSessionListRequest, opts ...grpc.CallOption) (*GetSessionListResponse, error)
+	CreateRoom(ctx context.Context, in *CreateRoomRequest, opts ...grpc.CallOption) (*CreateRoomResponse, error)
+	GenerateToken(ctx context.Context, in *GenerateTokenRequest, opts ...grpc.CallOption) (*GenerateTokenResponse, error)
+	EndSession(ctx context.Context, in *EndSessionRequest, opts ...grpc.CallOption) (*EndSessionResponse, error)
 }
 
 type videoServiceClient struct {
@@ -59,12 +65,45 @@ func (c *videoServiceClient) GetSessionList(ctx context.Context, in *GetSessionL
 	return out, nil
 }
 
+func (c *videoServiceClient) CreateRoom(ctx context.Context, in *CreateRoomRequest, opts ...grpc.CallOption) (*CreateRoomResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateRoomResponse)
+	err := c.cc.Invoke(ctx, VideoService_CreateRoom_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoServiceClient) GenerateToken(ctx context.Context, in *GenerateTokenRequest, opts ...grpc.CallOption) (*GenerateTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenerateTokenResponse)
+	err := c.cc.Invoke(ctx, VideoService_GenerateToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoServiceClient) EndSession(ctx context.Context, in *EndSessionRequest, opts ...grpc.CallOption) (*EndSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EndSessionResponse)
+	err := c.cc.Invoke(ctx, VideoService_EndSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VideoServiceServer is the server API for VideoService service.
 // All implementations must embed UnimplementedVideoServiceServer
 // for forward compatibility.
 type VideoServiceServer interface {
 	CreateSessionToken(context.Context, *CreateSessionTokenRequest) (*CreateSessionTokenResponse, error)
 	GetSessionList(context.Context, *GetSessionListRequest) (*GetSessionListResponse, error)
+	CreateRoom(context.Context, *CreateRoomRequest) (*CreateRoomResponse, error)
+	GenerateToken(context.Context, *GenerateTokenRequest) (*GenerateTokenResponse, error)
+	EndSession(context.Context, *EndSessionRequest) (*EndSessionResponse, error)
 	mustEmbedUnimplementedVideoServiceServer()
 }
 
@@ -80,6 +119,15 @@ func (UnimplementedVideoServiceServer) CreateSessionToken(context.Context, *Crea
 }
 func (UnimplementedVideoServiceServer) GetSessionList(context.Context, *GetSessionListRequest) (*GetSessionListResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSessionList not implemented")
+}
+func (UnimplementedVideoServiceServer) CreateRoom(context.Context, *CreateRoomRequest) (*CreateRoomResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateRoom not implemented")
+}
+func (UnimplementedVideoServiceServer) GenerateToken(context.Context, *GenerateTokenRequest) (*GenerateTokenResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GenerateToken not implemented")
+}
+func (UnimplementedVideoServiceServer) EndSession(context.Context, *EndSessionRequest) (*EndSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method EndSession not implemented")
 }
 func (UnimplementedVideoServiceServer) mustEmbedUnimplementedVideoServiceServer() {}
 func (UnimplementedVideoServiceServer) testEmbeddedByValue()                      {}
@@ -138,6 +186,60 @@ func _VideoService_GetSessionList_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoService_CreateRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRoomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).CreateRoom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_CreateRoom_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).CreateRoom(ctx, req.(*CreateRoomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoService_GenerateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).GenerateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_GenerateToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).GenerateToken(ctx, req.(*GenerateTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoService_EndSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).EndSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_EndSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).EndSession(ctx, req.(*EndSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // VideoService_ServiceDesc is the grpc.ServiceDesc for VideoService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -153,7 +255,19 @@ var VideoService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetSessionList",
 			Handler:    _VideoService_GetSessionList_Handler,
 		},
+		{
+			MethodName: "CreateRoom",
+			Handler:    _VideoService_CreateRoom_Handler,
+		},
+		{
+			MethodName: "GenerateToken",
+			Handler:    _VideoService_GenerateToken_Handler,
+		},
+		{
+			MethodName: "EndSession",
+			Handler:    _VideoService_EndSession_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/video/v1/video.proto",
+	Metadata: "video/v1/video.proto",
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function AdminOverview({ users, workouts, courses, onApprove, onReject }) {
+export default function AdminOverview({ users, workouts, courses, onApprove, onReject, liveNotifs = [] }) {
   const total    = users.length;
   const active   = users.filter((u) => u.status === 'Active').length;
   const pending  = users.filter((u) => u.status === 'Pending').length;
@@ -126,6 +126,45 @@ export default function AdminOverview({ users, workouts, courses, onApprove, onR
               <div className="text-xs text-white/30 py-6 text-center">No pending approvals 🎉</div>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* Live System Activity Feed */}
+      <div className="bg-[#08080c] border border-white/5 p-6 rounded-2xl animate-fade-in-up">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#39ff14] animate-ping" />
+            Live System Activity
+          </h3>
+          <span className="text-[10px] font-semibold text-white/30">Listening for client events...</span>
+        </div>
+        <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+          {liveNotifs && liveNotifs.length > 0 ? (
+            liveNotifs.map((n) => (
+              <div key={n.id} className="flex items-start justify-between border-b border-white/5 pb-2 last:border-0 last:pb-0">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs">
+                    {n.type === 'signup_pending' && '🆕'}
+                    {n.type === 'day_completed' && '✅'}
+                    {n.type === 'trial_expiring' && '⏰'}
+                    {n.type === 'subscription_charged' && '💳'}
+                    {n.type === 'subscription_cancelled' && '❌'}
+                    {n.type === 'plan_updated' && '🔄'}
+                  </span>
+                  <div>
+                    <p className="text-xs text-white/80 font-medium">{n.text}</p>
+                    <p className="text-[9px] text-white/30 font-mono mt-0.5">
+                      {new Date(n.id).toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-xs text-white/30 py-8 text-center">
+              Listening for live user actions, trial expirations, & subscription events...
+            </div>
+          )}
         </div>
       </div>
     </div>

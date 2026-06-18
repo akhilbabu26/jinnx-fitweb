@@ -4,10 +4,12 @@ import { logout, setCredentials } from '../../features/auth/authSlice';
 
 const api = axios.create({
   baseURL: '/api',
+  withCredentials: true, // send HttpOnly refresh_token cookie on every request
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
 
 api.interceptors.request.use(
   (config) => {
@@ -39,8 +41,10 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     
-    // Prevent infinite loop if refreshing fails
-    if (originalRequest.url === '/auth/refresh') {
+    // Prevent token refresh attempts for public auth endpoints or if refresh itself fails
+    const publicPaths = ['/auth/login', '/auth/register', '/auth/verify-otp', '/auth/resend-otp', '/auth/forgot-password', '/auth/reset-password', '/auth/refresh'];
+    const isPublic = publicPaths.some(path => originalRequest.url && originalRequest.url.includes(path));
+    if (isPublic) {
       return Promise.reject(error);
     }
 

@@ -32,7 +32,7 @@ func (h *ChatHandler) GetChatHistory(ctx context.Context, req *chatv1.GetChatHis
 	for _, m := range result.Messages {
 		proto = append(proto, &chatv1.ChatMessage{
 			Id:        uint32(m.ID),
-			Role:      m.Role,
+			Role:      string(m.Role),
 			Content:   m.Content,
 			CreatedAt: m.CreatedAt.Format(time.RFC3339),
 		})

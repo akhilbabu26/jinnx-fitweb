@@ -12,6 +12,18 @@ service WorkoutService {
   rpc Enroll (EnrollRequest) returns (EnrollResponse);
   rpc CancelEnrollment (CancelEnrollmentRequest) returns (CancelEnrollmentResponse);
   rpc CompleteWorkoutDay (CompleteWorkoutDayRequest) returns (CompleteWorkoutDayResponse);
+
+  // Admin Custom Plan APIs
+  rpc CreateUserWeek (CreateUserWeekRequest) returns (CreateUserWeekResponse);
+  rpc CreateUserDay (CreateUserDayRequest) returns (CreateUserDayResponse);
+  rpc CreateUserExercise (CreateUserExerciseRequest) returns (CreateUserExerciseResponse);
+  rpc UpdateUserExercise (UpdateUserExerciseRequest) returns (UpdateUserExerciseResponse);
+  rpc DeleteUserExercise (DeleteUserExerciseRequest) returns (DeleteUserExerciseResponse);
+  rpc AddDayFeedback (AddDayFeedbackRequest) returns (AddDayFeedbackResponse);
+  rpc GetUserPlan (GetUserPlanRequest) returns (GetUserPlanResponse);
+  rpc ToggleUserVideoAccess (ToggleUserVideoAccessRequest) returns (ToggleUserVideoAccessResponse);
+  rpc ListTrialExpiringUsers (ListTrialExpiringUsersRequest) returns (ListTrialExpiringUsersResponse);
+  rpc SetUserLevel (SetUserLevelRequest) returns (SetUserLevelResponse);
 }
 
 message GetCoursesRequest {}
@@ -37,6 +49,14 @@ message GetEnrolledCourseResponse {
   string description = 3;
   string slug = 4;
   bool is_enrolled = 5;
+  string level = 6;
+  string equipment = 7;
+  string trial_ends_at = 8;
+  bool video_access_enabled = 9;
+  string goals = 10;
+  int32 age = 11;
+  string gender = 12;
+  string injuries = 13;
 }
 
 message GetTodayWorkoutRequest {
@@ -98,5 +118,158 @@ message CompleteWorkoutDayRequest {
 }
 
 message CompleteWorkoutDayResponse {
+  bool success = 1;
+}
+
+// --- Admin Custom Plan Messages ---
+
+message CreateUserWeekRequest {
+  uint32 admin_id = 1;
+  uint32 user_id = 2;
+  uint32 course_id = 3;
+  int32 week_number = 4;
+  string title = 5;
+}
+
+message CreateUserWeekResponse {
+  uint32 assigned_week_id = 1;
+  bool success = 2;
+}
+
+message CreateUserDayRequest {
+  uint32 admin_id = 1;
+  uint32 assigned_week_id = 2;
+  int32 day_number = 3;
+  string title = 4;
+  bool is_rest_day = 5;
+  string admin_notes = 6;
+}
+
+message CreateUserDayResponse {
+  uint32 assigned_day_id = 1;
+  bool success = 2;
+}
+
+message AdminExercise {
+  string name = 1;
+  int32 sets = 2;
+  string reps = 3;
+  string weight = 4;
+  string video_url = 5;
+  string target = 6;
+  string equipment_needed = 7;
+  int32 order_index = 8;
+}
+
+message CreateUserExerciseRequest {
+  uint32 admin_id = 1;
+  uint32 assigned_day_id = 2;
+  AdminExercise exercise = 3;
+}
+
+message CreateUserExerciseResponse {
+  uint32 exercise_id = 1;
+  bool success = 2;
+}
+
+message UpdateUserExerciseRequest {
+  uint32 admin_id = 1;
+  uint32 exercise_id = 2;
+  AdminExercise exercise = 3;
+}
+
+message UpdateUserExerciseResponse {
+  bool success = 1;
+}
+
+message DeleteUserExerciseRequest {
+  uint32 admin_id = 1;
+  uint32 exercise_id = 2;
+}
+
+message DeleteUserExerciseResponse {
+  bool success = 1;
+}
+
+message AddDayFeedbackRequest {
+  uint32 admin_id = 1;
+  uint32 user_id = 2;
+  uint32 assigned_day_id = 3;
+  string feedback_text = 4;
+}
+
+message AddDayFeedbackResponse {
+  bool success = 1;
+}
+
+message GetUserPlanRequest {
+  uint32 user_id = 1;
+}
+
+message UserPlanExercise {
+  uint32 id = 1;
+  string name = 2;
+  int32 sets = 3;
+  string reps = 4;
+  string weight = 5;
+  string video_url = 6;
+  string target = 7;
+  string equipment_needed = 8;
+  int32 order_index = 9;
+}
+
+message UserPlanDay {
+  uint32 id = 1;
+  int32 day_number = 2;
+  string title = 3;
+  bool is_rest_day = 4;
+  string admin_notes = 5;
+  repeated UserPlanExercise exercises = 6;
+  string admin_feedback = 7;
+}
+
+message UserPlanWeek {
+  uint32 id = 1;
+  int32 week_number = 2;
+  string title = 3;
+  repeated UserPlanDay days = 4;
+}
+
+message GetUserPlanResponse {
+  repeated UserPlanWeek weeks = 1;
+}
+
+message ToggleUserVideoAccessRequest {
+  uint32 admin_id = 1;
+  uint32 user_id = 2;
+  bool enabled = 3;
+}
+
+message ToggleUserVideoAccessResponse {
+  bool success = 1;
+}
+
+message ListTrialExpiringUsersRequest {
+  uint32 admin_id = 1;
+}
+
+message ExpiringUser {
+  uint32 user_id = 1;
+  string email = 2;
+  string name = 3;
+  string trial_ends_at = 4;
+}
+
+message ListTrialExpiringUsersResponse {
+  repeated ExpiringUser users = 1;
+}
+
+message SetUserLevelRequest {
+  uint32 admin_id = 1;
+  uint32 user_id = 2;
+  string level = 3;
+}
+
+message SetUserLevelResponse {
   bool success = 1;
 }

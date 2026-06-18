@@ -29,6 +29,11 @@ type cachedProfile struct {
 // this TTL acts as a safety net for Redis restarts or missed invalidations.
 const profileCacheTTL = 5 * time.Minute
 
+const (
+	roleAdmin      = "admin"
+	statusApproved = "approved"
+)
+
 // JWTMiddleware validates the Bearer token and loads user claims into locals.
 // On a cache miss it calls the auth service and caches the result.
 // Pass a nil redisClient to disable caching (useful in tests).
@@ -108,7 +113,7 @@ func resolveProfile(ctx context.Context, userID uint, authClient authv1.AuthServ
 func RequireApproved() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		status, ok := c.Locals("status").(string)
-		if !ok || status != "approved" {
+		if !ok || status != statusApproved {
 			return c.Status(403).JSON(fiber.Map{
 				"success": false,
 				"message": "your account is pending trainer approval",
@@ -151,7 +156,7 @@ func RequireActiveSubscription(subClient subv1.SubscriptionServiceClient) fiber.
 func RequireAdmin() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		role, ok := c.Locals("role").(string)
-		if !ok || role != "admin" {
+		if !ok || role != roleAdmin {
 			return c.Status(403).JSON(fiber.Map{
 				"success": false,
 				"message": "admin access required",

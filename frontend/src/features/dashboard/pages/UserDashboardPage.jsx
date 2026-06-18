@@ -10,28 +10,24 @@ import Toast from '../../../shared/components/ui/Toast';
 import Loader from '../../../shared/components/ui/Loader';
 
 const onboardingQuestions = {
-  hypertrophy: [
-    { name: 'fitness_goal', label: 'Fitness Goal', type: 'text', placeholder: 'e.g. Muscle size, aesthetic physique' },
+  common: [
+    { name: 'age', label: 'Age', type: 'number', placeholder: 'e.g. 25' },
+    { name: 'gender', label: 'Gender', type: 'select', options: ['Male', 'Female', 'Other'] },
+    { name: 'fitness_goal', label: 'Fitness Goal / Objectives', type: 'text', placeholder: 'e.g. Build muscle, lose bodyfat' },
     { name: 'experience_level', label: 'Experience Level', type: 'select', options: ['Beginner', 'Intermediate', 'Advanced'] },
-    { name: 'days_per_week', label: 'Days Per Week', type: 'number', placeholder: 'e.g. 4' },
-    { name: 'target_muscle', label: 'Target Muscle Group', type: 'text', placeholder: 'e.g. Chest/Arms, Full Body' },
-    { name: 'equipment_available', label: 'Equipment Available', type: 'text', placeholder: 'e.g. Full Gym, Dumbbells only' },
-  ],
-  strength: [
-    { name: 'current_max_squat', label: 'Current Squat Max (kg)', type: 'number', placeholder: 'e.g. 100' },
-    { name: 'current_max_bench', label: 'Current Bench Max (kg)', type: 'number', placeholder: 'e.g. 80' },
-    { name: 'current_max_deadlift', label: 'Current Deadlift Max (kg)', type: 'number', placeholder: 'e.g. 120' },
-    { name: 'experience_level', label: 'Experience Level', type: 'select', options: ['Beginner', 'Intermediate', 'Advanced'] },
-    { name: 'days_per_week', label: 'Days Per Week', type: 'number', placeholder: 'e.g. 4' },
-    { name: 'competition_goal', label: 'Competition Goal', type: 'text', placeholder: 'e.g. Powerlifting meet, general strength' },
-  ],
-  endurance: [
-    { name: 'target_distance', label: 'Target Distance', type: 'text', placeholder: 'e.g. 5K, 10K, Marathon' },
-    { name: 'current_fitness', label: 'Current Fitness Level', type: 'select', options: ['Poor', 'Moderate', 'Excellent'] },
-    { name: 'days_per_week', label: 'Days Per Week', type: 'number', placeholder: 'e.g. 3' },
-    { name: 'race_goal', label: 'Race Goal / Target Date', type: 'text', placeholder: 'e.g. Finish marathon, beat PR' },
-    { name: 'equipment_available', label: 'Equipment Available', type: 'text', placeholder: 'e.g. Treadmill, Road, GPS Watch' },
-  ],
+    { name: 'days_per_week', label: 'Desired Weekly Sessions', type: 'number', placeholder: 'e.g. 4' },
+    { name: 'injuries', label: 'Injuries or Restrictions (Write None if none)', type: 'text', placeholder: 'e.g. Knee pain, none' },
+    { name: 'equipment', label: 'Available Gym Equipment', type: 'checkboxes', options: [
+        { value: 'barbell', label: 'Barbell' },
+        { value: 'dumbbell', label: 'Dumbbell' },
+        { value: 'cables', label: 'Cables' },
+        { value: 'kettlebell', label: 'Kettlebell' },
+        { value: 'machine', label: 'Machines' },
+        { value: 'bench', label: 'Bench' },
+        { value: 'resistance band', label: 'Resistance Bands' }
+      ]
+    }
+  ]
 };
 
 export default function UserDashboardPage() {
@@ -144,11 +140,18 @@ export default function UserDashboardPage() {
 
   const handleSelectCourse = (course) => {
     setSelectedCourse(course);
-    // Initialize form keys
-    const questions = onboardingQuestions[course.slug] || [];
-    const initialForm = {};
+    const questions = onboardingQuestions.common;
+    const initialForm = {
+      equipment: []
+    };
     questions.forEach(q => {
-      initialForm[q.name] = q.type === 'number' ? '' : (q.type === 'select' ? q.options[0] : '');
+      if (q.type === 'number') {
+        initialForm[q.name] = '';
+      } else if (q.type === 'select') {
+        initialForm[q.name] = q.options[0];
+      } else if (q.type === 'text') {
+        initialForm[q.name] = '';
+      }
     });
     setOnboardingForm(initialForm);
     setShowModal(true);
@@ -158,23 +161,27 @@ export default function UserDashboardPage() {
     setOnboardingForm({ ...onboardingForm, [name]: value });
   };
 
+  const handleCheckboxChange = (value, checked) => {
+    const list = onboardingForm.equipment || [];
+    const updated = checked ? [...list, value] : list.filter(v => v !== value);
+    setOnboardingForm({ ...onboardingForm, equipment: updated });
+  };
+
   const handleOnboardingSubmit = async (e) => {
     e.preventDefault();
     if (!selectedCourse) return;
 
     setSubmittingOnboarding(true);
     try {
-      // Parse numbers if applicable
-      const parsedData = {};
-      const questions = onboardingQuestions[selectedCourse.slug] || [];
-      questions.forEach(q => {
-        const val = onboardingForm[q.name];
-        if (q.type === 'number') {
-          parsedData[q.name] = val ? parseInt(val) : 0;
-        } else {
-          parsedData[q.name] = val;
-        }
-      });
+      const parsedData = {
+        age: parseInt(onboardingForm.age) || 0,
+        gender: onboardingForm.gender || 'Male',
+        goals: onboardingForm.fitness_goal || '',
+        experience_level: onboardingForm.experience_level || 'Beginner',
+        days_per_week: parseInt(onboardingForm.days_per_week) || 3,
+        injuries: onboardingForm.injuries || '',
+        equipment: onboardingForm.equipment || [],
+      };
 
       const res = await workoutApi.enroll(selectedCourse.id, parsedData);
       if (res.data?.success) {
@@ -473,6 +480,30 @@ export default function UserDashboardPage() {
                       No active routines generated for today.
                     </div>
                   )}
+
+                  {/* Workout History Section */}
+                  <div className="bg-[#08080c] border border-white/5 rounded-2xl p-6 space-y-4">
+                    <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                      <span>📊</span> Workout History & Logs
+                    </h4>
+                    {history.length === 0 ? (
+                      <p className="text-xs text-white/30 text-center py-6">No completed workouts recorded yet. Start training to see your history logs here!</p>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 max-h-[260px] overflow-y-auto pr-1">
+                        {[...history].sort((a,b) => new Date(b.completed_at) - new Date(a.completed_at)).map((log) => (
+                          <div key={log.id} className="p-3 bg-white/[0.01] border border-white/5 rounded-xl flex items-center justify-between">
+                            <div>
+                              <span className="text-xs font-bold text-white block">{log.workout_title}</span>
+                              <span className="text-[10px] text-white/40 block mt-0.5">Completed on {new Date(log.completed_at).toLocaleDateString()}</span>
+                            </div>
+                            <span className="text-[10px] font-black uppercase text-[#39ff14] bg-[#39ff14]/5 border border-[#39ff14]/10 px-2 py-0.5 rounded">
+                              ✓ Verified
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </>
               ) : (
                 <>
@@ -657,7 +688,7 @@ export default function UserDashboardPage() {
             </div>
 
             <form onSubmit={handleOnboardingSubmit} className="space-y-4">
-              {(onboardingQuestions[selectedCourse.slug] || []).map((q) => (
+              {onboardingQuestions.common.map((q) => (
                 <div key={q.name} className="flex flex-col space-y-1.5">
                   <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider">
                     {q.label}
@@ -674,6 +705,23 @@ export default function UserDashboardPage() {
                         </option>
                       ))}
                     </select>
+                  ) : q.type === 'checkboxes' ? (
+                    <div className="grid grid-cols-2 gap-2 pt-1">
+                      {q.options.map((opt) => {
+                        const checked = (onboardingForm.equipment || []).includes(opt.value);
+                        return (
+                          <label key={opt.value} className="flex items-center gap-2 bg-black/40 border border-white/5 p-2.5 rounded-xl cursor-pointer hover:bg-white/[0.02] select-none transition-all">
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={(e) => handleCheckboxChange(opt.value, e.target.checked)}
+                              className="w-4 h-4 accent-[#39ff14] cursor-pointer"
+                            />
+                            <span className="text-[11px] text-white/80">{opt.label}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
                   ) : (
                     <Input
                       name={q.name}

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.35.0
-// source: proto/workout/v1/workout.proto
+// source: workout/v1/workout.proto
 
 package workoutv1
 
@@ -29,7 +29,7 @@ type GetCoursesRequest struct {
 
 func (x *GetCoursesRequest) Reset() {
 	*x = GetCoursesRequest{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[0]
+	mi := &file_workout_v1_workout_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -41,7 +41,7 @@ func (x *GetCoursesRequest) String() string {
 func (*GetCoursesRequest) ProtoMessage() {}
 
 func (x *GetCoursesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[0]
+	mi := &file_workout_v1_workout_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -54,7 +54,7 @@ func (x *GetCoursesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCoursesRequest.ProtoReflect.Descriptor instead.
 func (*GetCoursesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{0}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{0}
 }
 
 type Course struct {
@@ -69,7 +69,7 @@ type Course struct {
 
 func (x *Course) Reset() {
 	*x = Course{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[1]
+	mi := &file_workout_v1_workout_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -81,7 +81,7 @@ func (x *Course) String() string {
 func (*Course) ProtoMessage() {}
 
 func (x *Course) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[1]
+	mi := &file_workout_v1_workout_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -94,7 +94,7 @@ func (x *Course) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Course.ProtoReflect.Descriptor instead.
 func (*Course) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{1}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Course) GetId() uint32 {
@@ -134,7 +134,7 @@ type GetCoursesResponse struct {
 
 func (x *GetCoursesResponse) Reset() {
 	*x = GetCoursesResponse{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[2]
+	mi := &file_workout_v1_workout_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -146,7 +146,7 @@ func (x *GetCoursesResponse) String() string {
 func (*GetCoursesResponse) ProtoMessage() {}
 
 func (x *GetCoursesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[2]
+	mi := &file_workout_v1_workout_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -159,7 +159,7 @@ func (x *GetCoursesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCoursesResponse.ProtoReflect.Descriptor instead.
 func (*GetCoursesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{2}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetCoursesResponse) GetCourses() []*Course {
@@ -178,7 +178,7 @@ type GetEnrolledCourseRequest struct {
 
 func (x *GetEnrolledCourseRequest) Reset() {
 	*x = GetEnrolledCourseRequest{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[3]
+	mi := &file_workout_v1_workout_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -190,7 +190,7 @@ func (x *GetEnrolledCourseRequest) String() string {
 func (*GetEnrolledCourseRequest) ProtoMessage() {}
 
 func (x *GetEnrolledCourseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[3]
+	mi := &file_workout_v1_workout_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -203,7 +203,7 @@ func (x *GetEnrolledCourseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEnrolledCourseRequest.ProtoReflect.Descriptor instead.
 func (*GetEnrolledCourseRequest) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{3}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetEnrolledCourseRequest) GetUserId() uint32 {
@@ -214,19 +214,27 @@ func (x *GetEnrolledCourseRequest) GetUserId() uint32 {
 }
 
 type GetEnrolledCourseResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Slug          string                 `protobuf:"bytes,4,opt,name=slug,proto3" json:"slug,omitempty"`
-	IsEnrolled    bool                   `protobuf:"varint,5,opt,name=is_enrolled,json=isEnrolled,proto3" json:"is_enrolled,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Id                 uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name               string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description        string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Slug               string                 `protobuf:"bytes,4,opt,name=slug,proto3" json:"slug,omitempty"`
+	IsEnrolled         bool                   `protobuf:"varint,5,opt,name=is_enrolled,json=isEnrolled,proto3" json:"is_enrolled,omitempty"`
+	Level              string                 `protobuf:"bytes,6,opt,name=level,proto3" json:"level,omitempty"`
+	Equipment          string                 `protobuf:"bytes,7,opt,name=equipment,proto3" json:"equipment,omitempty"`
+	TrialEndsAt        string                 `protobuf:"bytes,8,opt,name=trial_ends_at,json=trialEndsAt,proto3" json:"trial_ends_at,omitempty"`
+	VideoAccessEnabled bool                   `protobuf:"varint,9,opt,name=video_access_enabled,json=videoAccessEnabled,proto3" json:"video_access_enabled,omitempty"`
+	Goals              string                 `protobuf:"bytes,10,opt,name=goals,proto3" json:"goals,omitempty"`
+	Age                int32                  `protobuf:"varint,11,opt,name=age,proto3" json:"age,omitempty"`
+	Gender             string                 `protobuf:"bytes,12,opt,name=gender,proto3" json:"gender,omitempty"`
+	Injuries           string                 `protobuf:"bytes,13,opt,name=injuries,proto3" json:"injuries,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *GetEnrolledCourseResponse) Reset() {
 	*x = GetEnrolledCourseResponse{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[4]
+	mi := &file_workout_v1_workout_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -238,7 +246,7 @@ func (x *GetEnrolledCourseResponse) String() string {
 func (*GetEnrolledCourseResponse) ProtoMessage() {}
 
 func (x *GetEnrolledCourseResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[4]
+	mi := &file_workout_v1_workout_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -251,7 +259,7 @@ func (x *GetEnrolledCourseResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEnrolledCourseResponse.ProtoReflect.Descriptor instead.
 func (*GetEnrolledCourseResponse) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{4}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetEnrolledCourseResponse) GetId() uint32 {
@@ -289,6 +297,62 @@ func (x *GetEnrolledCourseResponse) GetIsEnrolled() bool {
 	return false
 }
 
+func (x *GetEnrolledCourseResponse) GetLevel() string {
+	if x != nil {
+		return x.Level
+	}
+	return ""
+}
+
+func (x *GetEnrolledCourseResponse) GetEquipment() string {
+	if x != nil {
+		return x.Equipment
+	}
+	return ""
+}
+
+func (x *GetEnrolledCourseResponse) GetTrialEndsAt() string {
+	if x != nil {
+		return x.TrialEndsAt
+	}
+	return ""
+}
+
+func (x *GetEnrolledCourseResponse) GetVideoAccessEnabled() bool {
+	if x != nil {
+		return x.VideoAccessEnabled
+	}
+	return false
+}
+
+func (x *GetEnrolledCourseResponse) GetGoals() string {
+	if x != nil {
+		return x.Goals
+	}
+	return ""
+}
+
+func (x *GetEnrolledCourseResponse) GetAge() int32 {
+	if x != nil {
+		return x.Age
+	}
+	return 0
+}
+
+func (x *GetEnrolledCourseResponse) GetGender() string {
+	if x != nil {
+		return x.Gender
+	}
+	return ""
+}
+
+func (x *GetEnrolledCourseResponse) GetInjuries() string {
+	if x != nil {
+		return x.Injuries
+	}
+	return ""
+}
+
 type GetTodayWorkoutRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -298,7 +362,7 @@ type GetTodayWorkoutRequest struct {
 
 func (x *GetTodayWorkoutRequest) Reset() {
 	*x = GetTodayWorkoutRequest{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[5]
+	mi := &file_workout_v1_workout_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -310,7 +374,7 @@ func (x *GetTodayWorkoutRequest) String() string {
 func (*GetTodayWorkoutRequest) ProtoMessage() {}
 
 func (x *GetTodayWorkoutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[5]
+	mi := &file_workout_v1_workout_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -323,7 +387,7 @@ func (x *GetTodayWorkoutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTodayWorkoutRequest.ProtoReflect.Descriptor instead.
 func (*GetTodayWorkoutRequest) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{5}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetTodayWorkoutRequest) GetUserId() uint32 {
@@ -346,7 +410,7 @@ type Exercise struct {
 
 func (x *Exercise) Reset() {
 	*x = Exercise{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[6]
+	mi := &file_workout_v1_workout_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -358,7 +422,7 @@ func (x *Exercise) String() string {
 func (*Exercise) ProtoMessage() {}
 
 func (x *Exercise) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[6]
+	mi := &file_workout_v1_workout_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -371,7 +435,7 @@ func (x *Exercise) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Exercise.ProtoReflect.Descriptor instead.
 func (*Exercise) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{6}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Exercise) GetName() string {
@@ -422,7 +486,7 @@ type GetTodayWorkoutResponse struct {
 
 func (x *GetTodayWorkoutResponse) Reset() {
 	*x = GetTodayWorkoutResponse{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[7]
+	mi := &file_workout_v1_workout_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -434,7 +498,7 @@ func (x *GetTodayWorkoutResponse) String() string {
 func (*GetTodayWorkoutResponse) ProtoMessage() {}
 
 func (x *GetTodayWorkoutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[7]
+	mi := &file_workout_v1_workout_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -447,7 +511,7 @@ func (x *GetTodayWorkoutResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTodayWorkoutResponse.ProtoReflect.Descriptor instead.
 func (*GetTodayWorkoutResponse) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{7}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetTodayWorkoutResponse) GetId() uint32 {
@@ -494,7 +558,7 @@ type GetWorkoutHistoryRequest struct {
 
 func (x *GetWorkoutHistoryRequest) Reset() {
 	*x = GetWorkoutHistoryRequest{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[8]
+	mi := &file_workout_v1_workout_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -506,7 +570,7 @@ func (x *GetWorkoutHistoryRequest) String() string {
 func (*GetWorkoutHistoryRequest) ProtoMessage() {}
 
 func (x *GetWorkoutHistoryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[8]
+	mi := &file_workout_v1_workout_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -519,7 +583,7 @@ func (x *GetWorkoutHistoryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetWorkoutHistoryRequest.ProtoReflect.Descriptor instead.
 func (*GetWorkoutHistoryRequest) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{8}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetWorkoutHistoryRequest) GetUserId() uint32 {
@@ -540,7 +604,7 @@ type WorkoutLog struct {
 
 func (x *WorkoutLog) Reset() {
 	*x = WorkoutLog{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[9]
+	mi := &file_workout_v1_workout_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -552,7 +616,7 @@ func (x *WorkoutLog) String() string {
 func (*WorkoutLog) ProtoMessage() {}
 
 func (x *WorkoutLog) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[9]
+	mi := &file_workout_v1_workout_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -565,7 +629,7 @@ func (x *WorkoutLog) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WorkoutLog.ProtoReflect.Descriptor instead.
 func (*WorkoutLog) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{9}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *WorkoutLog) GetId() uint32 {
@@ -598,7 +662,7 @@ type GetWorkoutHistoryResponse struct {
 
 func (x *GetWorkoutHistoryResponse) Reset() {
 	*x = GetWorkoutHistoryResponse{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[10]
+	mi := &file_workout_v1_workout_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -610,7 +674,7 @@ func (x *GetWorkoutHistoryResponse) String() string {
 func (*GetWorkoutHistoryResponse) ProtoMessage() {}
 
 func (x *GetWorkoutHistoryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[10]
+	mi := &file_workout_v1_workout_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -623,7 +687,7 @@ func (x *GetWorkoutHistoryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetWorkoutHistoryResponse.ProtoReflect.Descriptor instead.
 func (*GetWorkoutHistoryResponse) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{10}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetWorkoutHistoryResponse) GetLogs() []*WorkoutLog {
@@ -644,7 +708,7 @@ type EnrollRequest struct {
 
 func (x *EnrollRequest) Reset() {
 	*x = EnrollRequest{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[11]
+	mi := &file_workout_v1_workout_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -656,7 +720,7 @@ func (x *EnrollRequest) String() string {
 func (*EnrollRequest) ProtoMessage() {}
 
 func (x *EnrollRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[11]
+	mi := &file_workout_v1_workout_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -669,7 +733,7 @@ func (x *EnrollRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnrollRequest.ProtoReflect.Descriptor instead.
 func (*EnrollRequest) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{11}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *EnrollRequest) GetUserId() uint32 {
@@ -703,7 +767,7 @@ type EnrollResponse struct {
 
 func (x *EnrollResponse) Reset() {
 	*x = EnrollResponse{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[12]
+	mi := &file_workout_v1_workout_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -715,7 +779,7 @@ func (x *EnrollResponse) String() string {
 func (*EnrollResponse) ProtoMessage() {}
 
 func (x *EnrollResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[12]
+	mi := &file_workout_v1_workout_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -728,7 +792,7 @@ func (x *EnrollResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnrollResponse.ProtoReflect.Descriptor instead.
 func (*EnrollResponse) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{12}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *EnrollResponse) GetSuccess() bool {
@@ -754,7 +818,7 @@ type CancelEnrollmentRequest struct {
 
 func (x *CancelEnrollmentRequest) Reset() {
 	*x = CancelEnrollmentRequest{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[13]
+	mi := &file_workout_v1_workout_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -766,7 +830,7 @@ func (x *CancelEnrollmentRequest) String() string {
 func (*CancelEnrollmentRequest) ProtoMessage() {}
 
 func (x *CancelEnrollmentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[13]
+	mi := &file_workout_v1_workout_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -779,7 +843,7 @@ func (x *CancelEnrollmentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelEnrollmentRequest.ProtoReflect.Descriptor instead.
 func (*CancelEnrollmentRequest) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{13}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CancelEnrollmentRequest) GetUserId() uint32 {
@@ -798,7 +862,7 @@ type CancelEnrollmentResponse struct {
 
 func (x *CancelEnrollmentResponse) Reset() {
 	*x = CancelEnrollmentResponse{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[14]
+	mi := &file_workout_v1_workout_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -810,7 +874,7 @@ func (x *CancelEnrollmentResponse) String() string {
 func (*CancelEnrollmentResponse) ProtoMessage() {}
 
 func (x *CancelEnrollmentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[14]
+	mi := &file_workout_v1_workout_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -823,7 +887,7 @@ func (x *CancelEnrollmentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelEnrollmentResponse.ProtoReflect.Descriptor instead.
 func (*CancelEnrollmentResponse) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{14}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CancelEnrollmentResponse) GetSuccess() bool {
@@ -843,7 +907,7 @@ type CompleteWorkoutDayRequest struct {
 
 func (x *CompleteWorkoutDayRequest) Reset() {
 	*x = CompleteWorkoutDayRequest{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[15]
+	mi := &file_workout_v1_workout_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -855,7 +919,7 @@ func (x *CompleteWorkoutDayRequest) String() string {
 func (*CompleteWorkoutDayRequest) ProtoMessage() {}
 
 func (x *CompleteWorkoutDayRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[15]
+	mi := &file_workout_v1_workout_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -868,7 +932,7 @@ func (x *CompleteWorkoutDayRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompleteWorkoutDayRequest.ProtoReflect.Descriptor instead.
 func (*CompleteWorkoutDayRequest) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{15}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *CompleteWorkoutDayRequest) GetUserId() uint32 {
@@ -894,7 +958,7 @@ type CompleteWorkoutDayResponse struct {
 
 func (x *CompleteWorkoutDayResponse) Reset() {
 	*x = CompleteWorkoutDayResponse{}
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[16]
+	mi := &file_workout_v1_workout_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -906,7 +970,7 @@ func (x *CompleteWorkoutDayResponse) String() string {
 func (*CompleteWorkoutDayResponse) ProtoMessage() {}
 
 func (x *CompleteWorkoutDayResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_workout_v1_workout_proto_msgTypes[16]
+	mi := &file_workout_v1_workout_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -919,7 +983,7 @@ func (x *CompleteWorkoutDayResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompleteWorkoutDayResponse.ProtoReflect.Descriptor instead.
 func (*CompleteWorkoutDayResponse) Descriptor() ([]byte, []int) {
-	return file_proto_workout_v1_workout_proto_rawDescGZIP(), []int{16}
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *CompleteWorkoutDayResponse) GetSuccess() bool {
@@ -929,11 +993,1519 @@ func (x *CompleteWorkoutDayResponse) GetSuccess() bool {
 	return false
 }
 
-var File_proto_workout_v1_workout_proto protoreflect.FileDescriptor
+type CreateUserWeekRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	UserId        uint32                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	CourseId      uint32                 `protobuf:"varint,3,opt,name=course_id,json=courseId,proto3" json:"course_id,omitempty"`
+	WeekNumber    int32                  `protobuf:"varint,4,opt,name=week_number,json=weekNumber,proto3" json:"week_number,omitempty"`
+	Title         string                 `protobuf:"bytes,5,opt,name=title,proto3" json:"title,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_proto_workout_v1_workout_proto_rawDesc = "" +
+func (x *CreateUserWeekRequest) Reset() {
+	*x = CreateUserWeekRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserWeekRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserWeekRequest) ProtoMessage() {}
+
+func (x *CreateUserWeekRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserWeekRequest.ProtoReflect.Descriptor instead.
+func (*CreateUserWeekRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *CreateUserWeekRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *CreateUserWeekRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *CreateUserWeekRequest) GetCourseId() uint32 {
+	if x != nil {
+		return x.CourseId
+	}
+	return 0
+}
+
+func (x *CreateUserWeekRequest) GetWeekNumber() int32 {
+	if x != nil {
+		return x.WeekNumber
+	}
+	return 0
+}
+
+func (x *CreateUserWeekRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+type CreateUserWeekResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	AssignedWeekId uint32                 `protobuf:"varint,1,opt,name=assigned_week_id,json=assignedWeekId,proto3" json:"assigned_week_id,omitempty"`
+	Success        bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *CreateUserWeekResponse) Reset() {
+	*x = CreateUserWeekResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserWeekResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserWeekResponse) ProtoMessage() {}
+
+func (x *CreateUserWeekResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserWeekResponse.ProtoReflect.Descriptor instead.
+func (*CreateUserWeekResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *CreateUserWeekResponse) GetAssignedWeekId() uint32 {
+	if x != nil {
+		return x.AssignedWeekId
+	}
+	return 0
+}
+
+func (x *CreateUserWeekResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type CreateUserDayRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	AdminId        uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	AssignedWeekId uint32                 `protobuf:"varint,2,opt,name=assigned_week_id,json=assignedWeekId,proto3" json:"assigned_week_id,omitempty"`
+	DayNumber      int32                  `protobuf:"varint,3,opt,name=day_number,json=dayNumber,proto3" json:"day_number,omitempty"`
+	Title          string                 `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
+	IsRestDay      bool                   `protobuf:"varint,5,opt,name=is_rest_day,json=isRestDay,proto3" json:"is_rest_day,omitempty"`
+	AdminNotes     string                 `protobuf:"bytes,6,opt,name=admin_notes,json=adminNotes,proto3" json:"admin_notes,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *CreateUserDayRequest) Reset() {
+	*x = CreateUserDayRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserDayRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserDayRequest) ProtoMessage() {}
+
+func (x *CreateUserDayRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserDayRequest.ProtoReflect.Descriptor instead.
+func (*CreateUserDayRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *CreateUserDayRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *CreateUserDayRequest) GetAssignedWeekId() uint32 {
+	if x != nil {
+		return x.AssignedWeekId
+	}
+	return 0
+}
+
+func (x *CreateUserDayRequest) GetDayNumber() int32 {
+	if x != nil {
+		return x.DayNumber
+	}
+	return 0
+}
+
+func (x *CreateUserDayRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *CreateUserDayRequest) GetIsRestDay() bool {
+	if x != nil {
+		return x.IsRestDay
+	}
+	return false
+}
+
+func (x *CreateUserDayRequest) GetAdminNotes() string {
+	if x != nil {
+		return x.AdminNotes
+	}
+	return ""
+}
+
+type CreateUserDayResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AssignedDayId uint32                 `protobuf:"varint,1,opt,name=assigned_day_id,json=assignedDayId,proto3" json:"assigned_day_id,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateUserDayResponse) Reset() {
+	*x = CreateUserDayResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserDayResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserDayResponse) ProtoMessage() {}
+
+func (x *CreateUserDayResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserDayResponse.ProtoReflect.Descriptor instead.
+func (*CreateUserDayResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *CreateUserDayResponse) GetAssignedDayId() uint32 {
+	if x != nil {
+		return x.AssignedDayId
+	}
+	return 0
+}
+
+func (x *CreateUserDayResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type AdminExercise struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Name            string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Sets            int32                  `protobuf:"varint,2,opt,name=sets,proto3" json:"sets,omitempty"`
+	Reps            string                 `protobuf:"bytes,3,opt,name=reps,proto3" json:"reps,omitempty"`
+	Weight          string                 `protobuf:"bytes,4,opt,name=weight,proto3" json:"weight,omitempty"`
+	VideoUrl        string                 `protobuf:"bytes,5,opt,name=video_url,json=videoUrl,proto3" json:"video_url,omitempty"`
+	Target          string                 `protobuf:"bytes,6,opt,name=target,proto3" json:"target,omitempty"`
+	EquipmentNeeded string                 `protobuf:"bytes,7,opt,name=equipment_needed,json=equipmentNeeded,proto3" json:"equipment_needed,omitempty"`
+	OrderIndex      int32                  `protobuf:"varint,8,opt,name=order_index,json=orderIndex,proto3" json:"order_index,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *AdminExercise) Reset() {
+	*x = AdminExercise{}
+	mi := &file_workout_v1_workout_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminExercise) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminExercise) ProtoMessage() {}
+
+func (x *AdminExercise) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminExercise.ProtoReflect.Descriptor instead.
+func (*AdminExercise) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *AdminExercise) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AdminExercise) GetSets() int32 {
+	if x != nil {
+		return x.Sets
+	}
+	return 0
+}
+
+func (x *AdminExercise) GetReps() string {
+	if x != nil {
+		return x.Reps
+	}
+	return ""
+}
+
+func (x *AdminExercise) GetWeight() string {
+	if x != nil {
+		return x.Weight
+	}
+	return ""
+}
+
+func (x *AdminExercise) GetVideoUrl() string {
+	if x != nil {
+		return x.VideoUrl
+	}
+	return ""
+}
+
+func (x *AdminExercise) GetTarget() string {
+	if x != nil {
+		return x.Target
+	}
+	return ""
+}
+
+func (x *AdminExercise) GetEquipmentNeeded() string {
+	if x != nil {
+		return x.EquipmentNeeded
+	}
+	return ""
+}
+
+func (x *AdminExercise) GetOrderIndex() int32 {
+	if x != nil {
+		return x.OrderIndex
+	}
+	return 0
+}
+
+type CreateUserExerciseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	AssignedDayId uint32                 `protobuf:"varint,2,opt,name=assigned_day_id,json=assignedDayId,proto3" json:"assigned_day_id,omitempty"`
+	Exercise      *AdminExercise         `protobuf:"bytes,3,opt,name=exercise,proto3" json:"exercise,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateUserExerciseRequest) Reset() {
+	*x = CreateUserExerciseRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserExerciseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserExerciseRequest) ProtoMessage() {}
+
+func (x *CreateUserExerciseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserExerciseRequest.ProtoReflect.Descriptor instead.
+func (*CreateUserExerciseRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *CreateUserExerciseRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *CreateUserExerciseRequest) GetAssignedDayId() uint32 {
+	if x != nil {
+		return x.AssignedDayId
+	}
+	return 0
+}
+
+func (x *CreateUserExerciseRequest) GetExercise() *AdminExercise {
+	if x != nil {
+		return x.Exercise
+	}
+	return nil
+}
+
+type CreateUserExerciseResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ExerciseId    uint32                 `protobuf:"varint,1,opt,name=exercise_id,json=exerciseId,proto3" json:"exercise_id,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateUserExerciseResponse) Reset() {
+	*x = CreateUserExerciseResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserExerciseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserExerciseResponse) ProtoMessage() {}
+
+func (x *CreateUserExerciseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserExerciseResponse.ProtoReflect.Descriptor instead.
+func (*CreateUserExerciseResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *CreateUserExerciseResponse) GetExerciseId() uint32 {
+	if x != nil {
+		return x.ExerciseId
+	}
+	return 0
+}
+
+func (x *CreateUserExerciseResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type UpdateUserExerciseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	ExerciseId    uint32                 `protobuf:"varint,2,opt,name=exercise_id,json=exerciseId,proto3" json:"exercise_id,omitempty"`
+	Exercise      *AdminExercise         `protobuf:"bytes,3,opt,name=exercise,proto3" json:"exercise,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserExerciseRequest) Reset() {
+	*x = UpdateUserExerciseRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserExerciseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserExerciseRequest) ProtoMessage() {}
+
+func (x *UpdateUserExerciseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserExerciseRequest.ProtoReflect.Descriptor instead.
+func (*UpdateUserExerciseRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *UpdateUserExerciseRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *UpdateUserExerciseRequest) GetExerciseId() uint32 {
+	if x != nil {
+		return x.ExerciseId
+	}
+	return 0
+}
+
+func (x *UpdateUserExerciseRequest) GetExercise() *AdminExercise {
+	if x != nil {
+		return x.Exercise
+	}
+	return nil
+}
+
+type UpdateUserExerciseResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserExerciseResponse) Reset() {
+	*x = UpdateUserExerciseResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserExerciseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserExerciseResponse) ProtoMessage() {}
+
+func (x *UpdateUserExerciseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserExerciseResponse.ProtoReflect.Descriptor instead.
+func (*UpdateUserExerciseResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *UpdateUserExerciseResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type DeleteUserExerciseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	ExerciseId    uint32                 `protobuf:"varint,2,opt,name=exercise_id,json=exerciseId,proto3" json:"exercise_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteUserExerciseRequest) Reset() {
+	*x = DeleteUserExerciseRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteUserExerciseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteUserExerciseRequest) ProtoMessage() {}
+
+func (x *DeleteUserExerciseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteUserExerciseRequest.ProtoReflect.Descriptor instead.
+func (*DeleteUserExerciseRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *DeleteUserExerciseRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *DeleteUserExerciseRequest) GetExerciseId() uint32 {
+	if x != nil {
+		return x.ExerciseId
+	}
+	return 0
+}
+
+type DeleteUserExerciseResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteUserExerciseResponse) Reset() {
+	*x = DeleteUserExerciseResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteUserExerciseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteUserExerciseResponse) ProtoMessage() {}
+
+func (x *DeleteUserExerciseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteUserExerciseResponse.ProtoReflect.Descriptor instead.
+func (*DeleteUserExerciseResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *DeleteUserExerciseResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type AddDayFeedbackRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	UserId        uint32                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	AssignedDayId uint32                 `protobuf:"varint,3,opt,name=assigned_day_id,json=assignedDayId,proto3" json:"assigned_day_id,omitempty"`
+	FeedbackText  string                 `protobuf:"bytes,4,opt,name=feedback_text,json=feedbackText,proto3" json:"feedback_text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddDayFeedbackRequest) Reset() {
+	*x = AddDayFeedbackRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddDayFeedbackRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddDayFeedbackRequest) ProtoMessage() {}
+
+func (x *AddDayFeedbackRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddDayFeedbackRequest.ProtoReflect.Descriptor instead.
+func (*AddDayFeedbackRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *AddDayFeedbackRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *AddDayFeedbackRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *AddDayFeedbackRequest) GetAssignedDayId() uint32 {
+	if x != nil {
+		return x.AssignedDayId
+	}
+	return 0
+}
+
+func (x *AddDayFeedbackRequest) GetFeedbackText() string {
+	if x != nil {
+		return x.FeedbackText
+	}
+	return ""
+}
+
+type AddDayFeedbackResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddDayFeedbackResponse) Reset() {
+	*x = AddDayFeedbackResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddDayFeedbackResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddDayFeedbackResponse) ProtoMessage() {}
+
+func (x *AddDayFeedbackResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddDayFeedbackResponse.ProtoReflect.Descriptor instead.
+func (*AddDayFeedbackResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *AddDayFeedbackResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type GetUserPlanRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserPlanRequest) Reset() {
+	*x = GetUserPlanRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserPlanRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserPlanRequest) ProtoMessage() {}
+
+func (x *GetUserPlanRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserPlanRequest.ProtoReflect.Descriptor instead.
+func (*GetUserPlanRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *GetUserPlanRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type UserPlanExercise struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name            string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Sets            int32                  `protobuf:"varint,3,opt,name=sets,proto3" json:"sets,omitempty"`
+	Reps            string                 `protobuf:"bytes,4,opt,name=reps,proto3" json:"reps,omitempty"`
+	Weight          string                 `protobuf:"bytes,5,opt,name=weight,proto3" json:"weight,omitempty"`
+	VideoUrl        string                 `protobuf:"bytes,6,opt,name=video_url,json=videoUrl,proto3" json:"video_url,omitempty"`
+	Target          string                 `protobuf:"bytes,7,opt,name=target,proto3" json:"target,omitempty"`
+	EquipmentNeeded string                 `protobuf:"bytes,8,opt,name=equipment_needed,json=equipmentNeeded,proto3" json:"equipment_needed,omitempty"`
+	OrderIndex      int32                  `protobuf:"varint,9,opt,name=order_index,json=orderIndex,proto3" json:"order_index,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UserPlanExercise) Reset() {
+	*x = UserPlanExercise{}
+	mi := &file_workout_v1_workout_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserPlanExercise) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserPlanExercise) ProtoMessage() {}
+
+func (x *UserPlanExercise) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserPlanExercise.ProtoReflect.Descriptor instead.
+func (*UserPlanExercise) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *UserPlanExercise) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UserPlanExercise) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *UserPlanExercise) GetSets() int32 {
+	if x != nil {
+		return x.Sets
+	}
+	return 0
+}
+
+func (x *UserPlanExercise) GetReps() string {
+	if x != nil {
+		return x.Reps
+	}
+	return ""
+}
+
+func (x *UserPlanExercise) GetWeight() string {
+	if x != nil {
+		return x.Weight
+	}
+	return ""
+}
+
+func (x *UserPlanExercise) GetVideoUrl() string {
+	if x != nil {
+		return x.VideoUrl
+	}
+	return ""
+}
+
+func (x *UserPlanExercise) GetTarget() string {
+	if x != nil {
+		return x.Target
+	}
+	return ""
+}
+
+func (x *UserPlanExercise) GetEquipmentNeeded() string {
+	if x != nil {
+		return x.EquipmentNeeded
+	}
+	return ""
+}
+
+func (x *UserPlanExercise) GetOrderIndex() int32 {
+	if x != nil {
+		return x.OrderIndex
+	}
+	return 0
+}
+
+type UserPlanDay struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	DayNumber     int32                  `protobuf:"varint,2,opt,name=day_number,json=dayNumber,proto3" json:"day_number,omitempty"`
+	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	IsRestDay     bool                   `protobuf:"varint,4,opt,name=is_rest_day,json=isRestDay,proto3" json:"is_rest_day,omitempty"`
+	AdminNotes    string                 `protobuf:"bytes,5,opt,name=admin_notes,json=adminNotes,proto3" json:"admin_notes,omitempty"`
+	Exercises     []*UserPlanExercise    `protobuf:"bytes,6,rep,name=exercises,proto3" json:"exercises,omitempty"`
+	AdminFeedback string                 `protobuf:"bytes,7,opt,name=admin_feedback,json=adminFeedback,proto3" json:"admin_feedback,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserPlanDay) Reset() {
+	*x = UserPlanDay{}
+	mi := &file_workout_v1_workout_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserPlanDay) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserPlanDay) ProtoMessage() {}
+
+func (x *UserPlanDay) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserPlanDay.ProtoReflect.Descriptor instead.
+func (*UserPlanDay) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *UserPlanDay) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UserPlanDay) GetDayNumber() int32 {
+	if x != nil {
+		return x.DayNumber
+	}
+	return 0
+}
+
+func (x *UserPlanDay) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *UserPlanDay) GetIsRestDay() bool {
+	if x != nil {
+		return x.IsRestDay
+	}
+	return false
+}
+
+func (x *UserPlanDay) GetAdminNotes() string {
+	if x != nil {
+		return x.AdminNotes
+	}
+	return ""
+}
+
+func (x *UserPlanDay) GetExercises() []*UserPlanExercise {
+	if x != nil {
+		return x.Exercises
+	}
+	return nil
+}
+
+func (x *UserPlanDay) GetAdminFeedback() string {
+	if x != nil {
+		return x.AdminFeedback
+	}
+	return ""
+}
+
+type UserPlanWeek struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	WeekNumber    int32                  `protobuf:"varint,2,opt,name=week_number,json=weekNumber,proto3" json:"week_number,omitempty"`
+	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Days          []*UserPlanDay         `protobuf:"bytes,4,rep,name=days,proto3" json:"days,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserPlanWeek) Reset() {
+	*x = UserPlanWeek{}
+	mi := &file_workout_v1_workout_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserPlanWeek) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserPlanWeek) ProtoMessage() {}
+
+func (x *UserPlanWeek) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserPlanWeek.ProtoReflect.Descriptor instead.
+func (*UserPlanWeek) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *UserPlanWeek) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UserPlanWeek) GetWeekNumber() int32 {
+	if x != nil {
+		return x.WeekNumber
+	}
+	return 0
+}
+
+func (x *UserPlanWeek) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *UserPlanWeek) GetDays() []*UserPlanDay {
+	if x != nil {
+		return x.Days
+	}
+	return nil
+}
+
+type GetUserPlanResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Weeks         []*UserPlanWeek        `protobuf:"bytes,1,rep,name=weeks,proto3" json:"weeks,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserPlanResponse) Reset() {
+	*x = GetUserPlanResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserPlanResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserPlanResponse) ProtoMessage() {}
+
+func (x *GetUserPlanResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserPlanResponse.ProtoReflect.Descriptor instead.
+func (*GetUserPlanResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *GetUserPlanResponse) GetWeeks() []*UserPlanWeek {
+	if x != nil {
+		return x.Weeks
+	}
+	return nil
+}
+
+type ToggleUserVideoAccessRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	UserId        uint32                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Enabled       bool                   `protobuf:"varint,3,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ToggleUserVideoAccessRequest) Reset() {
+	*x = ToggleUserVideoAccessRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ToggleUserVideoAccessRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ToggleUserVideoAccessRequest) ProtoMessage() {}
+
+func (x *ToggleUserVideoAccessRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ToggleUserVideoAccessRequest.ProtoReflect.Descriptor instead.
+func (*ToggleUserVideoAccessRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *ToggleUserVideoAccessRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *ToggleUserVideoAccessRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ToggleUserVideoAccessRequest) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+type ToggleUserVideoAccessResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ToggleUserVideoAccessResponse) Reset() {
+	*x = ToggleUserVideoAccessResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ToggleUserVideoAccessResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ToggleUserVideoAccessResponse) ProtoMessage() {}
+
+func (x *ToggleUserVideoAccessResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ToggleUserVideoAccessResponse.ProtoReflect.Descriptor instead.
+func (*ToggleUserVideoAccessResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *ToggleUserVideoAccessResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type ListTrialExpiringUsersRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTrialExpiringUsersRequest) Reset() {
+	*x = ListTrialExpiringUsersRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTrialExpiringUsersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTrialExpiringUsersRequest) ProtoMessage() {}
+
+func (x *ListTrialExpiringUsersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTrialExpiringUsersRequest.ProtoReflect.Descriptor instead.
+func (*ListTrialExpiringUsersRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *ListTrialExpiringUsersRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+type ExpiringUser struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	TrialEndsAt   string                 `protobuf:"bytes,4,opt,name=trial_ends_at,json=trialEndsAt,proto3" json:"trial_ends_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ExpiringUser) Reset() {
+	*x = ExpiringUser{}
+	mi := &file_workout_v1_workout_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExpiringUser) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExpiringUser) ProtoMessage() {}
+
+func (x *ExpiringUser) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExpiringUser.ProtoReflect.Descriptor instead.
+func (*ExpiringUser) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *ExpiringUser) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ExpiringUser) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *ExpiringUser) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ExpiringUser) GetTrialEndsAt() string {
+	if x != nil {
+		return x.TrialEndsAt
+	}
+	return ""
+}
+
+type ListTrialExpiringUsersResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Users         []*ExpiringUser        `protobuf:"bytes,1,rep,name=users,proto3" json:"users,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTrialExpiringUsersResponse) Reset() {
+	*x = ListTrialExpiringUsersResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTrialExpiringUsersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTrialExpiringUsersResponse) ProtoMessage() {}
+
+func (x *ListTrialExpiringUsersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTrialExpiringUsersResponse.ProtoReflect.Descriptor instead.
+func (*ListTrialExpiringUsersResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *ListTrialExpiringUsersResponse) GetUsers() []*ExpiringUser {
+	if x != nil {
+		return x.Users
+	}
+	return nil
+}
+
+type SetUserLevelRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminId       uint32                 `protobuf:"varint,1,opt,name=admin_id,json=adminId,proto3" json:"admin_id,omitempty"`
+	UserId        uint32                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Level         string                 `protobuf:"bytes,3,opt,name=level,proto3" json:"level,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetUserLevelRequest) Reset() {
+	*x = SetUserLevelRequest{}
+	mi := &file_workout_v1_workout_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetUserLevelRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetUserLevelRequest) ProtoMessage() {}
+
+func (x *SetUserLevelRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetUserLevelRequest.ProtoReflect.Descriptor instead.
+func (*SetUserLevelRequest) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *SetUserLevelRequest) GetAdminId() uint32 {
+	if x != nil {
+		return x.AdminId
+	}
+	return 0
+}
+
+func (x *SetUserLevelRequest) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *SetUserLevelRequest) GetLevel() string {
+	if x != nil {
+		return x.Level
+	}
+	return ""
+}
+
+type SetUserLevelResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetUserLevelResponse) Reset() {
+	*x = SetUserLevelResponse{}
+	mi := &file_workout_v1_workout_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetUserLevelResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetUserLevelResponse) ProtoMessage() {}
+
+func (x *SetUserLevelResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_workout_v1_workout_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetUserLevelResponse.ProtoReflect.Descriptor instead.
+func (*SetUserLevelResponse) Descriptor() ([]byte, []int) {
+	return file_workout_v1_workout_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *SetUserLevelResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+var File_workout_v1_workout_proto protoreflect.FileDescriptor
+
+const file_workout_v1_workout_proto_rawDesc = "" +
 	"\n" +
-	"\x1eproto/workout/v1/workout.proto\x12\n" +
+	"\x18workout/v1/workout.proto\x12\n" +
 	"workout.v1\"\x13\n" +
 	"\x11GetCoursesRequest\"b\n" +
 	"\x06Course\x12\x0e\n" +
@@ -944,14 +2516,23 @@ const file_proto_workout_v1_workout_proto_rawDesc = "" +
 	"\x12GetCoursesResponse\x12,\n" +
 	"\acourses\x18\x01 \x03(\v2\x12.workout.v1.CourseR\acourses\"3\n" +
 	"\x18GetEnrolledCourseRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\rR\x06userId\"\x96\x01\n" +
+	"\auser_id\x18\x01 \x01(\rR\x06userId\"\xfc\x02\n" +
 	"\x19GetEnrolledCourseResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x12\n" +
 	"\x04slug\x18\x04 \x01(\tR\x04slug\x12\x1f\n" +
 	"\vis_enrolled\x18\x05 \x01(\bR\n" +
-	"isEnrolled\"1\n" +
+	"isEnrolled\x12\x14\n" +
+	"\x05level\x18\x06 \x01(\tR\x05level\x12\x1c\n" +
+	"\tequipment\x18\a \x01(\tR\tequipment\x12\"\n" +
+	"\rtrial_ends_at\x18\b \x01(\tR\vtrialEndsAt\x120\n" +
+	"\x14video_access_enabled\x18\t \x01(\bR\x12videoAccessEnabled\x12\x14\n" +
+	"\x05goals\x18\n" +
+	" \x01(\tR\x05goals\x12\x10\n" +
+	"\x03age\x18\v \x01(\x05R\x03age\x12\x16\n" +
+	"\x06gender\x18\f \x01(\tR\x06gender\x12\x1a\n" +
+	"\binjuries\x18\r \x01(\tR\binjuries\"1\n" +
 	"\x16GetTodayWorkoutRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\rR\x06userId\"\x82\x01\n" +
 	"\bExercise\x12\x12\n" +
@@ -991,7 +2572,119 @@ const file_proto_workout_v1_workout_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\rR\x06userId\x12\x15\n" +
 	"\x06day_id\x18\x02 \x01(\rR\x05dayId\"6\n" +
 	"\x1aCompleteWorkoutDayResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\x82\x05\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x9f\x01\n" +
+	"\x15CreateUserWeekRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\rR\x06userId\x12\x1b\n" +
+	"\tcourse_id\x18\x03 \x01(\rR\bcourseId\x12\x1f\n" +
+	"\vweek_number\x18\x04 \x01(\x05R\n" +
+	"weekNumber\x12\x14\n" +
+	"\x05title\x18\x05 \x01(\tR\x05title\"\\\n" +
+	"\x16CreateUserWeekResponse\x12(\n" +
+	"\x10assigned_week_id\x18\x01 \x01(\rR\x0eassignedWeekId\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\"\xd1\x01\n" +
+	"\x14CreateUserDayRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12(\n" +
+	"\x10assigned_week_id\x18\x02 \x01(\rR\x0eassignedWeekId\x12\x1d\n" +
+	"\n" +
+	"day_number\x18\x03 \x01(\x05R\tdayNumber\x12\x14\n" +
+	"\x05title\x18\x04 \x01(\tR\x05title\x12\x1e\n" +
+	"\vis_rest_day\x18\x05 \x01(\bR\tisRestDay\x12\x1f\n" +
+	"\vadmin_notes\x18\x06 \x01(\tR\n" +
+	"adminNotes\"Y\n" +
+	"\x15CreateUserDayResponse\x12&\n" +
+	"\x0fassigned_day_id\x18\x01 \x01(\rR\rassignedDayId\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\"\xe4\x01\n" +
+	"\rAdminExercise\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
+	"\x04sets\x18\x02 \x01(\x05R\x04sets\x12\x12\n" +
+	"\x04reps\x18\x03 \x01(\tR\x04reps\x12\x16\n" +
+	"\x06weight\x18\x04 \x01(\tR\x06weight\x12\x1b\n" +
+	"\tvideo_url\x18\x05 \x01(\tR\bvideoUrl\x12\x16\n" +
+	"\x06target\x18\x06 \x01(\tR\x06target\x12)\n" +
+	"\x10equipment_needed\x18\a \x01(\tR\x0fequipmentNeeded\x12\x1f\n" +
+	"\vorder_index\x18\b \x01(\x05R\n" +
+	"orderIndex\"\x95\x01\n" +
+	"\x19CreateUserExerciseRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12&\n" +
+	"\x0fassigned_day_id\x18\x02 \x01(\rR\rassignedDayId\x125\n" +
+	"\bexercise\x18\x03 \x01(\v2\x19.workout.v1.AdminExerciseR\bexercise\"W\n" +
+	"\x1aCreateUserExerciseResponse\x12\x1f\n" +
+	"\vexercise_id\x18\x01 \x01(\rR\n" +
+	"exerciseId\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\"\x8e\x01\n" +
+	"\x19UpdateUserExerciseRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12\x1f\n" +
+	"\vexercise_id\x18\x02 \x01(\rR\n" +
+	"exerciseId\x125\n" +
+	"\bexercise\x18\x03 \x01(\v2\x19.workout.v1.AdminExerciseR\bexercise\"6\n" +
+	"\x1aUpdateUserExerciseResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"W\n" +
+	"\x19DeleteUserExerciseRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12\x1f\n" +
+	"\vexercise_id\x18\x02 \x01(\rR\n" +
+	"exerciseId\"6\n" +
+	"\x1aDeleteUserExerciseResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x98\x01\n" +
+	"\x15AddDayFeedbackRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\rR\x06userId\x12&\n" +
+	"\x0fassigned_day_id\x18\x03 \x01(\rR\rassignedDayId\x12#\n" +
+	"\rfeedback_text\x18\x04 \x01(\tR\ffeedbackText\"2\n" +
+	"\x16AddDayFeedbackResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"-\n" +
+	"\x12GetUserPlanRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\rR\x06userId\"\xf7\x01\n" +
+	"\x10UserPlanExercise\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
+	"\x04sets\x18\x03 \x01(\x05R\x04sets\x12\x12\n" +
+	"\x04reps\x18\x04 \x01(\tR\x04reps\x12\x16\n" +
+	"\x06weight\x18\x05 \x01(\tR\x06weight\x12\x1b\n" +
+	"\tvideo_url\x18\x06 \x01(\tR\bvideoUrl\x12\x16\n" +
+	"\x06target\x18\a \x01(\tR\x06target\x12)\n" +
+	"\x10equipment_needed\x18\b \x01(\tR\x0fequipmentNeeded\x12\x1f\n" +
+	"\vorder_index\x18\t \x01(\x05R\n" +
+	"orderIndex\"\xf6\x01\n" +
+	"\vUserPlanDay\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1d\n" +
+	"\n" +
+	"day_number\x18\x02 \x01(\x05R\tdayNumber\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12\x1e\n" +
+	"\vis_rest_day\x18\x04 \x01(\bR\tisRestDay\x12\x1f\n" +
+	"\vadmin_notes\x18\x05 \x01(\tR\n" +
+	"adminNotes\x12:\n" +
+	"\texercises\x18\x06 \x03(\v2\x1c.workout.v1.UserPlanExerciseR\texercises\x12%\n" +
+	"\x0eadmin_feedback\x18\a \x01(\tR\radminFeedback\"\x82\x01\n" +
+	"\fUserPlanWeek\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1f\n" +
+	"\vweek_number\x18\x02 \x01(\x05R\n" +
+	"weekNumber\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12+\n" +
+	"\x04days\x18\x04 \x03(\v2\x17.workout.v1.UserPlanDayR\x04days\"E\n" +
+	"\x13GetUserPlanResponse\x12.\n" +
+	"\x05weeks\x18\x01 \x03(\v2\x18.workout.v1.UserPlanWeekR\x05weeks\"l\n" +
+	"\x1cToggleUserVideoAccessRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\rR\x06userId\x12\x18\n" +
+	"\aenabled\x18\x03 \x01(\bR\aenabled\"9\n" +
+	"\x1dToggleUserVideoAccessResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\":\n" +
+	"\x1dListTrialExpiringUsersRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\"u\n" +
+	"\fExpiringUser\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\rR\x06userId\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\"\n" +
+	"\rtrial_ends_at\x18\x04 \x01(\tR\vtrialEndsAt\"P\n" +
+	"\x1eListTrialExpiringUsersResponse\x12.\n" +
+	"\x05users\x18\x01 \x03(\v2\x18.workout.v1.ExpiringUserR\x05users\"_\n" +
+	"\x13SetUserLevelRequest\x12\x19\n" +
+	"\badmin_id\x18\x01 \x01(\rR\aadminId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\rR\x06userId\x12\x14\n" +
+	"\x05level\x18\x03 \x01(\tR\x05level\"0\n" +
+	"\x14SetUserLevelResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xbb\f\n" +
 	"\x0eWorkoutService\x12K\n" +
 	"\n" +
 	"GetCourses\x12\x1d.workout.v1.GetCoursesRequest\x1a\x1e.workout.v1.GetCoursesResponse\x12`\n" +
@@ -1000,85 +2693,146 @@ const file_proto_workout_v1_workout_proto_rawDesc = "" +
 	"\x11GetWorkoutHistory\x12$.workout.v1.GetWorkoutHistoryRequest\x1a%.workout.v1.GetWorkoutHistoryResponse\x12?\n" +
 	"\x06Enroll\x12\x19.workout.v1.EnrollRequest\x1a\x1a.workout.v1.EnrollResponse\x12]\n" +
 	"\x10CancelEnrollment\x12#.workout.v1.CancelEnrollmentRequest\x1a$.workout.v1.CancelEnrollmentResponse\x12c\n" +
-	"\x12CompleteWorkoutDay\x12%.workout.v1.CompleteWorkoutDayRequest\x1a&.workout.v1.CompleteWorkoutDayResponseBIZGgithub.com/akhilbabu26/jinnx-fitweb/backend2/proto/workout/v1;workoutv1b\x06proto3"
+	"\x12CompleteWorkoutDay\x12%.workout.v1.CompleteWorkoutDayRequest\x1a&.workout.v1.CompleteWorkoutDayResponse\x12W\n" +
+	"\x0eCreateUserWeek\x12!.workout.v1.CreateUserWeekRequest\x1a\".workout.v1.CreateUserWeekResponse\x12T\n" +
+	"\rCreateUserDay\x12 .workout.v1.CreateUserDayRequest\x1a!.workout.v1.CreateUserDayResponse\x12c\n" +
+	"\x12CreateUserExercise\x12%.workout.v1.CreateUserExerciseRequest\x1a&.workout.v1.CreateUserExerciseResponse\x12c\n" +
+	"\x12UpdateUserExercise\x12%.workout.v1.UpdateUserExerciseRequest\x1a&.workout.v1.UpdateUserExerciseResponse\x12c\n" +
+	"\x12DeleteUserExercise\x12%.workout.v1.DeleteUserExerciseRequest\x1a&.workout.v1.DeleteUserExerciseResponse\x12W\n" +
+	"\x0eAddDayFeedback\x12!.workout.v1.AddDayFeedbackRequest\x1a\".workout.v1.AddDayFeedbackResponse\x12N\n" +
+	"\vGetUserPlan\x12\x1e.workout.v1.GetUserPlanRequest\x1a\x1f.workout.v1.GetUserPlanResponse\x12l\n" +
+	"\x15ToggleUserVideoAccess\x12(.workout.v1.ToggleUserVideoAccessRequest\x1a).workout.v1.ToggleUserVideoAccessResponse\x12o\n" +
+	"\x16ListTrialExpiringUsers\x12).workout.v1.ListTrialExpiringUsersRequest\x1a*.workout.v1.ListTrialExpiringUsersResponse\x12Q\n" +
+	"\fSetUserLevel\x12\x1f.workout.v1.SetUserLevelRequest\x1a .workout.v1.SetUserLevelResponseBIZGgithub.com/akhilbabu26/jinnx-fitweb/backend2/proto/workout/v1;workoutv1b\x06proto3"
 
 var (
-	file_proto_workout_v1_workout_proto_rawDescOnce sync.Once
-	file_proto_workout_v1_workout_proto_rawDescData []byte
+	file_workout_v1_workout_proto_rawDescOnce sync.Once
+	file_workout_v1_workout_proto_rawDescData []byte
 )
 
-func file_proto_workout_v1_workout_proto_rawDescGZIP() []byte {
-	file_proto_workout_v1_workout_proto_rawDescOnce.Do(func() {
-		file_proto_workout_v1_workout_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_workout_v1_workout_proto_rawDesc), len(file_proto_workout_v1_workout_proto_rawDesc)))
+func file_workout_v1_workout_proto_rawDescGZIP() []byte {
+	file_workout_v1_workout_proto_rawDescOnce.Do(func() {
+		file_workout_v1_workout_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_workout_v1_workout_proto_rawDesc), len(file_workout_v1_workout_proto_rawDesc)))
 	})
-	return file_proto_workout_v1_workout_proto_rawDescData
+	return file_workout_v1_workout_proto_rawDescData
 }
 
-var file_proto_workout_v1_workout_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
-var file_proto_workout_v1_workout_proto_goTypes = []any{
-	(*GetCoursesRequest)(nil),          // 0: workout.v1.GetCoursesRequest
-	(*Course)(nil),                     // 1: workout.v1.Course
-	(*GetCoursesResponse)(nil),         // 2: workout.v1.GetCoursesResponse
-	(*GetEnrolledCourseRequest)(nil),   // 3: workout.v1.GetEnrolledCourseRequest
-	(*GetEnrolledCourseResponse)(nil),  // 4: workout.v1.GetEnrolledCourseResponse
-	(*GetTodayWorkoutRequest)(nil),     // 5: workout.v1.GetTodayWorkoutRequest
-	(*Exercise)(nil),                   // 6: workout.v1.Exercise
-	(*GetTodayWorkoutResponse)(nil),    // 7: workout.v1.GetTodayWorkoutResponse
-	(*GetWorkoutHistoryRequest)(nil),   // 8: workout.v1.GetWorkoutHistoryRequest
-	(*WorkoutLog)(nil),                 // 9: workout.v1.WorkoutLog
-	(*GetWorkoutHistoryResponse)(nil),  // 10: workout.v1.GetWorkoutHistoryResponse
-	(*EnrollRequest)(nil),              // 11: workout.v1.EnrollRequest
-	(*EnrollResponse)(nil),             // 12: workout.v1.EnrollResponse
-	(*CancelEnrollmentRequest)(nil),    // 13: workout.v1.CancelEnrollmentRequest
-	(*CancelEnrollmentResponse)(nil),   // 14: workout.v1.CancelEnrollmentResponse
-	(*CompleteWorkoutDayRequest)(nil),  // 15: workout.v1.CompleteWorkoutDayRequest
-	(*CompleteWorkoutDayResponse)(nil), // 16: workout.v1.CompleteWorkoutDayResponse
+var file_workout_v1_workout_proto_msgTypes = make([]protoimpl.MessageInfo, 42)
+var file_workout_v1_workout_proto_goTypes = []any{
+	(*GetCoursesRequest)(nil),              // 0: workout.v1.GetCoursesRequest
+	(*Course)(nil),                         // 1: workout.v1.Course
+	(*GetCoursesResponse)(nil),             // 2: workout.v1.GetCoursesResponse
+	(*GetEnrolledCourseRequest)(nil),       // 3: workout.v1.GetEnrolledCourseRequest
+	(*GetEnrolledCourseResponse)(nil),      // 4: workout.v1.GetEnrolledCourseResponse
+	(*GetTodayWorkoutRequest)(nil),         // 5: workout.v1.GetTodayWorkoutRequest
+	(*Exercise)(nil),                       // 6: workout.v1.Exercise
+	(*GetTodayWorkoutResponse)(nil),        // 7: workout.v1.GetTodayWorkoutResponse
+	(*GetWorkoutHistoryRequest)(nil),       // 8: workout.v1.GetWorkoutHistoryRequest
+	(*WorkoutLog)(nil),                     // 9: workout.v1.WorkoutLog
+	(*GetWorkoutHistoryResponse)(nil),      // 10: workout.v1.GetWorkoutHistoryResponse
+	(*EnrollRequest)(nil),                  // 11: workout.v1.EnrollRequest
+	(*EnrollResponse)(nil),                 // 12: workout.v1.EnrollResponse
+	(*CancelEnrollmentRequest)(nil),        // 13: workout.v1.CancelEnrollmentRequest
+	(*CancelEnrollmentResponse)(nil),       // 14: workout.v1.CancelEnrollmentResponse
+	(*CompleteWorkoutDayRequest)(nil),      // 15: workout.v1.CompleteWorkoutDayRequest
+	(*CompleteWorkoutDayResponse)(nil),     // 16: workout.v1.CompleteWorkoutDayResponse
+	(*CreateUserWeekRequest)(nil),          // 17: workout.v1.CreateUserWeekRequest
+	(*CreateUserWeekResponse)(nil),         // 18: workout.v1.CreateUserWeekResponse
+	(*CreateUserDayRequest)(nil),           // 19: workout.v1.CreateUserDayRequest
+	(*CreateUserDayResponse)(nil),          // 20: workout.v1.CreateUserDayResponse
+	(*AdminExercise)(nil),                  // 21: workout.v1.AdminExercise
+	(*CreateUserExerciseRequest)(nil),      // 22: workout.v1.CreateUserExerciseRequest
+	(*CreateUserExerciseResponse)(nil),     // 23: workout.v1.CreateUserExerciseResponse
+	(*UpdateUserExerciseRequest)(nil),      // 24: workout.v1.UpdateUserExerciseRequest
+	(*UpdateUserExerciseResponse)(nil),     // 25: workout.v1.UpdateUserExerciseResponse
+	(*DeleteUserExerciseRequest)(nil),      // 26: workout.v1.DeleteUserExerciseRequest
+	(*DeleteUserExerciseResponse)(nil),     // 27: workout.v1.DeleteUserExerciseResponse
+	(*AddDayFeedbackRequest)(nil),          // 28: workout.v1.AddDayFeedbackRequest
+	(*AddDayFeedbackResponse)(nil),         // 29: workout.v1.AddDayFeedbackResponse
+	(*GetUserPlanRequest)(nil),             // 30: workout.v1.GetUserPlanRequest
+	(*UserPlanExercise)(nil),               // 31: workout.v1.UserPlanExercise
+	(*UserPlanDay)(nil),                    // 32: workout.v1.UserPlanDay
+	(*UserPlanWeek)(nil),                   // 33: workout.v1.UserPlanWeek
+	(*GetUserPlanResponse)(nil),            // 34: workout.v1.GetUserPlanResponse
+	(*ToggleUserVideoAccessRequest)(nil),   // 35: workout.v1.ToggleUserVideoAccessRequest
+	(*ToggleUserVideoAccessResponse)(nil),  // 36: workout.v1.ToggleUserVideoAccessResponse
+	(*ListTrialExpiringUsersRequest)(nil),  // 37: workout.v1.ListTrialExpiringUsersRequest
+	(*ExpiringUser)(nil),                   // 38: workout.v1.ExpiringUser
+	(*ListTrialExpiringUsersResponse)(nil), // 39: workout.v1.ListTrialExpiringUsersResponse
+	(*SetUserLevelRequest)(nil),            // 40: workout.v1.SetUserLevelRequest
+	(*SetUserLevelResponse)(nil),           // 41: workout.v1.SetUserLevelResponse
 }
-var file_proto_workout_v1_workout_proto_depIdxs = []int32{
+var file_workout_v1_workout_proto_depIdxs = []int32{
 	1,  // 0: workout.v1.GetCoursesResponse.courses:type_name -> workout.v1.Course
 	6,  // 1: workout.v1.GetTodayWorkoutResponse.exercises:type_name -> workout.v1.Exercise
 	9,  // 2: workout.v1.GetWorkoutHistoryResponse.logs:type_name -> workout.v1.WorkoutLog
-	0,  // 3: workout.v1.WorkoutService.GetCourses:input_type -> workout.v1.GetCoursesRequest
-	3,  // 4: workout.v1.WorkoutService.GetEnrolledCourse:input_type -> workout.v1.GetEnrolledCourseRequest
-	5,  // 5: workout.v1.WorkoutService.GetTodayWorkout:input_type -> workout.v1.GetTodayWorkoutRequest
-	8,  // 6: workout.v1.WorkoutService.GetWorkoutHistory:input_type -> workout.v1.GetWorkoutHistoryRequest
-	11, // 7: workout.v1.WorkoutService.Enroll:input_type -> workout.v1.EnrollRequest
-	13, // 8: workout.v1.WorkoutService.CancelEnrollment:input_type -> workout.v1.CancelEnrollmentRequest
-	15, // 9: workout.v1.WorkoutService.CompleteWorkoutDay:input_type -> workout.v1.CompleteWorkoutDayRequest
-	2,  // 10: workout.v1.WorkoutService.GetCourses:output_type -> workout.v1.GetCoursesResponse
-	4,  // 11: workout.v1.WorkoutService.GetEnrolledCourse:output_type -> workout.v1.GetEnrolledCourseResponse
-	7,  // 12: workout.v1.WorkoutService.GetTodayWorkout:output_type -> workout.v1.GetTodayWorkoutResponse
-	10, // 13: workout.v1.WorkoutService.GetWorkoutHistory:output_type -> workout.v1.GetWorkoutHistoryResponse
-	12, // 14: workout.v1.WorkoutService.Enroll:output_type -> workout.v1.EnrollResponse
-	14, // 15: workout.v1.WorkoutService.CancelEnrollment:output_type -> workout.v1.CancelEnrollmentResponse
-	16, // 16: workout.v1.WorkoutService.CompleteWorkoutDay:output_type -> workout.v1.CompleteWorkoutDayResponse
-	10, // [10:17] is the sub-list for method output_type
-	3,  // [3:10] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	21, // 3: workout.v1.CreateUserExerciseRequest.exercise:type_name -> workout.v1.AdminExercise
+	21, // 4: workout.v1.UpdateUserExerciseRequest.exercise:type_name -> workout.v1.AdminExercise
+	31, // 5: workout.v1.UserPlanDay.exercises:type_name -> workout.v1.UserPlanExercise
+	32, // 6: workout.v1.UserPlanWeek.days:type_name -> workout.v1.UserPlanDay
+	33, // 7: workout.v1.GetUserPlanResponse.weeks:type_name -> workout.v1.UserPlanWeek
+	38, // 8: workout.v1.ListTrialExpiringUsersResponse.users:type_name -> workout.v1.ExpiringUser
+	0,  // 9: workout.v1.WorkoutService.GetCourses:input_type -> workout.v1.GetCoursesRequest
+	3,  // 10: workout.v1.WorkoutService.GetEnrolledCourse:input_type -> workout.v1.GetEnrolledCourseRequest
+	5,  // 11: workout.v1.WorkoutService.GetTodayWorkout:input_type -> workout.v1.GetTodayWorkoutRequest
+	8,  // 12: workout.v1.WorkoutService.GetWorkoutHistory:input_type -> workout.v1.GetWorkoutHistoryRequest
+	11, // 13: workout.v1.WorkoutService.Enroll:input_type -> workout.v1.EnrollRequest
+	13, // 14: workout.v1.WorkoutService.CancelEnrollment:input_type -> workout.v1.CancelEnrollmentRequest
+	15, // 15: workout.v1.WorkoutService.CompleteWorkoutDay:input_type -> workout.v1.CompleteWorkoutDayRequest
+	17, // 16: workout.v1.WorkoutService.CreateUserWeek:input_type -> workout.v1.CreateUserWeekRequest
+	19, // 17: workout.v1.WorkoutService.CreateUserDay:input_type -> workout.v1.CreateUserDayRequest
+	22, // 18: workout.v1.WorkoutService.CreateUserExercise:input_type -> workout.v1.CreateUserExerciseRequest
+	24, // 19: workout.v1.WorkoutService.UpdateUserExercise:input_type -> workout.v1.UpdateUserExerciseRequest
+	26, // 20: workout.v1.WorkoutService.DeleteUserExercise:input_type -> workout.v1.DeleteUserExerciseRequest
+	28, // 21: workout.v1.WorkoutService.AddDayFeedback:input_type -> workout.v1.AddDayFeedbackRequest
+	30, // 22: workout.v1.WorkoutService.GetUserPlan:input_type -> workout.v1.GetUserPlanRequest
+	35, // 23: workout.v1.WorkoutService.ToggleUserVideoAccess:input_type -> workout.v1.ToggleUserVideoAccessRequest
+	37, // 24: workout.v1.WorkoutService.ListTrialExpiringUsers:input_type -> workout.v1.ListTrialExpiringUsersRequest
+	40, // 25: workout.v1.WorkoutService.SetUserLevel:input_type -> workout.v1.SetUserLevelRequest
+	2,  // 26: workout.v1.WorkoutService.GetCourses:output_type -> workout.v1.GetCoursesResponse
+	4,  // 27: workout.v1.WorkoutService.GetEnrolledCourse:output_type -> workout.v1.GetEnrolledCourseResponse
+	7,  // 28: workout.v1.WorkoutService.GetTodayWorkout:output_type -> workout.v1.GetTodayWorkoutResponse
+	10, // 29: workout.v1.WorkoutService.GetWorkoutHistory:output_type -> workout.v1.GetWorkoutHistoryResponse
+	12, // 30: workout.v1.WorkoutService.Enroll:output_type -> workout.v1.EnrollResponse
+	14, // 31: workout.v1.WorkoutService.CancelEnrollment:output_type -> workout.v1.CancelEnrollmentResponse
+	16, // 32: workout.v1.WorkoutService.CompleteWorkoutDay:output_type -> workout.v1.CompleteWorkoutDayResponse
+	18, // 33: workout.v1.WorkoutService.CreateUserWeek:output_type -> workout.v1.CreateUserWeekResponse
+	20, // 34: workout.v1.WorkoutService.CreateUserDay:output_type -> workout.v1.CreateUserDayResponse
+	23, // 35: workout.v1.WorkoutService.CreateUserExercise:output_type -> workout.v1.CreateUserExerciseResponse
+	25, // 36: workout.v1.WorkoutService.UpdateUserExercise:output_type -> workout.v1.UpdateUserExerciseResponse
+	27, // 37: workout.v1.WorkoutService.DeleteUserExercise:output_type -> workout.v1.DeleteUserExerciseResponse
+	29, // 38: workout.v1.WorkoutService.AddDayFeedback:output_type -> workout.v1.AddDayFeedbackResponse
+	34, // 39: workout.v1.WorkoutService.GetUserPlan:output_type -> workout.v1.GetUserPlanResponse
+	36, // 40: workout.v1.WorkoutService.ToggleUserVideoAccess:output_type -> workout.v1.ToggleUserVideoAccessResponse
+	39, // 41: workout.v1.WorkoutService.ListTrialExpiringUsers:output_type -> workout.v1.ListTrialExpiringUsersResponse
+	41, // 42: workout.v1.WorkoutService.SetUserLevel:output_type -> workout.v1.SetUserLevelResponse
+	26, // [26:43] is the sub-list for method output_type
+	9,  // [9:26] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
-func init() { file_proto_workout_v1_workout_proto_init() }
-func file_proto_workout_v1_workout_proto_init() {
-	if File_proto_workout_v1_workout_proto != nil {
+func init() { file_workout_v1_workout_proto_init() }
+func file_workout_v1_workout_proto_init() {
+	if File_workout_v1_workout_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_workout_v1_workout_proto_rawDesc), len(file_proto_workout_v1_workout_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_workout_v1_workout_proto_rawDesc), len(file_workout_v1_workout_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   42,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_workout_v1_workout_proto_goTypes,
-		DependencyIndexes: file_proto_workout_v1_workout_proto_depIdxs,
-		MessageInfos:      file_proto_workout_v1_workout_proto_msgTypes,
+		GoTypes:           file_workout_v1_workout_proto_goTypes,
+		DependencyIndexes: file_workout_v1_workout_proto_depIdxs,
+		MessageInfos:      file_workout_v1_workout_proto_msgTypes,
 	}.Build()
-	File_proto_workout_v1_workout_proto = out.File
-	file_proto_workout_v1_workout_proto_goTypes = nil
-	file_proto_workout_v1_workout_proto_depIdxs = nil
+	File_workout_v1_workout_proto = out.File
+	file_workout_v1_workout_proto_goTypes = nil
+	file_workout_v1_workout_proto_depIdxs = nil
 }

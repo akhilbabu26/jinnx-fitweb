@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { registerUser, verifyOTP, clearErrors, resetRegisterState } from '../authSlice';
+import { registerUser, verifyOTP, resendOTP, clearErrors, resetRegisterState } from '../authSlice';
 import Input from '../../../shared/components/ui/Input';
 import Button from '../../../shared/components/ui/Button';
 import Toast from '../../../shared/components/ui/Toast';
@@ -9,16 +9,18 @@ import Toast from '../../../shared/components/ui/Toast';
 export default function RegisterPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { registerStatus, registerMessage, otpStatus, otpMessage, error } = useAppSelector((state) => state.auth);
+  const { registerStatus, registerMessage, otpStatus, otpMessage, resendOTPStatus, resendOTPMessage, error } = useAppSelector((state) => state.auth);
 
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm_password: '' });
   const [otp, setOtp] = useState('');
+  const [cooldown, setCooldown] = useState(60);
   const [toastMsg, setToastMsg] = useState(null);
 
   // Clear states on mount & unmount
   useEffect(() => {
     dispatch(clearErrors());
     dispatch(resetRegisterState());
+    setCooldown(60);
   }, [dispatch]);
 
   // Handle errors from state
@@ -42,6 +44,40 @@ export default function RegisterPage() {
       setToastMsg({ message: otpMessage, type: 'success' });
     }
   }, [otpStatus, otpMessage]);
+
+  // Handle successful OTP resend
+  useEffect(() => {
+    if (resendOTPStatus === 'success' && resendOTPMessage) {
+      setToastMsg({ message: resendOTPMessage, type: 'success' });
+      dispatch(clearErrors());
+    }
+  }, [resendOTPStatus, resendOTPMessage, dispatch]);
+
+  // Cooldown countdown timer for resend OTP
+  useEffect(() => {
+    let timer;
+    if (registerStatus === 'success' && cooldown > 0) {
+      timer = setInterval(() => {
+        setCooldown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [registerStatus, cooldown]);
+
+  const formatCooldown = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  const handleResendOTP = () => {
+    if (cooldown === 0 && resendOTPStatus !== 'loading') {
+      dispatch(resendOTP(form.email));
+      setCooldown(60);
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -71,7 +107,8 @@ export default function RegisterPage() {
       setToastMsg({ message: 'Please enter a valid 6-digit OTP code', type: 'error' });
       return;
     }
-    dispatch(verifyOTP({ email: form.email, otp }));
+    // Backend expects field name 'code', not 'otp'
+    dispatch(verifyOTP({ email: form.email, code: otp }));
   };
 
   // Phase 3: OTP Success -> Approval Pending
@@ -142,11 +179,31 @@ export default function RegisterPage() {
           >
             Verify Code
           </Button>
+
+          <div className="text-center text-sm pt-2">
+            {cooldown > 0 ? (
+              <span className="text-white/40 font-medium select-none">
+                Resend code in <strong className="text-white/70 font-mono">{formatCooldown(cooldown)}</strong>
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={handleResendOTP}
+                disabled={resendOTPStatus === 'loading'}
+                className="text-[#39ff14] hover:text-[#2bcc0f] transition-all cursor-pointer font-bold hover:underline bg-transparent border-none text-sm disabled:opacity-50"
+              >
+                {resendOTPStatus === 'loading' ? 'Resending...' : 'Resend OTP'}
+              </button>
+            )}
+          </div>
         </form>
 
         <div className="text-center mt-6">
           <button
-            onClick={() => dispatch(resetRegisterState())}
+            onClick={() => {
+              dispatch(resetRegisterState());
+              setCooldown(60);
+            }}
             className="text-xs text-white/40 hover:text-[#39ff14] transition-colors cursor-pointer font-semibold hover:underline bg-transparent border-none"
           >
             Back to Registration

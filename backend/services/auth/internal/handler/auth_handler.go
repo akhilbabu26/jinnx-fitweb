@@ -100,7 +100,7 @@ func (h *AuthHandler) GetUserProfile(ctx context.Context, req *authv1.GetUserPro
 		Id:     uint32(user.ID),
 		Name:   user.Name,
 		Email:  user.Email,
-		Role:   user.Role,
+		Role:   string(user.Role),
 		Status: string(user.Status),
 	}, nil
 }
@@ -121,7 +121,7 @@ func (h *AuthHandler) GetTrainerTasks(ctx context.Context, req *authv1.GetTraine
 			Id:          uint32(t.ID),
 			Title:       t.Title,
 			Description: t.Description,
-			Status:      t.Status,
+			Status:      string(t.Status),
 			DueDate:     dueStr,
 		})
 	}
@@ -198,7 +198,7 @@ func (h *AuthHandler) ListPendingUsers(ctx context.Context, _ *authv1.ListPendin
 			Id:        uint32(u.ID),
 			Email:     u.Email,
 			Name:      u.Name,
-			Role:      u.Role,
+			Role:      string(u.Role),
 			Status:    string(u.Status),
 			CreatedAt: u.CreatedAt.Format(time.RFC3339),
 		})
@@ -213,8 +213,10 @@ func (h *AuthHandler) UpdateUserStatus(ctx context.Context, req *authv1.UpdateUs
 		err = h.svc.ApproveUser(ctx, uint(req.AdminId), uint(req.UserId))
 	case "rejected":
 		err = h.svc.RejectUser(ctx, uint(req.AdminId), uint(req.UserId))
+	case "pending_approval":
+		err = h.svc.ReApproveUser(ctx, uint(req.AdminId), uint(req.UserId))
 	default:
-		return nil, status.Error(codes.InvalidArgument, "status must be 'approved' or 'rejected'")
+		return nil, status.Error(codes.InvalidArgument, "status must be 'approved', 'rejected', or 'pending_approval'")
 	}
 
 	if err != nil {
@@ -253,12 +255,57 @@ func (h *AuthHandler) ListAllUsers(ctx context.Context, _ *authv1.ListAllUsersRe
 			Id:        uint32(u.ID),
 			Email:     u.Email,
 			Name:      u.Name,
-			Role:      u.Role,
+			Role:      string(u.Role),
 			Status:    string(u.Status),
 			CreatedAt: u.CreatedAt.Format(time.RFC3339),
 		})
 	}
 	return &authv1.ListAllUsersResponse{Users: protoUsers}, nil
+}
+
+func (h *AuthHandler) AssignTask(ctx context.Context, req *authv1.AssignTaskRequest) (*authv1.AssignTaskResponse, error) {
+	taskID, err := h.svc.AssignTask(ctx, uint(req.AdminId), uint(req.UserId), req.Title, req.Description, req.DueDate)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &authv1.AssignTaskResponse{
+		TaskId:  uint32(taskID),
+		Success: true,
+	}, nil
+}
+
+func (h *AuthHandler) DeleteTask(ctx context.Context, req *authv1.DeleteTaskRequest) (*authv1.DeleteTaskResponse, error) {
+	err := h.svc.DeleteTask(ctx, uint(req.TaskId))
+	if err != nil {
+		if err.Error() == "task not found" {
+			return nil, status.Error(codes.NotFound, err.Error())
+		}
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &authv1.DeleteTaskResponse{
+		Success: true,
+	}, nil
+}
+
+func (h *AuthHandler) ResendOTP(ctx context.Context, req *authv1.ResendOTPRequest) (*authv1.ResendOTPResponse, error) {
+	err := h.svc.ResendOTP(ctx, req.Email)
+	if err != nil {
+		switch err.Error() {
+		case "user not found":
+			return nil, status.Error(codes.NotFound, err.Error())
+		case "user is already verified or not pending verification":
+			return nil, status.Error(codes.FailedPrecondition, err.Error())
+		case "OTP service unavailable":
+			return nil, status.Error(codes.Unavailable, err.Error())
+		default:
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+	}
+
+	return &authv1.ResendOTPResponse{
+		Success: true,
+		Message: "Verification code resent successfully.",
+	}, nil
 }
 
 

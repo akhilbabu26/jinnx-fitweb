@@ -2,20 +2,18 @@ import api from './api';
 
 export const workoutApi = {
   // ── User-Facing ────────────────────────────────────────────────────────────
-  getCourses: () => api.get('/courses'),
-  getCourseBySlug: (slug) => api.get(`/courses/${slug}`),
-  enroll: (courseId, onboardingData) => api.post('/courses/enroll', {
-    course_id: courseId,
+  getCourses: () => api.get('/workouts/courses'),
+  enroll: (courseId, onboardingData) => api.post(`/workouts/course/${courseId}/enroll`, {
     onboarding_data: onboardingData,
   }),
-  getEnrolledCourse: () => api.get('/courses/my'),
+  getEnrolledCourse: () => api.get('/workouts/course/enrolled'),
   getTodayWorkout: () => api.get('/workouts/today'),
-  getWorkoutDetails: (id) => api.get(`/workouts/${id}`),
-  logExercise: (data) => api.post('/workouts/exercises/log', data),
-  completeWorkoutDay: (dayId) => api.post(`/workouts/${dayId}/complete`),
-  cancelEnrollment: () => api.delete('/courses/my'),
-  getMyTasks: () => api.get('/users/me/tasks'),
-  updateTaskStatus: (taskId, status) => api.patch(`/users/tasks/${taskId}`, { status }),
+  getWorkoutHistory: () => api.get('/workouts/history'),
+  logExercise: (data) => Promise.resolve({ data: { success: true } }), // Mocked local-only
+  completeWorkoutDay: (dayId) => api.post(`/workouts/day/${dayId}/complete`),
+  cancelEnrollment: () => api.post('/workouts/course/cancel'),
+  getMyTasks: () => api.get('/workouts/tasks'),
+  updateTaskStatus: (taskId, status) => api.post(`/workouts/tasks/${taskId}/complete`),
 
   // ── Admin: Weeks Program CRUD ──────────────────────────────────────────────
   getWeeks: (courseId, level) => api.get(`/admin/courses/${courseId}/weeks?level=${level}`),
@@ -44,4 +42,16 @@ export const workoutApi = {
   getUserTasks: (userId) => api.get(`/admin/users/${userId}/tasks`),
   deleteTask: (taskId) => api.delete(`/admin/tasks/${taskId}`),
   getAdminCourses: () => api.get('/admin/courses'),
+
+  // ── Admin: User Custom Plans & Settings ────────────────────────────────────
+  getUserPlan: (userId) => api.get(`/admin/users/${userId}/plan`),
+  createUserWeek: (userId, data) => api.post(`/admin/users/${userId}/plan/week`, data),
+  createUserDay: (data) => api.post('/admin/users/plan/day', data),
+  createUserExercise: (data) => api.post('/admin/users/plan/exercise', data),
+  updateUserExercise: (exerciseId, data) => api.put(`/admin/users/plan/exercise/${exerciseId}`, data),
+  deleteUserExercise: (exerciseId) => api.delete(`/admin/users/plan/exercise/${exerciseId}`),
+  addUserDayFeedback: (userId, dayId, feedbackText) => api.post(`/admin/users/${userId}/plan/day/${dayId}/feedback`, { feedback_text: feedbackText }),
+  toggleUserVideoAccess: (userId, enabled) => api.put(`/admin/users/${userId}/video-access`, { enabled }),
+  getTrialExpiringUsers: () => api.get('/admin/users/trial-expiring'),
+  getUserEnrollment: (userId) => api.get(`/admin/users/${userId}/enrollment`),
 };

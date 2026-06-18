@@ -31,6 +31,34 @@ services:
       retries: 5
     restart: unless-stopped
 
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: fitweb-kafka
+    ports: 
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - kafkadata:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+
   # ── Services ──────────────────────────────────────────────────────────────
 
   auth-service:
@@ -53,10 +81,13 @@ services:
       - SMTP_PASS=${SMTP_PASS}
       - SMTP_FROM=${SMTP_FROM}
       - REDIS_ADDR=redis:6379
+      - KAFKA_BROKERS=kafka:9092
     depends_on:
       postgres:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      kafka:
         condition: service_healthy
     restart: unless-stopped
 
@@ -73,8 +104,11 @@ services:
       - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
       - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET}
       - RAZORPAY_PLAN_ID=${RAZORPAY_PLAN_ID}
+      - KAFKA_BROKERS=kafka:9092
     depends_on:
       postgres:
+        condition: service_healthy
+      kafka:
         condition: service_healthy
     restart: unless-stopped
 
@@ -87,8 +121,11 @@ services:
       - "50053:50053"
     environment:
       - DATABASE_URL=postgres://postgres:123@postgres:5432/jinnx_fitweb_db?sslmode=disable
+      - KAFKA_BROKERS=kafka:9092
     depends_on:
       postgres:
+        condition: service_healthy
+      kafka:
         condition: service_healthy
     restart: unless-stopped
 
@@ -105,11 +142,14 @@ services:
       - CHATBOT_DAILY_LIMIT_FREE=${CHATBOT_DAILY_LIMIT_FREE:-20}
       - CHATBOT_MAX_HISTORY=${CHATBOT_MAX_HISTORY:-10}
       - WORKOUT_SERVICE_ADDR=workout-service:50053
+      - KAFKA_BROKERS=kafka:9092
     depends_on:
       postgres:
         condition: service_healthy
       workout-service:
         condition: service_started
+      kafka:
+        condition: service_healthy
     restart: unless-stopped
 
   video-service:
@@ -151,6 +191,7 @@ services:
       - CHAT_SERVICE_ADDR=chat-service:50054
       - VIDEO_SERVICE_ADDR=video-service:50055
       - REDIS_ADDR=redis:6379
+      - KAFKA_BROKERS=kafka:9092
     depends_on:
       redis:
         condition: service_healthy
@@ -164,8 +205,11 @@ services:
         condition: service_started
       video-service:
         condition: service_started
+      kafka:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
   pgdata:
   redisdata:
+  kafkadata:

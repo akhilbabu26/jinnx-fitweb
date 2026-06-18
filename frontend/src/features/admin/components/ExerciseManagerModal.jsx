@@ -21,7 +21,7 @@ function extractYouTubeID(input) {
   }
 }
 
-export default function ExerciseManagerModal({ day, onClose }) {
+export default function ExerciseManagerModal({ day, onClose, isUserPlan = false, onRefresh, clientEquipment = [] }) {
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -34,6 +34,8 @@ export default function ExerciseManagerModal({ day, onClose }) {
     reps: '10',
     weight: 0,
     video: '',
+    target: '',
+    equipment_needed: 'bodyweight',
     order_index: 0,
   });
 
@@ -52,8 +54,12 @@ export default function ExerciseManagerModal({ day, onClose }) {
   };
 
   useEffect(() => {
-    fetchExercises();
-  }, [day.id]);
+    if (isUserPlan) {
+      setExercises(day.exercises || []);
+    } else {
+      fetchExercises();
+    }
+  }, [day, isUserPlan]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,8 +75,10 @@ export default function ExerciseManagerModal({ day, onClose }) {
       name: ex.name,
       sets: ex.sets,
       reps: ex.reps,
-      weight: ex.weight,
-      video: ex.video_url || '',
+      weight: parseFloat(ex.weight) || 0,
+      video: ex.video_url || ex.video || '',
+      target: ex.target || '',
+      equipment_needed: ex.equipment_needed || 'bodyweight',
       order_index: ex.order_index,
     });
   };
@@ -83,6 +91,8 @@ export default function ExerciseManagerModal({ day, onClose }) {
       reps: '10',
       weight: 0,
       video: '',
+      target: '',
+      equipment_needed: 'bodyweight',
       order_index: exercises.length,
     });
   };
@@ -93,21 +103,45 @@ export default function ExerciseManagerModal({ day, onClose }) {
     setSaving(true);
     try {
       const cleanVideo = extractYouTubeID(form.video);
-      const payload = {
-        ...form,
-        week_day_id: day.id,
-        video: cleanVideo || form.video,
-      };
+      
+      if (isUserPlan) {
+        const exercisePayload = {
+          name: form.name,
+          sets: parseInt(form.sets),
+          reps: String(form.reps),
+          weight: String(form.weight),
+          video_url: cleanVideo || form.video,
+          target: form.target || '',
+          equipment_needed: form.equipment_needed || 'bodyweight',
+          order_index: parseInt(form.order_index),
+        };
 
-      if (editingId) {
-        await workoutApi.updateExercise(editingId, payload);
+        if (editingId) {
+          await workoutApi.updateUserExercise(editingId, { exercise: exercisePayload });
+        } else {
+          await workoutApi.createUserExercise({
+            assigned_day_id: day.id,
+            exercise: exercisePayload,
+          });
+        }
+        
+        handleCancelEdit();
+        if (onRefresh) await onRefresh();
       } else {
-        await workoutApi.createExercise(payload);
-      }
+        const payload = {
+          ...form,
+          week_day_id: day.id,
+          video: cleanVideo || form.video,
+        };
 
-      // Reset
-      handleCancelEdit();
-      fetchExercises();
+        if (editingId) {
+          await workoutApi.updateExercise(editingId, payload);
+        } else {
+          await workoutApi.createExercise(payload);
+        }
+        handleCancelEdit();
+        fetchExercises();
+      }
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to save exercise');
     } finally {
@@ -118,8 +152,13 @@ export default function ExerciseManagerModal({ day, onClose }) {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this exercise?')) return;
     try {
-      await workoutApi.deleteExercise(id);
-      fetchExercises();
+      if (isUserPlan) {
+        await workoutApi.deleteUserExercise(id);
+        if (onRefresh) await onRefresh();
+      } else {
+        await workoutApi.deleteExercise(id);
+        fetchExercises();
+      }
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to delete exercise');
     }
@@ -296,6 +335,43 @@ export default function ExerciseManagerModal({ day, onClose }) {
                   />
                 </div>
               </div>
+
+              {/* Target & Equipment */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Target Muscle</label>
+                  <input
+                    name="target" type="text"
+                    placeholder="e.g. Chest, Quads"
+                    value={form.target} onChange={handleChange}
+                    className="w-full px-3 py-2 rounded-xl bg-black border border-white/5 text-white/80 text-xs focus:outline-none focus:border-[#39ff14]/30"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Equipment Needed</label>
+                  <select
+                    name="equipment_needed"
+                    value={form.equipment_needed} onChange={handleChange}
+                    className="w-full px-3 py-2 rounded-xl bg-black border border-white/5 text-white/85 text-xs focus:outline-none focus:border-[#39ff14]/30 cursor-pointer"
+                  >
+                    <option value="bodyweight">Bodyweight</option>
+                    <option value="barbell">Barbell</option>
+                    <option value="dumbbell">Dumbbell</option>
+                    <option value="cables">Cables</option>
+                    <option value="kettlebell">Kettlebell</option>
+                    <option value="machine">Machine</option>
+                    <option value="bench">Bench</option>
+                    <option value="resistance band">Resistance Band</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Equipment Warning badge */}
+              {isUserPlan && form.equipment_needed !== 'bodyweight' && !clientEquipment.includes(form.equipment_needed) && (
+                <div className="text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-2 rounded-xl">
+                  ⚠️ Warning: Client does not have <strong>{form.equipment_needed}</strong> in their onboarding equipment profile.
+                </div>
+              )}
 
               {/* YouTube Link */}
               <div className="space-y-1">

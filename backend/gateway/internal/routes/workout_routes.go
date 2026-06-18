@@ -2,6 +2,7 @@ package routes
 
 import (
 	"encoding/json"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 
@@ -126,5 +127,57 @@ func RegisterWorkoutRoutes(
 			return c.Status(appErr.Code).JSON(fiber.Map{"success": false, "message": appErr.Message})
 		}
 		return c.JSON(fiber.Map{"success": true, "message": "day completed successfully"})
+	})
+
+	// GET /api/v1/workouts/tasks — get assigned tasks for the logged in user
+	g.Get("/tasks", func(c *fiber.Ctx) error {
+		userID := c.Locals("userID").(uint)
+		res, err := authClient.GetTrainerTasks(c.Context(), &authv1.GetTrainerTasksRequest{
+			UserId: uint32(userID),
+		})
+		if err != nil {
+			appErr := apperr.FromGRPCError(err)
+			return c.Status(appErr.Code).JSON(fiber.Map{"success": false, "message": appErr.Message})
+		}
+
+		tasks := make([]fiber.Map, 0, len(res.Tasks))
+		for _, t := range res.Tasks {
+			tasks = append(tasks, fiber.Map{
+				"id":          t.Id,
+				"title":       t.Title,
+				"description": t.Description,
+				"status":      t.Status,
+				"due_date":    t.DueDate,
+			})
+		}
+
+		return c.JSON(fiber.Map{
+			"success": true,
+			"data":    tasks,
+		})
+	})
+
+	// POST /api/v1/workouts/tasks/:id/complete — mark an assigned task as completed by user
+	g.Post("/tasks/:id/complete", func(c *fiber.Ctx) error {
+		userID := c.Locals("userID").(uint)
+		idStr := c.Params("id")
+		taskID, err := strconv.ParseUint(idStr, 10, 32)
+		if err != nil {
+			return c.Status(400).JSON(fiber.Map{"success": false, "message": "invalid task id"})
+		}
+
+		res, err := authClient.MarkTaskCompleted(c.Context(), &authv1.MarkTaskCompletedRequest{
+			TaskId: uint32(taskID),
+			UserId: uint32(userID),
+		})
+		if err != nil {
+			appErr := apperr.FromGRPCError(err)
+			return c.Status(appErr.Code).JSON(fiber.Map{"success": false, "message": appErr.Message})
+		}
+
+		return c.JSON(fiber.Map{
+			"success": res.Success,
+			"message": res.Message,
+		})
 	})
 }

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.35.0
-// source: proto/auth/v1/auth.proto
+// source: auth/v1/auth.proto
 
 package authv1
 
@@ -32,6 +32,9 @@ const (
 	AuthService_BlockUser_FullMethodName         = "/auth.v1.AuthService/BlockUser"
 	AuthService_UnblockUser_FullMethodName       = "/auth.v1.AuthService/UnblockUser"
 	AuthService_ListAllUsers_FullMethodName      = "/auth.v1.AuthService/ListAllUsers"
+	AuthService_AssignTask_FullMethodName        = "/auth.v1.AuthService/AssignTask"
+	AuthService_DeleteTask_FullMethodName        = "/auth.v1.AuthService/DeleteTask"
+	AuthService_ResendOTP_FullMethodName         = "/auth.v1.AuthService/ResendOTP"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -52,6 +55,9 @@ type AuthServiceClient interface {
 	BlockUser(ctx context.Context, in *BlockUserRequest, opts ...grpc.CallOption) (*BlockUserResponse, error)
 	UnblockUser(ctx context.Context, in *UnblockUserRequest, opts ...grpc.CallOption) (*UnblockUserResponse, error)
 	ListAllUsers(ctx context.Context, in *ListAllUsersRequest, opts ...grpc.CallOption) (*ListAllUsersResponse, error)
+	AssignTask(ctx context.Context, in *AssignTaskRequest, opts ...grpc.CallOption) (*AssignTaskResponse, error)
+	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error)
+	ResendOTP(ctx context.Context, in *ResendOTPRequest, opts ...grpc.CallOption) (*ResendOTPResponse, error)
 }
 
 type authServiceClient struct {
@@ -192,6 +198,36 @@ func (c *authServiceClient) ListAllUsers(ctx context.Context, in *ListAllUsersRe
 	return out, nil
 }
 
+func (c *authServiceClient) AssignTask(ctx context.Context, in *AssignTaskRequest, opts ...grpc.CallOption) (*AssignTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AssignTaskResponse)
+	err := c.cc.Invoke(ctx, AuthService_AssignTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteTaskResponse)
+	err := c.cc.Invoke(ctx, AuthService_DeleteTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) ResendOTP(ctx context.Context, in *ResendOTPRequest, opts ...grpc.CallOption) (*ResendOTPResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResendOTPResponse)
+	err := c.cc.Invoke(ctx, AuthService_ResendOTP_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility.
@@ -210,6 +246,9 @@ type AuthServiceServer interface {
 	BlockUser(context.Context, *BlockUserRequest) (*BlockUserResponse, error)
 	UnblockUser(context.Context, *UnblockUserRequest) (*UnblockUserResponse, error)
 	ListAllUsers(context.Context, *ListAllUsersRequest) (*ListAllUsersResponse, error)
+	AssignTask(context.Context, *AssignTaskRequest) (*AssignTaskResponse, error)
+	DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error)
+	ResendOTP(context.Context, *ResendOTPRequest) (*ResendOTPResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -258,6 +297,15 @@ func (UnimplementedAuthServiceServer) UnblockUser(context.Context, *UnblockUserR
 }
 func (UnimplementedAuthServiceServer) ListAllUsers(context.Context, *ListAllUsersRequest) (*ListAllUsersResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListAllUsers not implemented")
+}
+func (UnimplementedAuthServiceServer) AssignTask(context.Context, *AssignTaskRequest) (*AssignTaskResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AssignTask not implemented")
+}
+func (UnimplementedAuthServiceServer) DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteTask not implemented")
+}
+func (UnimplementedAuthServiceServer) ResendOTP(context.Context, *ResendOTPRequest) (*ResendOTPResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResendOTP not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 func (UnimplementedAuthServiceServer) testEmbeddedByValue()                     {}
@@ -514,6 +562,60 @@ func _AuthService_ListAllUsers_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_AssignTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AssignTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).AssignTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_AssignTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).AssignTask(ctx, req.(*AssignTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_DeleteTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).DeleteTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_DeleteTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).DeleteTask(ctx, req.(*DeleteTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_ResendOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResendOTPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).ResendOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_ResendOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).ResendOTP(ctx, req.(*ResendOTPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -573,7 +675,19 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "ListAllUsers",
 			Handler:    _AuthService_ListAllUsers_Handler,
 		},
+		{
+			MethodName: "AssignTask",
+			Handler:    _AuthService_AssignTask_Handler,
+		},
+		{
+			MethodName: "DeleteTask",
+			Handler:    _AuthService_DeleteTask_Handler,
+		},
+		{
+			MethodName: "ResendOTP",
+			Handler:    _AuthService_ResendOTP_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/auth/v1/auth.proto",
+	Metadata: "auth/v1/auth.proto",
 }

@@ -32,7 +32,7 @@ func (h *SubscriptionHandler) GetSubscription(ctx context.Context, req *subv1.Ge
 	}
 
 	return &subv1.GetSubscriptionResponse{
-		Status:           result.Sub.Status,
+		Status:           string(result.Sub.Status),
 		CurrentPeriodEnd: pbPeriodEnd,
 		RazorpaySubId:    result.Sub.RazorpaySubID,
 		IsActive:         result.IsActive,

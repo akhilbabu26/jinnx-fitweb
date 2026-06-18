@@ -19,6 +19,9 @@ service AuthService {
   rpc BlockUser (BlockUserRequest) returns (BlockUserResponse);
   rpc UnblockUser (UnblockUserRequest) returns (UnblockUserResponse);
   rpc ListAllUsers (ListAllUsersRequest) returns (ListAllUsersResponse);
+  rpc AssignTask (AssignTaskRequest) returns (AssignTaskResponse);
+  rpc DeleteTask (DeleteTaskRequest) returns (DeleteTaskResponse);
+  rpc ResendOTP (ResendOTPRequest) returns (ResendOTPResponse);
 }
 
 message RegisterRequest {
@@ -165,4 +168,35 @@ message ListAllUsersRequest {}
 
 message ListAllUsersResponse {
   repeated PendingUser users = 1;
+}
+
+message AssignTaskRequest {
+  uint32 admin_id = 1;
+  uint32 user_id = 2;
+  string title = 3;
+  string description = 4;
+  string due_date = 5;
+}
+
+message AssignTaskResponse {
+  uint32 task_id = 1;
+  bool success = 2;
+}
+
+message DeleteTaskRequest {
+  uint32 admin_id = 1;
+  uint32 task_id = 2;
+}
+
+message DeleteTaskResponse {
+  bool success = 1;
+}
+
+message ResendOTPRequest {
+  string email = 1;
+}
+
+message ResendOTPResponse {
+  bool success = 1;
+  string message = 2;
 }

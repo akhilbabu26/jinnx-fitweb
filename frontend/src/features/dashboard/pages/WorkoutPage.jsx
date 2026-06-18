@@ -7,6 +7,25 @@ import Input from '../../../shared/components/ui/Input';
 import Toast from '../../../shared/components/ui/Toast';
 import Loader from '../../../shared/components/ui/Loader';
 
+// Extract bare YouTube video ID from any URL format
+function extractYouTubeID(input) {
+  if (!input) return '';
+  try {
+    if (input.startsWith('http')) {
+      const u = new URL(input);
+      const v = u.searchParams.get('v');
+      if (v) return v;
+      const parts = u.pathname.replace(/^\//, '').split('/').filter(Boolean);
+      const last = parts[parts.length - 1];
+      if (last && last !== 'embed') return last;
+      return '';
+    }
+    return input.trim();
+  } catch {
+    return '';
+  }
+}
+
 export default function WorkoutPage() {
   const navigate = useNavigate();
   const [workout, setWorkout] = useState(null);
@@ -237,7 +256,7 @@ export default function WorkoutPage() {
                   </div>
                   <div className="min-w-0">
                     <h4 className="text-sm font-bold text-white truncate">{ex.name}</h4>
-                    {ex.video_url && (
+                    {(ex.video_url || ex.instructions) && (
                       <span className="inline-flex items-center text-[9px] font-bold text-cyan-400 bg-cyan-500/5 px-2 py-0.5 rounded mt-1">
                         🎥 Video Demo Available
                       </span>
@@ -282,26 +301,29 @@ export default function WorkoutPage() {
               <h3 className="text-xl font-bold text-white">{currentExercise.name}</h3>
 
               {/* Video URL Embed */}
-              {currentExercise.video_url ? (
-                <div className="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/5 shadow-2xl">
-                  <iframe
-                    src={`${currentExercise.video_url}?rel=0&modestbranding=1&color=white`}
-                    title={currentExercise.name}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="w-full h-full border-0"
-                  />
-                </div>
-              ) : (
-                <div className="aspect-video rounded-xl bg-white/[0.01] border border-white/5 flex flex-col items-center justify-center p-6 text-center text-white/20">
-                  <svg className="w-12 h-12 mb-3 text-white/10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <p className="text-xs font-semibold text-white/35">No demonstration video loaded</p>
-                  <p className="text-[10px] text-white/20 mt-0.5">Rely on form guidance or consult your coach.</p>
-                </div>
-              )}
+              {(() => {
+                const vidId = extractYouTubeID(currentExercise.video_url || currentExercise.instructions);
+                return vidId ? (
+                  <div className="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/5 shadow-2xl">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${vidId}?rel=0&modestbranding=1&color=white`}
+                      title={currentExercise.name}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="w-full h-full border-0"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-video rounded-xl bg-white/[0.01] border border-white/5 flex flex-col items-center justify-center p-6 text-center text-white/20">
+                    <svg className="w-12 h-12 mb-3 text-white/10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-xs font-semibold text-white/35">No demonstration video loaded</p>
+                    <p className="text-[10px] text-white/20 mt-0.5">Rely on form guidance or consult your coach.</p>
+                  </div>
+                );
+              })()}
 
               {/* Targets Box */}
               <div className="bg-white/[0.01] border border-white/5 p-4 rounded-xl space-y-2">

@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { chatApi } from '../../../shared/services/chatApi';
 import { workoutApi } from '../../../shared/services/workoutApi';
+import { subscriptionApi } from '../../../shared/services/subscriptionApi';
 import Card from '../../../shared/components/ui/Card';
 import Button from '../../../shared/components/ui/Button';
 import Toast from '../../../shared/components/ui/Toast';
 import Loader from '../../../shared/components/ui/Loader';
+import { useWebSocket } from '../../../shared/hooks/useWebSocket';
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([]);
@@ -13,10 +15,12 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false);
   const [enrolledCourse, setEnrolledCourse] = useState(null);
   const [toastMsg, setToastMsg] = useState(null);
+  const [subscriptionRequired, setSubscriptionRequired] = useState(false);
   const messagesEndRef = useRef(null);
 
   const fetchHistoryAndCourse = async () => {
     setLoading(true);
+    setSubscriptionRequired(false);
     try {
       // 1. Fetch active course to customize advice
       try {
@@ -31,20 +35,40 @@ export default function ChatPage() {
       // 2. Fetch history
       const historyRes = await chatApi.getHistory();
       if (historyRes.data?.success) {
-        setMessages(historyRes.data.data || []);
+        setMessages(historyRes.data.data?.messages || []);
       }
     } catch (err) {
-      setToastMsg({ message: err.response?.data?.message || 'Failed to load chat history', type: 'error' });
-      // Add a friendly welcome message if no logs exist or if load fails
-      setMessages([
-        {
-          role: 'assistant',
-          content: 'Hello! I am your JINNX Claude AI Coach. How can I help you with your training, diet, or recovery goals today?',
-          createdAt: new Date().toISOString()
-        }
-      ]);
+      if (err.response?.status === 403 || err.response?.data?.code === 'SUBSCRIPTION_REQUIRED') {
+        setSubscriptionRequired(true);
+      } else {
+        setToastMsg({ message: err.response?.data?.message || 'Failed to load chat history', type: 'error' });
+        // Add a friendly welcome message if no logs exist or if load fails
+        setMessages([
+          {
+            role: 'assistant',
+            content: 'Hello! I am your JINNX Claude AI Coach. How can I help you with your training, diet, or recovery goals today?',
+            createdAt: new Date().toISOString()
+          }
+        ]);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSubscribe = async () => {
+    try {
+      const res = await subscriptionApi.createRazorpaySubscription();
+      if (res.data?.success) {
+        setToastMsg({ message: 'Subscription request sent successfully!', type: 'success' });
+        // Simulating immediate payment confirmation for developer convenience
+        setTimeout(() => {
+          setToastMsg({ message: 'Simulated payment success! Re-fetching chatbot status.', type: 'success' });
+          fetchHistoryAndCourse();
+        }, 1500);
+      }
+    } catch (err) {
+      setToastMsg({ message: err.response?.data?.message || 'Failed to trigger subscription checkout', type: 'error' });
     }
   };
 
@@ -57,79 +81,56 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // ── WebSocket: receive chat replies pushed from server ─────────────────────
+  const handleWSMessage = useCallback((data) => {
+    if (data.type === 'chat_reply' && data.reply) {
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: data.reply, createdAt: new Date().toISOString() },
+      ]);
+      setSending(false);
+    } else if (data.type === 'chat_error') {
+      setToastMsg({ message: data.error || 'Chat error', type: 'error' });
+      setSending(false);
+    }
+  }, []);
+
+  const { sendFrame, isConnected } = useWebSocket(handleWSMessage, !subscriptionRequired);
+
   const handleSend = async (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || sending) return;
 
-    const userMessageText = input;
+    const userMessageText = input.trim();
     setInput('');
     setSending(true);
 
-    // Append user message locally
-    const newUserMsg = {
-      role: 'user',
-      content: userMessageText,
-      createdAt: new Date().toISOString()
-    };
-    setMessages((prev) => [...prev, newUserMsg]);
+    // Append user message locally for instant feedback
+    setMessages((prev) => [
+      ...prev,
+      { role: 'user', content: userMessageText, createdAt: new Date().toISOString() },
+    ]);
 
+    // Try WebSocket first (real-time path)
+    const sent = sendFrame({ action: 'chat', message: userMessageText });
+    if (sent) {
+      // setSending(false) will be called when chat_reply arrives via handleWSMessage
+      return;
+    }
+
+    // Fallback: REST API when WS not connected
     try {
       const res = await chatApi.sendMessage(userMessageText);
       if (res.data?.success && res.data?.data?.reply) {
-        const assistantMsg = {
-          role: 'assistant',
-          content: res.data.data.reply,
-          createdAt: new Date().toISOString()
-        };
-        setMessages((prev) => [...prev, assistantMsg]);
+        setMessages((prev) => [
+          ...prev,
+          { role: 'assistant', content: res.data.data.reply, createdAt: new Date().toISOString() },
+        ]);
       } else {
         throw new Error('Invalid reply payload');
       }
     } catch (err) {
-      console.warn('API Chat failed, triggering smart local coaching response:', err);
-      // Smart coach response fallback based on selected course
-      let replyContent = 'That is a great question. Make sure you are maintaining consistent sleep (7-9 hours), drinking adequate water (3-4L), and logging your daily reps to track progressive overload.';
-      
-      const courseSlug = enrolledCourse?.slug?.toLowerCase() || '';
-      const textLower = userMessageText.toLowerCase();
-
-      if (courseSlug === 'hypertrophy') {
-        if (textLower.includes('protein') || textLower.includes('diet') || textLower.includes('eat')) {
-          replyContent = 'For hypertrophy (muscle growth), aim for 1.6 to 2.2 grams of protein per kilogram of body weight daily. Space this out across 3-5 meals to optimize muscle protein synthesis. Keep a slight caloric surplus of 200-300 calories if building mass.';
-        } else if (textLower.includes('volume') || textLower.includes('sets') || textLower.includes('rep')) {
-          replyContent = 'For maximum hypertrophy, target 10-20 weekly sets per muscle group. Keep your reps mostly in the 8-12 range, taken close to failure (RPE 8-9 or 1-2 reps in reserve). Focus on the mind-muscle connection during the eccentric (lowering) phase.';
-        } else {
-          replyContent = 'In the Hypertrophy course, focus on progressive volume overload. If you ever feel stuck, consider switching to an alternative exercise that targets the same muscle or dropping weight to improve form.';
-        }
-      } else if (courseSlug === 'strength') {
-        if (textLower.includes('squat') || textLower.includes('bench') || textLower.includes('deadlift') || textLower.includes('lift')) {
-          replyContent = 'To build absolute strength in the Big 3 lifts, prioritize lower volume but higher intensity (80-90% of your 1RM). Keep reps in the 3-5 range, and rest 3 to 5 full minutes between working sets so your ATP reserves fully recover.';
-        } else if (textLower.includes('pain') || textLower.includes('hurt') || textLower.includes('sore')) {
-          replyContent = 'Heavy strength lifting places high stress on the central nervous system and joints. If you feel localized joint pain, stop immediately. Focus on core bracing (Valsalva maneuver) and check your joint alignment (e.g. knees tracking with toes).';
-        } else {
-          replyContent = 'For strength adaptations, consistency is key. Focus on high-quality sets with clean technique. Avoid training to failure too frequently, as it can overtax your nervous system.';
-        }
-      } else if (courseSlug === 'endurance') {
-        if (textLower.includes('run') || textLower.includes('cardio') || textLower.includes('distance')) {
-          replyContent = 'To improve endurance, apply the 80/20 rule: 80% of your workouts should be at low intensity (Zone 2, conversational pace) to build mitochondrial density. Only 20% should be high-intensity tempo or interval runs.';
-        } else if (textLower.includes('cramp') || textLower.includes('hydrate') || textLower.includes('water')) {
-          replyContent = 'Stamina relies heavily on electrolyte balance. Hydrate well before your sessions. For runs exceeding 60 minutes, supplement with sodium, potassium, and easy-to-digest carbohydrates (30-60g per hour) to maintain glycogen levels.';
-        } else {
-          replyContent = 'Endurance training is about aerobic conditioning. Keep your breathing steady and build mileage slowly (no more than a 10% weekly increase) to prevent shin splints or stress fractures.';
-        }
-      }
-
-      // Simulated typing delay
-      setTimeout(() => {
-        const assistantMsg = {
-          role: 'assistant',
-          content: `${replyContent} (Note: Running in local coach mode)`,
-          createdAt: new Date().toISOString()
-        };
-        setMessages((prev) => [...prev, assistantMsg]);
-        setSending(false);
-      }, 800);
-      return;
+      setToastMsg({ message: err.response?.data?.message || 'Failed to send message', type: 'error' });
     }
     setSending(false);
   };
@@ -138,6 +139,27 @@ export default function ChatPage() {
     return (
       <div className="py-24 flex items-center justify-center">
         <Loader size="lg" />
+      </div>
+    );
+  }
+
+  if (subscriptionRequired) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 animate-fade-in-up">
+        <Card className="p-12 text-center text-white/30 space-y-6 bg-[#08080c] border-white/5">
+          <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-full flex items-center justify-center text-red-500 mx-auto text-2xl font-bold shadow-lg">
+            🔒
+          </div>
+          <div className="space-y-2">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Premium Feature Locked</h4>
+            <p className="text-xs text-white/45 max-w-sm mx-auto leading-relaxed">
+              The Claude-powered AI Fitness & Nutrition Chatbot is exclusive to Premium members. Please subscribe to unlock instant expert coaching.
+            </p>
+          </div>
+          <Button variant="neon" className="px-8 py-3 mx-auto uppercase font-black" onClick={handleSubscribe}>
+            Upgrade to Premium
+          </Button>
+        </Card>
       </div>
     );
   }

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.35.0
-// source: proto/workout/v1/workout.proto
+// source: workout/v1/workout.proto
 
 package workoutv1
 
@@ -19,13 +19,23 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WorkoutService_GetCourses_FullMethodName         = "/workout.v1.WorkoutService/GetCourses"
-	WorkoutService_GetEnrolledCourse_FullMethodName  = "/workout.v1.WorkoutService/GetEnrolledCourse"
-	WorkoutService_GetTodayWorkout_FullMethodName    = "/workout.v1.WorkoutService/GetTodayWorkout"
-	WorkoutService_GetWorkoutHistory_FullMethodName  = "/workout.v1.WorkoutService/GetWorkoutHistory"
-	WorkoutService_Enroll_FullMethodName             = "/workout.v1.WorkoutService/Enroll"
-	WorkoutService_CancelEnrollment_FullMethodName   = "/workout.v1.WorkoutService/CancelEnrollment"
-	WorkoutService_CompleteWorkoutDay_FullMethodName = "/workout.v1.WorkoutService/CompleteWorkoutDay"
+	WorkoutService_GetCourses_FullMethodName             = "/workout.v1.WorkoutService/GetCourses"
+	WorkoutService_GetEnrolledCourse_FullMethodName      = "/workout.v1.WorkoutService/GetEnrolledCourse"
+	WorkoutService_GetTodayWorkout_FullMethodName        = "/workout.v1.WorkoutService/GetTodayWorkout"
+	WorkoutService_GetWorkoutHistory_FullMethodName      = "/workout.v1.WorkoutService/GetWorkoutHistory"
+	WorkoutService_Enroll_FullMethodName                 = "/workout.v1.WorkoutService/Enroll"
+	WorkoutService_CancelEnrollment_FullMethodName       = "/workout.v1.WorkoutService/CancelEnrollment"
+	WorkoutService_CompleteWorkoutDay_FullMethodName     = "/workout.v1.WorkoutService/CompleteWorkoutDay"
+	WorkoutService_CreateUserWeek_FullMethodName         = "/workout.v1.WorkoutService/CreateUserWeek"
+	WorkoutService_CreateUserDay_FullMethodName          = "/workout.v1.WorkoutService/CreateUserDay"
+	WorkoutService_CreateUserExercise_FullMethodName     = "/workout.v1.WorkoutService/CreateUserExercise"
+	WorkoutService_UpdateUserExercise_FullMethodName     = "/workout.v1.WorkoutService/UpdateUserExercise"
+	WorkoutService_DeleteUserExercise_FullMethodName     = "/workout.v1.WorkoutService/DeleteUserExercise"
+	WorkoutService_AddDayFeedback_FullMethodName         = "/workout.v1.WorkoutService/AddDayFeedback"
+	WorkoutService_GetUserPlan_FullMethodName            = "/workout.v1.WorkoutService/GetUserPlan"
+	WorkoutService_ToggleUserVideoAccess_FullMethodName  = "/workout.v1.WorkoutService/ToggleUserVideoAccess"
+	WorkoutService_ListTrialExpiringUsers_FullMethodName = "/workout.v1.WorkoutService/ListTrialExpiringUsers"
+	WorkoutService_SetUserLevel_FullMethodName           = "/workout.v1.WorkoutService/SetUserLevel"
 )
 
 // WorkoutServiceClient is the client API for WorkoutService service.
@@ -39,6 +49,17 @@ type WorkoutServiceClient interface {
 	Enroll(ctx context.Context, in *EnrollRequest, opts ...grpc.CallOption) (*EnrollResponse, error)
 	CancelEnrollment(ctx context.Context, in *CancelEnrollmentRequest, opts ...grpc.CallOption) (*CancelEnrollmentResponse, error)
 	CompleteWorkoutDay(ctx context.Context, in *CompleteWorkoutDayRequest, opts ...grpc.CallOption) (*CompleteWorkoutDayResponse, error)
+	// Admin Custom Plan APIs
+	CreateUserWeek(ctx context.Context, in *CreateUserWeekRequest, opts ...grpc.CallOption) (*CreateUserWeekResponse, error)
+	CreateUserDay(ctx context.Context, in *CreateUserDayRequest, opts ...grpc.CallOption) (*CreateUserDayResponse, error)
+	CreateUserExercise(ctx context.Context, in *CreateUserExerciseRequest, opts ...grpc.CallOption) (*CreateUserExerciseResponse, error)
+	UpdateUserExercise(ctx context.Context, in *UpdateUserExerciseRequest, opts ...grpc.CallOption) (*UpdateUserExerciseResponse, error)
+	DeleteUserExercise(ctx context.Context, in *DeleteUserExerciseRequest, opts ...grpc.CallOption) (*DeleteUserExerciseResponse, error)
+	AddDayFeedback(ctx context.Context, in *AddDayFeedbackRequest, opts ...grpc.CallOption) (*AddDayFeedbackResponse, error)
+	GetUserPlan(ctx context.Context, in *GetUserPlanRequest, opts ...grpc.CallOption) (*GetUserPlanResponse, error)
+	ToggleUserVideoAccess(ctx context.Context, in *ToggleUserVideoAccessRequest, opts ...grpc.CallOption) (*ToggleUserVideoAccessResponse, error)
+	ListTrialExpiringUsers(ctx context.Context, in *ListTrialExpiringUsersRequest, opts ...grpc.CallOption) (*ListTrialExpiringUsersResponse, error)
+	SetUserLevel(ctx context.Context, in *SetUserLevelRequest, opts ...grpc.CallOption) (*SetUserLevelResponse, error)
 }
 
 type workoutServiceClient struct {
@@ -119,6 +140,106 @@ func (c *workoutServiceClient) CompleteWorkoutDay(ctx context.Context, in *Compl
 	return out, nil
 }
 
+func (c *workoutServiceClient) CreateUserWeek(ctx context.Context, in *CreateUserWeekRequest, opts ...grpc.CallOption) (*CreateUserWeekResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateUserWeekResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_CreateUserWeek_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) CreateUserDay(ctx context.Context, in *CreateUserDayRequest, opts ...grpc.CallOption) (*CreateUserDayResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateUserDayResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_CreateUserDay_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) CreateUserExercise(ctx context.Context, in *CreateUserExerciseRequest, opts ...grpc.CallOption) (*CreateUserExerciseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateUserExerciseResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_CreateUserExercise_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) UpdateUserExercise(ctx context.Context, in *UpdateUserExerciseRequest, opts ...grpc.CallOption) (*UpdateUserExerciseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateUserExerciseResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_UpdateUserExercise_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) DeleteUserExercise(ctx context.Context, in *DeleteUserExerciseRequest, opts ...grpc.CallOption) (*DeleteUserExerciseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteUserExerciseResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_DeleteUserExercise_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) AddDayFeedback(ctx context.Context, in *AddDayFeedbackRequest, opts ...grpc.CallOption) (*AddDayFeedbackResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddDayFeedbackResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_AddDayFeedback_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) GetUserPlan(ctx context.Context, in *GetUserPlanRequest, opts ...grpc.CallOption) (*GetUserPlanResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserPlanResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_GetUserPlan_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) ToggleUserVideoAccess(ctx context.Context, in *ToggleUserVideoAccessRequest, opts ...grpc.CallOption) (*ToggleUserVideoAccessResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ToggleUserVideoAccessResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_ToggleUserVideoAccess_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) ListTrialExpiringUsers(ctx context.Context, in *ListTrialExpiringUsersRequest, opts ...grpc.CallOption) (*ListTrialExpiringUsersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListTrialExpiringUsersResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_ListTrialExpiringUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workoutServiceClient) SetUserLevel(ctx context.Context, in *SetUserLevelRequest, opts ...grpc.CallOption) (*SetUserLevelResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetUserLevelResponse)
+	err := c.cc.Invoke(ctx, WorkoutService_SetUserLevel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkoutServiceServer is the server API for WorkoutService service.
 // All implementations must embed UnimplementedWorkoutServiceServer
 // for forward compatibility.
@@ -130,6 +251,17 @@ type WorkoutServiceServer interface {
 	Enroll(context.Context, *EnrollRequest) (*EnrollResponse, error)
 	CancelEnrollment(context.Context, *CancelEnrollmentRequest) (*CancelEnrollmentResponse, error)
 	CompleteWorkoutDay(context.Context, *CompleteWorkoutDayRequest) (*CompleteWorkoutDayResponse, error)
+	// Admin Custom Plan APIs
+	CreateUserWeek(context.Context, *CreateUserWeekRequest) (*CreateUserWeekResponse, error)
+	CreateUserDay(context.Context, *CreateUserDayRequest) (*CreateUserDayResponse, error)
+	CreateUserExercise(context.Context, *CreateUserExerciseRequest) (*CreateUserExerciseResponse, error)
+	UpdateUserExercise(context.Context, *UpdateUserExerciseRequest) (*UpdateUserExerciseResponse, error)
+	DeleteUserExercise(context.Context, *DeleteUserExerciseRequest) (*DeleteUserExerciseResponse, error)
+	AddDayFeedback(context.Context, *AddDayFeedbackRequest) (*AddDayFeedbackResponse, error)
+	GetUserPlan(context.Context, *GetUserPlanRequest) (*GetUserPlanResponse, error)
+	ToggleUserVideoAccess(context.Context, *ToggleUserVideoAccessRequest) (*ToggleUserVideoAccessResponse, error)
+	ListTrialExpiringUsers(context.Context, *ListTrialExpiringUsersRequest) (*ListTrialExpiringUsersResponse, error)
+	SetUserLevel(context.Context, *SetUserLevelRequest) (*SetUserLevelResponse, error)
 	mustEmbedUnimplementedWorkoutServiceServer()
 }
 
@@ -160,6 +292,36 @@ func (UnimplementedWorkoutServiceServer) CancelEnrollment(context.Context, *Canc
 }
 func (UnimplementedWorkoutServiceServer) CompleteWorkoutDay(context.Context, *CompleteWorkoutDayRequest) (*CompleteWorkoutDayResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CompleteWorkoutDay not implemented")
+}
+func (UnimplementedWorkoutServiceServer) CreateUserWeek(context.Context, *CreateUserWeekRequest) (*CreateUserWeekResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateUserWeek not implemented")
+}
+func (UnimplementedWorkoutServiceServer) CreateUserDay(context.Context, *CreateUserDayRequest) (*CreateUserDayResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateUserDay not implemented")
+}
+func (UnimplementedWorkoutServiceServer) CreateUserExercise(context.Context, *CreateUserExerciseRequest) (*CreateUserExerciseResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateUserExercise not implemented")
+}
+func (UnimplementedWorkoutServiceServer) UpdateUserExercise(context.Context, *UpdateUserExerciseRequest) (*UpdateUserExerciseResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserExercise not implemented")
+}
+func (UnimplementedWorkoutServiceServer) DeleteUserExercise(context.Context, *DeleteUserExerciseRequest) (*DeleteUserExerciseResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteUserExercise not implemented")
+}
+func (UnimplementedWorkoutServiceServer) AddDayFeedback(context.Context, *AddDayFeedbackRequest) (*AddDayFeedbackResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddDayFeedback not implemented")
+}
+func (UnimplementedWorkoutServiceServer) GetUserPlan(context.Context, *GetUserPlanRequest) (*GetUserPlanResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserPlan not implemented")
+}
+func (UnimplementedWorkoutServiceServer) ToggleUserVideoAccess(context.Context, *ToggleUserVideoAccessRequest) (*ToggleUserVideoAccessResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ToggleUserVideoAccess not implemented")
+}
+func (UnimplementedWorkoutServiceServer) ListTrialExpiringUsers(context.Context, *ListTrialExpiringUsersRequest) (*ListTrialExpiringUsersResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListTrialExpiringUsers not implemented")
+}
+func (UnimplementedWorkoutServiceServer) SetUserLevel(context.Context, *SetUserLevelRequest) (*SetUserLevelResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetUserLevel not implemented")
 }
 func (UnimplementedWorkoutServiceServer) mustEmbedUnimplementedWorkoutServiceServer() {}
 func (UnimplementedWorkoutServiceServer) testEmbeddedByValue()                        {}
@@ -308,6 +470,186 @@ func _WorkoutService_CompleteWorkoutDay_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkoutService_CreateUserWeek_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserWeekRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).CreateUserWeek(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_CreateUserWeek_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).CreateUserWeek(ctx, req.(*CreateUserWeekRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_CreateUserDay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserDayRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).CreateUserDay(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_CreateUserDay_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).CreateUserDay(ctx, req.(*CreateUserDayRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_CreateUserExercise_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserExerciseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).CreateUserExercise(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_CreateUserExercise_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).CreateUserExercise(ctx, req.(*CreateUserExerciseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_UpdateUserExercise_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserExerciseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).UpdateUserExercise(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_UpdateUserExercise_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).UpdateUserExercise(ctx, req.(*UpdateUserExerciseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_DeleteUserExercise_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUserExerciseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).DeleteUserExercise(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_DeleteUserExercise_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).DeleteUserExercise(ctx, req.(*DeleteUserExerciseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_AddDayFeedback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddDayFeedbackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).AddDayFeedback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_AddDayFeedback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).AddDayFeedback(ctx, req.(*AddDayFeedbackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_GetUserPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserPlanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).GetUserPlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_GetUserPlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).GetUserPlan(ctx, req.(*GetUserPlanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_ToggleUserVideoAccess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ToggleUserVideoAccessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).ToggleUserVideoAccess(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_ToggleUserVideoAccess_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).ToggleUserVideoAccess(ctx, req.(*ToggleUserVideoAccessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_ListTrialExpiringUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTrialExpiringUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).ListTrialExpiringUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_ListTrialExpiringUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).ListTrialExpiringUsers(ctx, req.(*ListTrialExpiringUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkoutService_SetUserLevel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetUserLevelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkoutServiceServer).SetUserLevel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkoutService_SetUserLevel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkoutServiceServer).SetUserLevel(ctx, req.(*SetUserLevelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkoutService_ServiceDesc is the grpc.ServiceDesc for WorkoutService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -343,7 +685,47 @@ var WorkoutService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "CompleteWorkoutDay",
 			Handler:    _WorkoutService_CompleteWorkoutDay_Handler,
 		},
+		{
+			MethodName: "CreateUserWeek",
+			Handler:    _WorkoutService_CreateUserWeek_Handler,
+		},
+		{
+			MethodName: "CreateUserDay",
+			Handler:    _WorkoutService_CreateUserDay_Handler,
+		},
+		{
+			MethodName: "CreateUserExercise",
+			Handler:    _WorkoutService_CreateUserExercise_Handler,
+		},
+		{
+			MethodName: "UpdateUserExercise",
+			Handler:    _WorkoutService_UpdateUserExercise_Handler,
+		},
+		{
+			MethodName: "DeleteUserExercise",
+			Handler:    _WorkoutService_DeleteUserExercise_Handler,
+		},
+		{
+			MethodName: "AddDayFeedback",
+			Handler:    _WorkoutService_AddDayFeedback_Handler,
+		},
+		{
+			MethodName: "GetUserPlan",
+			Handler:    _WorkoutService_GetUserPlan_Handler,
+		},
+		{
+			MethodName: "ToggleUserVideoAccess",
+			Handler:    _WorkoutService_ToggleUserVideoAccess_Handler,
+		},
+		{
+			MethodName: "ListTrialExpiringUsers",
+			Handler:    _WorkoutService_ListTrialExpiringUsers_Handler,
+		},
+		{
+			MethodName: "SetUserLevel",
+			Handler:    _WorkoutService_SetUserLevel_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/workout/v1/workout.proto",
+	Metadata: "workout/v1/workout.proto",
 }
